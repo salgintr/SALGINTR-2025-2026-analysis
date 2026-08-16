@@ -1,0 +1,24 @@
+# Data never enters this repository.
+*.xlsx
+*.xls
+*.csv.gz
+*.parquet
+*.rds
+*.RData
+data/
+!codebook/codebook.csv
+
+# Notebook and language artefacts
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+.Rhistory
+.RData
+.Rproj.user/
+renv/library/
+
+# Editor and OS
+.DS_Store
+.vscode/
+.idea/
+*.swp

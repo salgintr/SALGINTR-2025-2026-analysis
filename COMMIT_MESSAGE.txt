@@ -1,0 +1,16 @@
+Add analysis code, pseudocode, codebook and computational specifications
+
+The analysis code for the SALGINTR 2025/26 season: two notebooks with outputs embedded as executed,
+language-neutral pseudocode for all 107 analyses, the variable codebook, the aberration-detection
+specification, the seed and convergence register, and version-pinned environment files.
+
+The aberration-detection ensemble is implemented from the published detector definitions rather than
+through a historical-baseline package, since only one season is available. Three details are stated
+explicitly in both the code and the specification because they are easy to get wrong: EARS C3
+inherits C2's two-week guard band, the CUSUM decision interval is calibrated separately for each
+series, and the EWMA control limit re-arms after an alarm.
+
+No data is included. The cohort is a small professional panel and the combination of specialty,
+institution, region, household composition and reporting pattern is potentially re-identifying, so
+individual-level records are available on request under a data-sharing agreement instead. The
+codebook defines every variable the code consumes, so the analysis can be read and audited without it.
