@@ -1,4 +1,4 @@
-# SALGINTR 2025/26 analysis code
+# SALGINTR 2025/26 analysis code (version:20260816_2000)
 
 Analysis code, pseudocode and computational specifications for the SALGINTR study — a
 physician-based digital participatory surveillance system for influenza-like illness in Türkiye,
