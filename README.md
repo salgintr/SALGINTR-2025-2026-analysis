@@ -12,7 +12,7 @@ use. **It does not contain the data** — see [Data availability](#data-availabi
 
 This repository accompanies the following proof-of-concept study:
 
-> Öntaş E, Güçlü H, Aydın Son Y. (2026). SALGINTR: development and early evaluation of a low-cost cloud-based digital participatory surveillance system for influenza-like illness among physicians in Türkiye — a proof of concept. *BMC Infectious Diseases*.  
+> Ontaş E, Güçlü H, Aydın Son Y. (2026). SALGINTR: development and early evaluation of a low-cost cloud-based digital participatory surveillance system for influenza-like illness among physicians in Türkiye — a proof of concept. *BMC Infectious Diseases*.  
 > https://doi.org/10.1186/s12879-026-14153-1
 
 ## What is here
