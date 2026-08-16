@@ -50,8 +50,7 @@ produced under.
 
 ## Data availability
 
-The analysis dataset is **not** distributed with this repository, and the `.gitignore` is written to
-prevent it being added inadvertently.
+The analysis dataset is **not** distributed with this repository.
 
 The cohort is a small professional panel of physicians in a single country. Even with direct
 identifiers removed, the combination of specialty, institution type, region, household composition
