@@ -1,27 +1,28 @@
-# Data never enters this repository.
+# data — not distributed in this repository
 *.xlsx
+!codebook/*.xlsx
 *.xls
 *.csv.gz
-*.parquet
-*.rds
-*.RData
-data/
-!codebook/codebook.csv
 
-# Notebook and language artefacts
-.ipynb_checkpoints/
+# OS and editor cruft
+.DS_Store
+Thumbs.db
+*~
+.idea/
+.vscode/
+
+# python
 __pycache__/
-*.pyc
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# R
 .Rhistory
 .RData
 .Rproj.user/
-renv/library/
 
-# Editor and OS
-.DS_Store
-.vscode/
-.idea/
-*.swp
-
-# Apps Script project binding (carries the script id)
-.clasp.json
+# build and scratch
+*.log
+*.tmp

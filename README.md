@@ -1,4 +1,4 @@
-# SALGINTR 2025/26 analysis code (version:20260816_2000)
+# SALGINTR 2025/26 analysis code
 
 Analysis code, pseudocode and computational specifications for the SALGINTR study — a
 physician-based digital participatory surveillance system for influenza-like illness in Türkiye,
@@ -8,39 +8,16 @@ This repository accompanies a doctoral thesis at Middle East Technical Universit
 code that produced the reported analyses and the codebook that defines every variable those analyses
 use. **It does not contain the data** — see [Data availability](#data-availability).
 
-## Associated publication
-
-This repository accompanies the following proof-of-concept study:
-
-> Ontaş E, Güçlü H, Aydın Son Y. (2026). SALGINTR: development and early evaluation of a low-cost cloud-based digital participatory surveillance system for influenza-like illness among physicians in Türkiye — a proof of concept. *BMC Infectious Diseases*.  
-> https://doi.org/10.1186/s12879-026-14153-1
-
 ## What is here
 
 | Path | Contents |
 |---|---|
-| `apps-script/` | The collection instrument: the Apps Script that ran the weekly reporting cycle |
 | `notebooks/` | The two analysis notebooks, one per language, with outputs embedded as executed |
-| `pseudocode/` | Language-neutral pseudocode for each analysis and for the collection pipeline |
+| `pseudocode/` | Language-neutral pseudocode for each analysis, for reimplementation in any language |
 | `codebook/` | Every variable used in the analyses: label, type, permitted values, derivation rule |
 | `specs/` | The locked analysis protocol, the detector specification and the seed register |
 | `environment/` | Version-pinned environment files for Python and R |
 | `docs/` | Repository documentation, including how the notebooks map to the thesis supplement |
-
-## Collection instrument
-
-`apps-script/` holds the Google Apps Script that operated the weekly cycle: it enrolled each
-physician once, sent every enrolled physician their own pre-filled link to the weekly form each
-Saturday morning, and retried across the following days when the platform's daily mail quota ran out
-before the cohort was covered. `pseudocode/COLLECTION-PIPELINE.md` describes the same cycle in
-language-neutral form.
-
-Participant identifiers are drawn at random and are not derived from the email address or from any
-other participant attribute. There is no hash and no key to protect, so the generation rule is
-published in full; a random identifier carries no information about the person it names. The link
-between an identifier and an address exists only in the private response workbook, which is not
-distributed. No live form endpoint, mailbox or workbook identifier is committed — those are read at
-run time from script properties held with the script project.
 
 ## Analyses
 
@@ -58,6 +35,30 @@ equations, which are fitted with R packages that have no equivalent implementati
 Figure generation is deliberately outside the scope of these notebooks: they produce the numbers, and
 the thesis figures are drawn separately.
 
+## Aberration detection
+
+The detection ensemble is implemented directly from the published detector definitions rather than
+through a historical-baseline surveillance package, because the available series is a single season
+and those packages require multi-year baselines. Six detectors run on the causal three-week moving
+average of each series with a seven-week rolling baseline and a seven-week warm-up:
+
+| Detector | Statistic | Alarm threshold |
+|---|---|---|
+| EARS C1 | standardised deviate against the prior seven weeks | statistic > 3 |
+| EARS C2 | as C1, baseline ending two weeks before the current week | statistic > 3 |
+| EARS C3 | cumulative positive C2 excess over three weeks, inheriting C2's guard band | statistic > 2 |
+| Negative-binomial CUSUM | log-likelihood ratio on weekly counts, dispersion by method of moments, accumulator reset after an alarm | series-specific decision interval, Monte-Carlo calibrated |
+| EWMA | exponentially weighted average, smoothing constant 0.4, control limit re-arming to the baseline mean after an alarm | Z > baseline mean + 3 standard deviations of Z |
+| Empirical 95th percentile | current value against the prior ten weeks | value above the 95th percentile |
+
+A week is flagged when at least one detector alarms; a two-detector consensus variant is reported
+separately. The Farrington Flexible algorithm was excluded for the reason above.
+
+Three details are load-bearing and easy to get wrong, so they are stated explicitly here as well as
+in the code: EARS C3 inherits C2's two-week guard band; the CUSUM decision interval is calibrated
+separately for each series rather than shared; and the EWMA control limit re-arms after an alarm,
+without which the statistic latches and reports consecutive weeks as separate alarms.
+
 ## Reproducibility
 
 Random seeds are fixed for every resampling procedure and recorded in `specs/seeds.md`. Bootstraps
@@ -66,7 +67,8 @@ produced under.
 
 ## Data availability
 
-The analysis dataset is **not** distributed with this repository.
+The analysis dataset is **not** distributed with this repository, and the `.gitignore` is written to
+prevent it being added inadvertently.
 
 The cohort is a small professional panel of physicians in a single country. Even with direct
 identifiers removed, the combination of specialty, institution type, region, household composition
@@ -86,11 +88,7 @@ audited and adapted without the data in hand.
 See `CITATION.cff`. The archived release carries a DOI; cite that DOI for a specific version and this
 repository for the code in general.
 
-## Contact
-
-For questions about the repository, analysis code, data access, or reproducibility, please contact:
-> **eray.ontas@metu.edu.tr**
-
 ## Licence
 
-The code will be released under the MIT Licence, and the codebook and written documentation will be released under the Creative Commons Attribution 4.0 International (CC BY 4.0) licence.
+Code is released under the MIT Licence (`LICENSE`). The codebook and written documentation are
+released under CC BY 4.0 (`LICENSE-docs`), so they may be reused with attribution.

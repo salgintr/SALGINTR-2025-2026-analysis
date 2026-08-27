@@ -1,0 +1,11 @@
+figure,verdict,detail
+dag_h1_signal_concordance.png,CORRECT — ships,"all four phase correlations reproduce exactly on the RAW series (pre 0.524/fig 0.52, epidemic 0.437/0.44, season 0.243/0.24 = register Q138, post -0.226/-0.23 = Q135 sign and magnitude); ceiling sqrt(0.2933*0.9620)=0.5312/fig 0.53"
+dag_reporting_intensity_gradient.png,CORRECT — ships,stratum incidences reproduce exactly (14.1 / 12.0 / 9.1 per 100 at-risk weeks); IRR 0.81 (0.71-0.92) = register Q200 0.805 (0.710-0.912)
+dag_00_overall.png,CORRECT — ships,"structural only, no estimates; 304/248 cohort counts correct"
+dag_h10_selection_and_panel.png,CORRECT — ships,"248/56 split, 15 of 248 complete, median 20 weeks all correct"
+dag_h5_occupational_exposure.png,CORRECT — ships,structural; 112-of-248 patient-facing subgroup correct
+dag_h7_vaccination_habit.png,CORRECT — ships,prior-vax odds 'about 18' consistent with the uptake model of record (OR 17.34)
+dag_h1_epidemic_week_tautology.png,CORRECT — ships,circular 0.98 = register Q160 0.981; honest 0.92 = Q161 0.917 (calendar-defined window)
+dag_h10_reporting_collider.png,CORRECT — ships,528 post-gap weeks and 83 symptomatic post-gap weeks all coded new both reproduce exactly
+dag_episode_coding_artefact.png,CORRECTED AND SHIPPED,"counts correct (83 of 528 = register Q210 15.72%; 366 of 3,850 = Q211 9.51%). The odds ratio was rebuilt from the producing code: it now prints the conditional value of record, 1.66 (1.25 to 2.21) = Q212, and the accompanying phrase reads 'about 1.7 times' to match. The earlier print of 1.51 (1.19-1.93) matched no specification (marginal Q213 = 1.640, unadjusted refit 1.828, range across risk sets Q215 = 1.53-1.76)."
+dag_h6_vaccine_immortal_time.png,CORRECTED AND SHIPPED,"person-time panel was already correct (261 of 1,874 vaccinated person-weeks = 13.9%). The effectiveness pair was rebuilt from the producing code onto the shared gamma-frailty specification of record: naive ever-vaccinated 23.2% against 4.1% once the two-week wait is counted correctly (register Q103, HR 0.96). The earlier pair, 24.6% against 5.0%, came from a fit without the frailty term."

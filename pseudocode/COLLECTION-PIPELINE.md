@@ -1,9 +1,14 @@
 # Collection pipeline
 
 Language-neutral pseudocode for the weekly collection cycle, so the instrument can be reimplemented
-on any scheduler and mail transport rather than only on Google Apps Script. Each block states what
-the step does and why, not how a particular platform expresses it. The code that implements each
-block is in `apps-script/`.
+on any scheduler and mail transport rather than only on the platform it ran on. Each block states
+what the step does and why, not how a particular platform expresses it.
+
+The cycle was implemented as a Google Apps Script bound to the Google Sheets workbook that Google
+Forms wrote its responses to. That script is not distributed here: it carries the live form
+endpoint, the response workbook and the mailbox addresses the study operated on, and a Google Form
+endpoint accepts submissions from anyone holding it. The pseudocode below is the complete
+description of what it did.
 
 The cycle ran for 33 weeks, ISO 40/2025 to 20/2026.
 
