@@ -1,16 +1,26 @@
-Add analysis code, pseudocode, codebook and computational specifications
+Update analysis code and documentation to the final thesis analyses
 
-The analysis code for the SALGINTR 2025/26 season: two notebooks with outputs embedded as executed,
-language-neutral pseudocode for all 107 analyses, the variable codebook, the aberration-detection
-specification, the seed and convergence register, and version-pinned environment files.
+Notebooks
+- primary incidence model moved from the four-covariate set to the thirteen-term
+  pre-specified adjustment set (frailty variance 0.3220); the reduced fit is kept as a
+  labelled sensitivity analysis
+- vaccination-uptake model set to the specification of record: prior-season care-seeking and
+  household member at high risk, no university affiliation
+- added the immortal-time ladder for the vaccination contrast, four rungs, each carrying the
+  estimate its own specification produces (23.2% / 7.0% / 4.6% / 4.1%)
+- removed the two withdrawn models (susceptibility patterning, prior-season care-seeking) and
+  their now-unused imports
+- recap table now indexes coefficients by name rather than position
+- both notebooks re-executed end to end with outputs embedded; no errors
 
-The aberration-detection ensemble is implemented from the published detector definitions rather than
-through a historical-baseline package, since only one season is available. Three details are stated
-explicitly in both the code and the specification because they are easy to get wrong: EARS C3
-inherits C2's two-week guard band, the CUSUM decision interval is calibrated separately for each
-series, and the EWMA control limit re-arms after an alarm.
+Documentation
+- codebook: model attributions re-derived from the notebooks' term lists; six variables that
+  the thirteen-term model now uses are no longer marked as unused; 91 derived variables now
+  name their source variable instead of reading as direct responses
+- analysis inventory: withdrawn analyses dropped, primary exposure description updated, ladder
+  added
+- environment files added for both interpreters, with the determinism note
+- causal diagrams corrected: post-gap odds ratio to 1.66 (1.25-2.21) and the immortal-time
+  effectiveness pair to the frailty specification of record
 
-No data is included. The cohort is a small professional panel and the combination of specialty,
-institution, region, household composition and reporting pattern is potentially re-identifying, so
-individual-level records are available on request under a data-sharing agreement instead. The
-codebook defines every variable the code consumes, so the analysis can be read and audited without it.
+The dataset is not distributed in this repository; the notebooks carry their outputs.

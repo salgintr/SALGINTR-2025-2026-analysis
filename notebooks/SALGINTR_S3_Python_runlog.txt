@@ -1,0 +1,777 @@
+registry (304, 64)  panel (4729, 121)  episodes (497, 27)  weekly (33, 28)  recoded (248, 29)
+phase weeks: pre-epidemic 10, epidemic 9, post-epidemic 14, early-warning window 19, 2025 calendar portion 13
+registered physicians                  304
+reporting (analysis) cohort            248 (81.6%)
+never-reporters                        56 (18.4%)
+person-weeks of follow-up              4,729
+person-weeks at risk of a new episode  4,626
+continuation (not at-risk) weeks       103
+symptomatic (ILI) person-weeks         600
+cleaned incident ILI episodes          497
+weekly reporters: 44, 72, 83, 84, 89, 104, 120, 133, 159, 152, 148, 147, 149, 146, 150, 150, 165, 163, 163, 163, 171, 165, 168, 168, 177, 171, 165, 164, 158, 164, 155, 162, 157
+opening week                      44
+enrolment ramp, first eight weeks  44, 72, 83, 84, 89, 104, 120, 133
+plateau (week 9 onward)            median 163, range 146-177, n = 25
+median over all 33 weeks          157
+peak                               177 in 2026-W12
+closing week                       157 in 2026-W20
+post-peak trend                    -2.117 reporters per week over 2026-W12 to 2026-W20
+weeks reported per physician: median 20, mean 19.069, range 1-33
+  physicians reporting all 33 weeks 15 (6.0%)
+  physicians reporting 25-32 weeks  86 (34.7%)
+realised grid fill, reporter grid  4,729 of 8,184 (57.8%)
+realised grid fill, registry grid  4,729 of 10,032 (47.1%)
+                    physicians  at_risk  episodes
+stratum                                          
+least engaged               37       86        12
+moderately engaged         106     1543       216
+most engaged               105     2997       269
+
+physicians reporting 24 or more weeks  105 (42.3%)
+physicians reporting 25 or more weeks  101 (40.7%)
+provinces represented   46 of 81
+three largest centres   province 6 72 (29.0%), province 35 30 (12.1%), province 34 29 (11.7%)
+share in the three largest centres  131 of 248 (52.8%)
+provinces contributing fewer than five physicians  36 (pooled: 76 physicians)
+age, years       median 36 (IQR 32.75-48; range 25-72); mean 40.383; Shapiro-Wilk W = 0.8895, p = 1.76e-12
+household size   median 2 (IQR 2-3; range 1-6); mean 2.548; Shapiro-Wilk W = 0.9047, p = 1.91e-11
+school-age child at home  100 (40.3%)
+female                               165 of 248 (66.5%)
+university hospital                  105 of 248 (42.3%)
+academic title                       89 of 248 (35.9%)
+general practitioner                 25 of 248 (10.1%)
+resident                             44 of 248 (17.7%)
+performs face-to-face examination    112 of 248 (45.2%)
+
+institution type
+  Üniversite (Kamu ya da Vakıf) - Hastane                      105 (42.3%)
+  Sağlık Bakanlığı: Merkez - İl Sağlık Müdürlüğü - İlçe Sağl   61 (24.6%)
+  Sağlık Bakanlığı - Hastane                                   56 (22.6%)
+  Sağlık Bakanlığı: Aile Sağlığı Merkezi                       16 (6.5%)
+  Özel Hastane / Klinik                                        10 (4.0%)
+job title
+  Uzman hekim / Yan dal uzmanı hekim                           90 (36.3%)
+  Akademik ünvanı olan hekim                                   89 (35.9%)
+  Araştırma görevlisi (ana dal veya yan dal) hekim             44 (17.7%)
+  Pratisyen hekim                                              25 (10.1%)
+                                 item  valid_n       value
+             school-age child at home      248 100 (40.3%)
+household member at complication risk      205  72 (35.1%)
+                  current tobacco use      248  49 (19.8%)
+                  regular tobacco use      248   19 (7.7%)
+                uses public transport      248  51 (20.6%)
+                  respiratory allergy      248  96 (38.7%)
+         sufficient physical activity      248 117 (47.2%)
+       frequent contact with children      248   15 (6.0%)
+   frequent contact with older people      248   20 (8.1%)
+                household size (mean)      248       2.548
+ public-transport time (ordinal mean)      248       0.391
+          social-contact score (mean)      248       0.802
+
+tobacco status (categorical)
+  never        163 (65.7%)
+  former       34 (13.7%)
+  occasional   29 (11.7%)
+  daily        19 (7.7%)
+  unknown      3 (1.2%)
+susceptibility, four ordered levels, reporting cohort  8 / 156 / 70 / 14   (n = 248)
+susceptibility, four ordered levels, model sample      8 / 153 / 67 / 14   (n = 242)
+current-season vaccination           91 (36.7%)
+prior-season vaccination             99 (39.9%)
+prior-season influenza-like illness  201 (81.0%)
+prior-season care-seeking            55 (22.2%)
+declined the health-condition item   6 (2.4%) — kept missing
+any health condition (valid n = 242) 53 (21.9%)
+patient-facing physicians                      112
+with a daily patient-volume value              110 of 112
+daily patient volume    median 20 (IQR 10-40; range 1-100)
+works in a high-risk unit            76 of 112 (67.9%)
+routine mask use                     43 of 112 (38.4%)
+any monthly on-call duty             28 of 112 (25.0%)
+aerosol-generating procedure share (ordinal)
+  level 0  68 (60.7%)
+  level 1  27 (24.1%)
+  level 2  7 (6.2%)
+  level 3  10 (8.9%)
+primary patient group
+  Erişkin              87
+  Çocuk                20
+  65 yaş ve üzeri      4
+  İmmünsüprese         1
+cumulative season attack rate   192 of 248 (77.4%)
+two or more episodes            115 (46.4%)
+maximum episodes in a physician 12
+symptom-free reporters          56  (distinct from the 56 never-reporters)
+
+episode-count distribution
+n_episodes
+0     56
+1     77
+2     41
+3     26
+4     16
+5     15
+6      9
+7      4
+8      2
+11     1
+12     1
+A viral-systemic (influenza-like)     91 (18.3%)
+B viral-local                        341 (68.6%)
+C bacterial                           43 (8.7%)
+D indeterminate                       22 (4.4%)
+total incident episodes              497
+
+season participatory positivity (A-cluster share)  91 of 497 = 18.3099%
+A-cluster episodes                     91
+symptom duration, days    median 4 (IQR 3-6; range 1-21)
+any work absence                       29 (31.9%)
+an actual diagnostic test              5 (5.5% of A-cluster; 1.0% of all 497 episodes)
+worked through illness (presenteeism)  42 of 91 (46.2%)
+
+daily-routine impact, A-cluster symptomatic weeks
+  Evet - ancak İŞE ARA VEREMEDİM                                     43
+  Evet - İŞE ARA VERDİM: Ayaktan izlem ve tedavi                     31
+  Hayır değişmedi - günlük aktivitelerime her zamanki gibi devam e   22
+  Evet - İŞE ARA VERDİM: Yatış Gerektiren izlem ve tedavi            1
+A-cluster episodes 91; source flags 102
+  household    37
+  social       26
+  healthcare   25
+  unknown      14
+
+by clinical role, flags per 100 episodes
+  face-to-face examination     (n = 40)  household 40.0  social 20.0  healthcare 40.0  unknown 15.0
+  no face-to-face examination  (n = 51)  household 41.2  social 35.3  healthcare 17.6  unknown 15.7
+season incidence   497 / 4,626 at-risk person-weeks = 10.7436 per 100 (95% CI 9.82-11.73)
+on filed person-weeks  497 / 4,729 = 10.5096 per 100
+weeks where the two denominators differ  32 of 33
+    week  reporters  at_risk  episodes  A_episodes  part_positivity_pct  sent_specimens  sent_positives  sent_positivity_pct  ili_per_1000_at_risk  sparse_flag
+2025-W40         44       44         8           2                25.00             121              13                10.74                181.82            1
+2025-W41         72       69         8           3                37.50             136              22                16.18                115.94            1
+2025-W42         83       81        12           1                 8.33             113              14                12.39                148.15            0
+2025-W43         84       82        10           1                10.00             140               9                 6.43                121.95            0
+2025-W44         89       86        12           2                16.67              76               5                 6.58                139.53            0
+2025-W45        104      100         7           1                14.29             167              12                 7.19                 70.00            1
+2025-W46        120      119        12           0                 0.00             134               5                 3.73                100.84            0
+2025-W47        133      130        10           2                20.00             111               1                 0.90                 76.92            0
+2025-W48        159      155        16           1                 6.25             125              11                 8.80                103.23            0
+2025-W49        152      150        14           3                21.43             126              13                10.32                 93.33            0
+2025-W50        148      145        13           1                 7.69             129              23                17.83                 89.66            0
+2025-W51        147      143        15           4                26.67             131              20                15.27                104.90            0
+2025-W52        149      146        19           6                31.58             200              99                49.50                130.14            0
+2026-W01        146      142        21           4                19.05             117              64                54.70                147.89            0
+2026-W02        150      147        14           3                21.43             220             126                57.27                 95.24            0
+2026-W03        150      146        17           5                29.41             150              82                54.67                116.44            0
+2026-W04        165      159        15           4                26.67             135              57                42.22                 94.34            0
+2026-W05        163      161        17           5                29.41             101              33                32.67                105.59            0
+2026-W06        163      158        13           2                15.38              99              15                15.15                 82.28            0
+2026-W07        163      161        17           3                17.65             109              12                11.01                105.59            0
+2026-W08        171      167        16           6                37.50             100               8                 8.00                 95.81            0
+2026-W09        165      162        24           2                 8.33             115              14                12.17                148.15            0
+2026-W10        168      163        19           0                 0.00             145              16                11.03                116.56            0
+2026-W11        168      164        17           4                23.53             109              13                11.93                103.66            0
+2026-W12        177      174        22           1                 4.55              53               5                 9.43                126.44            0
+2026-W13        171      165        18           4                22.22              86               8                 9.30                109.09            0
+2026-W14        165      162        17           3                17.65              79               3                 3.80                104.94            0
+2026-W15        164      163        24           4                16.67              68               9                13.24                147.24            0
+2026-W16        158      153        16           3                18.75              78               4                 5.13                104.58            0
+2026-W17        164      162        24           2                 8.33              79               5                 6.33                148.15            0
+2026-W18        155      151        14           3                21.43              80               9                11.25                 92.72            0
+2026-W19        162      160         8           1                12.50              71               4                 5.63                 50.00            1
+2026-W20        157      156         8           5                62.50              76               5                 6.58                 51.28            1
+
+participatory denominator  median 15, range 7-24
+sentinel specimens         mean 114.515, median 113, range 53-220; weeks below 100 specimens 11 of 33
+weekly episode count                         against week index  r = +0.46443, p = 0.006474
+weekly rate per 1,000 at-risk person-weeks   against week index  r = -0.27097, p = 0.127185
+weekly rate per 1,000 filed person-weeks     against week index  r = -0.26288, p = 0.139405
+registered physicians (from the workbook)   304
+unique visitors (service-reported)          1,504
+page views (service-reported)               3,833
+page views per unique visitor               2.55
+panel rows 4,729  physicians 248  events 497
+at risk 4,626 = filed 4,729 less continuation 103
+weeks per physician   median 20, mean 19.069, range 1-33
+physicians with at least one gap  169 of 248; total gaps 528
+contiguous runs per physician  median 3, max 10
+registration staggering: first observed week  median 7, range 1-32; 44 physicians present from the opening week
+
+first observed week, distribution over the first eight weeks
+week_idx
+1    44
+2    31
+3    13
+4     7
+5     5
+6    18
+7    27
+8    15
+person-weeks of vaccinated physicians   1,874
+  preceding the vaccination week        178
+  inside the two-week interval          83 (4.429% of 1,874)
+  protected                             1,613
+protected share of the full 4,729-week panel  34.109%
+sample 242 physicians, 90 vaccinated
+                         OR       lo        hi        p
+Intercept           0.19453  0.03503   1.08037  0.06126
+age10               0.98954  0.70504   1.38885  0.95153
+female              0.80788  0.39464   1.65383  0.55946
+comp_risk_any_nan   1.50324  0.65811   3.43369  0.33344
+ili_freq_ord4       1.06539  0.62006   1.83058  0.81858
+sees_pat            0.82770  0.41517   1.65014  0.59115
+prev_vax           14.69884  7.41620  29.13297  0.00000
+school_kids_any     1.94784  0.95866   3.95771  0.06529
+university          0.42787  0.20663   0.88602  0.02226
+apparent AUC             0.84477
+Efron optimism           0.02589   (1000 replicates, seed 20260707)
+optimism-corrected AUC   0.81888
+
+Hosmer-Lemeshow  chi-square 1.5328, df 8, p = 0.9921 (10 groups of fitted risk)
+bootstrap-validated calibration slope  0.89293 (1.0 indicates no overfitting of the risk scale; 1000 replicates)
+A-cluster hazard ratio  0.5368  (se of log HR 0.2772)
+B-cluster hazard ratio  1.0783  (se of log HR 0.1482)
+ratio of hazard ratios  0.4978 (0.269-0.922), p = 0.0265
+the interval treats the two estimates as independent, which is conservative because they are estimated on the same physicians
+                unexposed  under vaccine protection  all
+cluster_letter                                          
+A                      70                        21   91
+B                     219                       122  341
+C                      30                        13   43
+D                      14                         8   22
+all                   333                       164  497
+
+exposed events by outcome
+  all-ILI    164 of 497
+  cluster A  21 of 91
+  cluster B  122 of 341
+  cluster C  13 of 43
+  cluster D  8 of 22
+occupational subgroup: 110 physicians, 1,724 at-risk person-weeks, 199 episodes
+no interaction terms are fitted: one mask-by-aerosol cell holds a single physician
+
+joint Wald test on the four occupational terms  chi-square 1.6343, df 4, p = 0.8026
+
+individual occupational terms from the same fit (incidence-rate ratios)
+              IRR       lo       hi        p
+patients  1.00290  0.99358  1.01230  0.54333
+oncall    0.99595  0.90435  1.09682  0.93423
+mask_use  0.84288  0.54659  1.29977  0.43923
+aerosol   1.13174  0.90030  1.42268  0.28906
+                    IRR       lo       hi        p
+patients        1.00290  0.99358  1.01230  0.54333
+oncall          0.99595  0.90435  1.09682  0.93423
+mask_use        0.84288  0.54659  1.29977  0.43923
+aerosol         1.13174  0.90030  1.42268  0.28906
+age10           0.84494  0.69620  1.02546  0.08811
+school_kids     1.89318  1.26486  2.83362  0.00192
+susceptibility  1.44190  1.07913  1.92663  0.01332
+
+overdispersion parameter alpha  0.30468 (SE 0.11657)
+size parameter 1/alpha          3.2821
+
+Poisson comparison on the same specification: log-likelihood -186.7500 against -178.7768
+likelihood-ratio test for overdispersion  chi-square 15.9464, p = 0.000033 (one-sided, boundary parameter)
+Poisson incidence-rate ratios for the same terms
+                    IRR        p
+patients        1.00314  0.37062
+oncall          0.99572  0.90797
+mask_use        0.84150  0.29305
+aerosol         1.16637  0.09041
+age10           0.83913  0.02764
+school_kids     1.82750  0.00008
+susceptibility  1.43648  0.00162
+participatory     91 of    497 = 18.3099%  (95% CI 15.006-21.996)
+sentinel         739 of  3,779 = 19.5554%  (95% CI 18.302-20.857)
+season-level difference (participatory minus sentinel)  -1.2456 percentage points
+computed on the raw weekly series, not the smoothed ones
+participatory  reliability 0.29331   noise share 70.669%
+sentinel       reliability 0.96197   noise share 3.803%
+attenuation ceiling on the correlation  0.53118
+              window  n  pearson_smoothed  p_smoothed  spearman_smoothed  pearson_raw    p_raw
+        pre-epidemic 10           0.88609    0.000641            0.87879      0.52384 0.120158
+            epidemic  9           0.75414    0.018893            0.63333      0.43690 0.239659
+       post-epidemic 14           0.04696    0.873347            0.03297     -0.22590 0.437424
+early-warning window 19           0.64196    0.003044            0.75439      0.48907 0.033585
+         full season 33           0.53804    0.001240            0.63937      0.24258 0.173770
+
+early-warning window (primary): r = +0.64196  moving-block bootstrap 95% CI +0.351 to +0.913 (block length 4, non-circular, B = 2000)
+post-epidemic excluding the flagged closing week: r = +0.28460  (n = 13)
+lag -4  n = 29  r = +0.36569
+lag -3  n = 30  r = +0.52844
+lag -2  n = 31  r = +0.58738  <- point maximum
+lag -1  n = 32  r = +0.55777
+lag +0  n = 33  r = +0.53804
+lag +1  n = 32  r = +0.57464
+lag +2  n = 31  r = +0.42356
+lag +3  n = 30  r = +0.22912
+lag +4  n = 29  r = -0.01188
+
+point profile peaks at lag -2 (r = 0.58738); the neighbouring lags [-3, -2, -1, 0, 1] run 0.528 to 0.587, so the profile is flat across the central lags
+procedure of record: lagged pairs formed first, then PAIRS resampled in NON-CIRCULAR blocks of 4 weeks, B = 2000
+  seed        7  modal lag -1 in 28.2% of resamples; lag 0 in 19.1%; 95% interval [-3, +1]
+  seed       42  modal lag -1 in 27.5% of resamples; lag 0 in 18.4%; 95% interval [-3, +1]
+  seed     2026  modal lag -2 in 27.6% of resamples; lag 0 in 16.8%; 95% interval [-3, +2]
+  seed 20260707  modal lag -1 in 27.7% of resamples; lag 0 in 18.4%; 95% interval [-3, +2]
+
+the modal lag is NOT stable across seeds: lag -1 in 3 of 4 seeds, lag -2 in 1 of 4 seeds. No modal lag holds more than 28% of resamples, the runner-up lags are within a few percentage points of it, and each 95% interval spans several weeks. NO LEAD TIME IS IDENTIFIABLE from these data, and the instability across seeds is itself part of that conclusion rather than a nuisance to be averaged away.
+circular-wrap variant, for contrast: modal lag -2 in 21.8% — the block rule changes the answer, which is why non-circular blocks are specified
+       series peak_week  peak_value half_max_week  half_max_value
+participatory  2026-W05      28.497      2025-W51          14.248
+     sentinel  2026-W03      55.547      2026-W01          27.773
+
+peak-to-peak difference  +2 weeks (participatory 2026-W05 against sentinel 2026-W03); a landmark comparison, not an estimated lead time
+mean weekly difference   +2.7572 percentage points (SD 17.8052)
+limits of agreement      -32.141 to +37.655 percentage points
+pooled season difference -1.2456 percentage points  (a different quantity from the mean weekly difference)
+smoothed (causal MA-3)   slope +1.26556  intercept -7.01189  R-squared 0.2895  p 0.001240
+raw weekly               slope +0.31725  intercept +10.45003  R-squared 0.0588  p 0.173770
+onset threshold      10.59% combined positivity   (fixed a-priori input)
+intensity thresholds 22.04% / 42.56% / 60.92% / 71.38%   (medium / high / very high / extraordinary; fixed a-priori inputs)
+
+weeks reaching the onset threshold  21 of 33
+  2025-W40, 2025-W41, 2025-W42, 2025-W49, 2025-W50, 2025-W51, 2025-W52, 2026-W01, 2026-W02, 2026-W03, 2026-W04, 2026-W05, 2026-W06, 2026-W07, 2026-W08, 2026-W09, 2026-W11, 2026-W13, 2026-W15, 2026-W18, 2026-W20
+
+epidemic-phase calendar of record (fixed, not re-derived per analysis)
+  pre-epidemic   2025-W40 to 2025-W49   10 weeks
+  epidemic       2025-W50 to 2026-W06   9 weeks
+  post-epidemic  2026-W07 to 2026-W20   14 weeks
+  early-warning window (pre-epidemic and epidemic)  19 weeks
+
+maximum combined positivity in the season 55.13% in 2026-W02, which reaches the high intensity level
+                                                         indicator     AUC  ci_lo  ci_hi                               note
+                                participatory positivity, smoothed 0.77315  0.583  0.938                indicator of record
+                                     participatory positivity, raw 0.69907  0.486  0.896                                   
+all-episode ILI incidence per 1,000 at-risk person-weeks, smoothed 0.40741  0.206  0.624                at-risk denominator
+                                     sentinel positivity, smoothed 0.98148  0.933  1.000 construction check, not validation
+
+for comparison, the same incidence indicator on the FILED person-week denominator: AUC 0.39815 smoothed, 0.44213 raw
+MEM epidemic window        9 weeks   sentinel AUC 0.98148   (construction check)
+calendar window W49-W07    11 weeks   sentinel AUC 0.91322   (no sentinel input)
+
+sensitivity of the MEM-window value to shifting the window
+  window shifted -1 week(s): 9 weeks, sentinel AUC 0.87037, participatory AUC 0.71296
+  window shifted +0 week(s): 9 weeks, sentinel AUC 0.98148, participatory AUC 0.77315
+  window shifted +1 week(s): 9 weeks, sentinel AUC 1.00000, participatory AUC 0.83333
+--- participatory: 8 consensus alarm weeks (rule: at least one of six)
+          C1  C2  C3  NBCUSUM  EWMA  P95  n_detectors  any
+2025-W51   0   0   0        1     0    0            1    1
+2025-W52   0   0   0        1     0    1            2    1
+2026-W01   0   1   1        0     0    1            3    1
+2026-W02   0   1   1        0     0    0            2    1
+2026-W03   0   0   1        0     0    0            1    1
+2026-W04   0   0   1        0     0    1            2    1
+2026-W05   0   0   1        0     0    1            2    1
+2026-W20   1   1   1        0     1    1            5    1
+    alarm weeks: 2025-W51, 2025-W52, 2026-W01, 2026-W02, 2026-W03, 2026-W04, 2026-W05, 2026-W20
+    under the stricter rule of at least two of six: 2025-W52, 2026-W01, 2026-W02, 2026-W04, 2026-W05, 2026-W20
+
+--- sentinel: 8 consensus alarm weeks (rule: at least one of six)
+          C1  C2  C3  NBCUSUM  EWMA  P95  n_detectors  any
+2025-W50   0   0   0        1     0    0            1    1
+2025-W51   0   0   0        0     0    1            1    1
+2025-W52   1   1   1        1     1    1            6    1
+2026-W01   1   1   1        0     0    1            4    1
+2026-W02   0   1   1        0     0    1            3    1
+2026-W03   0   1   1        0     0    1            3    1
+2026-W04   0   0   1        0     0    0            1    1
+2026-W05   0   0   1        0     0    0            1    1
+    alarm weeks: 2025-W50, 2025-W51, 2025-W52, 2026-W01, 2026-W02, 2026-W03, 2026-W04, 2026-W05
+    under the stricter rule of at least two of six: 2025-W52, 2026-W01, 2026-W02, 2026-W03
+
+per-detector alarm weeks
+  participatory  C1       2026-W20
+  participatory  C2       2026-W01, 2026-W02, 2026-W20
+  participatory  C3       2026-W01, 2026-W02, 2026-W03, 2026-W04, 2026-W05, 2026-W20
+  participatory  NBCUSUM  2025-W51, 2025-W52
+  participatory  EWMA     2026-W20
+  participatory  P95      2025-W52, 2026-W01, 2026-W04, 2026-W05, 2026-W20
+  sentinel       C1       2025-W52, 2026-W01
+  sentinel       C2       2025-W52, 2026-W01, 2026-W02, 2026-W03
+  sentinel       C3       2025-W52, 2026-W01, 2026-W02, 2026-W03, 2026-W04, 2026-W05
+  sentinel       NBCUSUM  2025-W50, 2025-W52
+  sentinel       EWMA     2025-W52
+  sentinel       P95      2025-W51, 2025-W52, 2026-W01, 2026-W02, 2026-W03
+
+weeks that cannot alarm under any detector (warm-up): 2025-W40 to 2025-W46 — 7 weeks
+decision intervals in force: participatory 1.4, sentinel 2.52 (Monte-Carlo calibrated, series-specific)
+C3 guard band: 2 weeks, inherited from C2
+EWMA: lambda 0.4, control limit re-arms to the baseline mean after an alarm
+percentile detector: 95th percentile of the prior 10 weeks, sliding window
+
+participatory weekly denominator: median 15 incident episodes (interquartile range 12 to 17); one episode moves the share by about 6.7 percentage points
+                                                                    n  agreement    kappa  sensitivity    ppv      phi   tp   fp   fn    tn
+full season                                                      33.0    0.93939  0.83500       0.8750  0.875  0.83500  7.0  1.0  1.0  24.0
+early-warning window (pre-epidemic and epidemic, 19 weeks)       19.0    0.94737  0.89017       0.8750  1.000  0.89559  7.0  0.0  1.0  11.0
+epidemic phase                                                    9.0    0.88889  0.60870       0.8750  1.000  0.66144  7.0  0.0  1.0   1.0
+full season excluding the flagged closing week                   32.0    0.96875  0.91304       0.8750  1.000  0.91652  7.0  0.0  1.0  24.0
+2025 calendar portion (13 weeks, narrower early-warning window)  13.0    0.92308  0.75472       0.6667  1.000  0.77850  2.0  0.0  1.0  10.0
+
+under the stricter consensus rule of at least two detectors of six
+                                                                    n  agreement    kappa  sensitivity  ppv      phi   tp   fp   fn    tn
+full season                                                      33.0    0.87879  0.53191         0.75  0.5  0.54711  3.0  3.0  1.0  26.0
+early-warning window (pre-epidemic and epidemic, 19 weeks)       19.0    0.84211  0.56489         0.75  0.6  0.57092  3.0  2.0  1.0  13.0
+epidemic phase                                                    9.0    0.66667  0.34146         0.75  0.6  0.35000  3.0  2.0  1.0   3.0
+full season excluding the flagged closing week                   32.0    0.90625  0.61290         0.75  0.6  0.61807  3.0  2.0  1.0  26.0
+2025 calendar portion (13 weeks, narrower early-warning window)  13.0    1.00000  1.00000         1.00  1.0  1.00000  1.0  0.0  0.0  12.0
+
+weeks required to establish an agreement of this size at 80% power: 9
+threshold: participatory denominator below 10 (median over 33 weeks = 15)
+flagged weeks: 5 of 33
+    week  denominator         phase
+2025-W40            8  pre-epidemic
+2025-W41            8  pre-epidemic
+2025-W45            7  pre-epidemic
+2026-W19            8 post-epidemic
+2026-W20            8 post-epidemic
+
+flagged weeks per phase
+  pre-epidemic   3 of 10
+  epidemic       0 of 9
+  post-epidemic  2 of 14
+
+flagging is disclosure, never exclusion: no analysis in this supplement drops a flagged week, so no reported value changes.
+                                   characteristic  n_reporters  n_never reporters never_reporters      SMD      p
+                                   academic title          248       56     35.9%            7.1%  0.74666 0.0000
+                performs face-to-face examination          248       56     45.2%           67.9% -0.47030 0.0029
+                              university hospital          248       56     42.3%           21.4%  0.46043 0.0037
+                       current-season vaccination          248       56     36.7%           17.9%  0.43272 0.0073
+                       household school-age child          248       56     40.3%           21.4%  0.41781 0.0089
+                            household size (mean)          248       56      2.55            2.09  0.40581 0.0040
+                             general practitioner          248       56     10.1%           23.2% -0.35818 0.0125
+                     sufficient physical activity          248       56     47.2%           33.9%  0.27233 0.0761
+                                           female          248       56     66.5%           53.6%  0.26697 0.0890
+                         prior-season vaccination          248       56     39.9%           30.4%  0.20131 0.2234
+                                age, years (mean)          248       56     40.38           38.32  0.19236 0.1529
+any health condition conferring complication risk          242       56     21.9%           26.8% -0.11401 0.4800
+                              respiratory allergy          248       56     38.7%           42.9% -0.08447 0.6501
+                              current tobacco use          248       56     19.8%           21.4% -0.04132 0.8535
+         susceptibility (four-level ordinal mean)          248       56      1.36            1.38 -0.01670 0.8025
+                                         resident          248       56     17.7%           17.9% -0.00301 1.0000
+
+characteristics with |SMD| > 0.10   12 of 16
+characteristics with |SMD| > 0.25   9 of 16
+largest imbalance: academic title at +0.74666
+sample 298 registrants, of whom 242 are reporters; 6 declined the health-condition item and stay missing
+                        OR       lo       hi        p
+Intercept          1.99318  0.43577  9.11676  0.37392
+age10              1.15247  0.84583  1.57028  0.36860
+female             1.59977  0.84282  3.03655  0.15072
+comp_risk_any_nan  0.57380  0.26928  1.22269  0.15013
+ili_freq_ord4      0.87891  0.54754  1.41083  0.59296
+sees_pat           0.47282  0.24523  0.91162  0.02534
+prev_vax           1.70807  0.86197  3.38466  0.12496
+school_kids_any    2.15768  1.02902  4.52429  0.04178
+university         2.19596  1.05662  4.56382  0.03507
+
+apparent AUC             0.71499   (eight-term model of record)
+Efron optimism           0.04998   (1000 usable replicates of 1000, seed 20260707)
+optimism-corrected AUC   0.66500
+for contrast, dropping university affiliation gives an apparent AUC of 0.69772; the eight-term fit above is the model of record
+
+fitted reporting propensity  min 0.41423, median 0.83367, max 0.97936
+marginal reporting probability P(R = 1)  0.812081
+stabilized weights, n = 242
+  range  0.82920 to 1.96047
+  mean   1.00083
+  SD     0.16801
+Kish effective sample size  235.3936 of 242
+design effect               1.02807
+rate ratio per unit of fitted propensity  0.7327 (0.240-2.239), p = 0.5854
+
+crude rates across propensity tertiles
+            physicians  episodes  at_risk  rate_per_100
+tertile                                                
+T1 lowest           81       146     1391       10.4960
+T2                  80       162     1477       10.9682
+T3 highest          81       181     1697       10.6659
+
+correlation of the stabilized weight with the episode count  Pearson -0.0169, Spearman -0.0680
+most engaged 105 physicians; least engaged 37 physicians
+
+institution type      chi-square 22.2825, df 4, p = 0.000176
+col_0                                                                                               least engaged  most engaged
+institution_type                                                                                                               
+Sağlık Bakanlığı - Hastane                                                                                     16            15
+Sağlık Bakanlığı: Aile Sağlığı Merkezi                                                                          5             4
+Sağlık Bakanlığı: Merkez - İl Sağlık Müdürlüğü - İlçe Sağlık Müdürlüğü - 112 Komuta Kontrol Birimi              7            27
+Özel Hastane / Klinik                                                                                           2             4
+Üniversite (Kamu ya da Vakıf) - Hastane                                                                         7            55
+performs face-to-face examination    33.3% against 70.3%; chi-square 13.7629, df 1, p = 0.000207
+any monthly on-call duty             4.8% against 29.7%; chi-square 14.6530, df 1, p = 0.000129
+public-transport commuting time      Mann-Whitney U = 2379.5, p = 0.004943
+248 physicians, 4,626 at-risk person-weeks, 497 episodes
+
+adjusted offset Poisson with robust variance
+                      IRR        lo        hi         p
+Intercept        0.221369  0.123558  0.396611  0.000000
+weeks10          0.804553  0.709541  0.912288  0.000695
+age10            0.855737  0.761155  0.962072  0.009134
+school_kids_any  1.282328  1.017404  1.616235  0.035196
+ili_freq_ord4    1.244626  1.054306  1.469300  0.009751
+
+unadjusted IRR per ten more reported weeks  0.79121 (0.69567-0.89986), p = 0.000361
+                        stratum  physicians  episodes  at_risk  rate_per_100  ci_lo  ci_hi
+      least engaged (1-5 weeks)          37        12       86      13.95349   7.21  24.37
+moderately engaged (6-23 weeks)         106       216     1543      13.99870  12.19  16.00
+       most engaged (24+ weeks)         105       269     2997       8.97564   7.93  10.11
+incident onsets in a week preceded by a gap   83 of 497 (16.70%)
+of those, the last week filed before the gap was symptomatic  22 (4.43% of all episodes) — these are the onsets the rule creates
+restricted to a single-week gap                14 (2.82%)
+
+gap length by whether the preceding filed week was symptomatic
+prior_symptomatic  gap_length
+0                  1             40
+                   2              8
+                   3              9
+                   4              2
+                   7              1
+                   10             1
+1                  1             14
+                   2              5
+                   3              2
+                   12             1
+incident episodes by engagement stratum and agent cluster
+cluster_letter       A    B   C   D
+stratum                            
+least engaged        6    5   1   0
+moderately engaged  39  148  21   8
+most engaged        46  188  21  14
+composition chi-square 9.80176, df 6, p = 0.13325
+
+A-cluster share within each stratum  least engaged 50.0%, moderately engaged 18.06%, most engaged 17.1%
+
+negative-control gradient on B-cluster episodes only: IRR 0.83338 (0.717-0.968), p = 0.01733, 341 episodes
+a gradient of similar size in the negative control points to reporting intensity rather than to a difference in influenza-like illness
+clusters (physicians)          248
+mean cluster size              19.0685 weeks per physician
+ACHIEVED intracluster correlation of the event indicator  0.05299
+ACHIEVED design effect         1.95744
+ACHIEVED effective sample      2415.9 of 4,729 person-weeks
+
+PLANNING intracluster correlation 0.127 (design-stage assumption)
+PLANNING design effect         3.2947
+PLANNING effective sample      1435.3 person-weeks
+ratio-scale effects for the same pre-specified specification
+                    Andersen-Gill (no frailty)  offset Poisson, robust  offset negative-binomial
+vax_protected                           0.9655                  0.9505                    0.9247
+age10                                   0.8611                  0.8690                    0.8649
+female                                  1.1131                  1.1113                    1.0945
+sees_pat                                1.1835                  1.1708                    1.1784
+school_kids_any                         1.2722                  1.2841                    1.3417
+comp_risk_any                           0.9039                  0.9048                    0.9472
+pub_transport_user                      1.1073                  1.1239                    1.1601
+ili_freq_ord4                           1.3318                  1.2909                    1.2998
+sought_care                             1.0401                  1.0301                    1.0526
+active                                  0.9792                  0.9730                    0.9568
+smoker_current                          1.1426                  1.1259                    1.1419
+allergy                                 1.0427                  1.0444                    1.0320
+social_risk_score                       0.9201                  0.9240                    0.9076
+
+the shared gamma-frailty Andersen-Gill fit of record and the Prentice-Williams-Peterson stratified fit are estimated in the R notebook and are read alongside this table
+protected person-time share  0.3411
+                                                         quantity  events  se_log_HR      HR  VE_pct
+                                          all-ILI design boundary     497    0.09462 0.76714  23.286
+                   A-cluster design boundary (boundary of record)      91    0.22112 0.53822  46.178
+effect implied by the A-cluster fit's own observed standard error      91    0.27720 0.45997  54.003
+
+the observed A-cluster effectiveness of 46.3% sits ON the A-cluster design boundary; the third row is a different quantity and is never attached to the primary contrast
+power at a true effectiveness of 30%  25.0% (from the observed standard error)
+  among estimates that reach significance the expected effect on the log scale is 0.7088 against a true 0.3567, so a significant result overstates the effect by about 2.0-fold at this power
+                                 coding     HR  VE_pct
+      naive ever-vaccinated, unadjusted 0.9565    4.35
+        naive ever-vaccinated, adjusted 0.9302    6.98
+time-varying coding of record, adjusted 0.9655    3.45
+
+the naive coding counts 261 person-weeks as protected that precede protection, which inflates apparent effectiveness
+vaccinated 91, unvaccinated 157
+                                   characteristic vaccinated unvaccinated     SMD  in_adjustment_set
+any health condition conferring complication risk      31.1%        16.4%  0.3497              False
+                       household school-age child      49.5%        35.0%  0.2951               True
+                                age, years (mean)      41.53        39.72  0.1674               True
+                                           female      64.8%        67.5% -0.0567              False
+                              university hospital      30.8%        49.0% -0.3799              False
+                performs face-to-face examination      47.3%        43.9%  0.0664              False
+                    susceptibility (ordinal mean)       1.42         1.33  0.1336               True
+                         prior-season vaccination      78.0%        17.8%  1.5094              False
+                            household size (mean)       2.63         2.50  0.1116              False
+
+imbalanced (|SMD| > 0.10) and NOT in the adjustment set — residual-confounding concerns: any health condition conferring complication risk; university hospital; prior-season vaccination; household size (mean)
+              window  n   level  detrended  first_difference
+        pre-epidemic 10 0.88609    0.65126           0.66852
+            epidemic  9 0.75414    0.55618           0.21579
+early-warning window 19 0.64196    0.71564           0.26618
+         full season 33 0.53804    0.53699           0.16712
+
+where the first-difference coefficient falls well below the level coefficient, the agreement rests mainly on the shared seasonal trend
+partial windows retained (specification of record)  r = +0.53804, p = 0.001240, n = 33
+complete windows only                               r = +0.61849, p = 0.000209, n = 31
+difference  +0.08044 — the convention is stated wherever the coefficient is reported
+pairing-broken procedure (resample the index, then form pairs)
+  modal lag +0 in 91.3% of resamples; lag 0 in 91.3%
+procedure of record (form pairs, then resample pairs)
+  modal lag -1 in 27.7% of resamples; lag 0 in 18.4%
+
+the pairing-broken procedure concentrates the peak at lag 0 in the large majority of resamples. That concentration is an artefact of destroying the lag pairing, not evidence of synchrony; the lag-preserving procedure is the procedure of record.
+                       series    h  multiple_of_calibrated  n_reset  n_persist  n_upcross  reset_eq_persist  reset_eq_upcross  consecutive_reset_alarms
+participatory A-cluster count 1.40                     1.0        2          7          1             False             False                      True
+participatory A-cluster count 2.10                     1.5        1          5          1             False              True                     False
+participatory A-cluster count 2.80                     2.0        1          4          1             False              True                     False
+      sentinel positive count 2.52                     1.0        2         15          1             False             False                     False
+      sentinel positive count 3.78                     1.5        1         12          1             False              True                     False
+      sentinel positive count 5.04                     2.0        1         12          1             False              True                     False
+
+reset and persistent-accumulator rules give identical alarm sets in 0 of 6 parameter combinations
+reset and first-upcrossing rules agree in 4 of 6
+consecutive alarm weeks occur under the reset rule in 1 of 6 combinations
+
+The rules coincide only where no alarm falls in consecutive weeks. At the calibrated decision intervals the accumulated log-likelihood ratio stays above the interval for several weeks on both count series, so the rules diverge: the persistent accumulator keeps alarming while it remains above the interval and the first-upcrossing rule alarms once per excursion. The reset rule is the rule of record and is stated wherever an alarm set is reported.
+72 specifications enumerated (3 quantities x 3 smoothings x 2 baseline lengths x 2 thresholds x 2 consensus rules)
+
+--- scored on the full season (33 weeks)
+    median 0.5296   range 0.1149 to 0.8406   interquartile range 0.4278 to 0.7238
+    substantial agreement (kappa >= 0.60)  36.1%
+    fair or poor (kappa < 0.40)            22.2%
+    maximum  0.84058  rate per 100, causal MA-3, 7-week baseline, 3.0 SD, consensus >=2
+    minimum  0.11494  A-cluster positivity (%), raw, 5-week baseline, 2.0 SD, consensus >=2
+    the specification of record sits at 0.83500, ranking 2 of 72, above 94% of the curve, tied with 2 other specifications
+      higher by +0.0056: rate per 100, causal MA-3, 7-week baseline, 3.0 SD, consensus >=2
+
+    median kappa by measured quantity
+                          median     min     max  count
+measured_quantity                                      
+A-cluster positivity (%)  0.5268  0.1149  0.8350     24
+rate per 100              0.7171  0.2979  0.8406     24
+weekly count              0.4854  0.2929  0.5951     24
+
+    median kappa by smoothing convention
+                median     min     max  count
+smoothing                                    
+causal MA-3     0.6574  0.3436  0.8406     24
+raw             0.4663  0.1149  0.5951     24
+symmetric MA-3  0.6363  0.3436  0.8197     24
+
+    median kappa by consensus rule
+                median     min     max  count
+consensus_rule                               
+>=1             0.5951  0.3436  0.8350     36
+>=2             0.5217  0.1149  0.8406     36
+
+--- scored on the early-warning window (19 weeks)
+    median 0.6760   range 0.2149 to 0.8902   interquartile range 0.6161 to 0.7745
+    substantial agreement (kappa >= 0.60)  77.8%
+    fair or poor (kappa < 0.40)            8.3%
+    maximum  0.89017  A-cluster positivity (%), causal MA-3, 5-week baseline, 3.0 SD, consensus >=1
+    minimum  0.21488  A-cluster positivity (%), raw, 5-week baseline, 2.0 SD, consensus >=2
+    the specification of record sits at 0.89017, ranking 1 of 72, above 93% of the curve, tied with 4 other specifications
+
+    median kappa by measured quantity
+                          median     min     max  count
+measured_quantity                                      
+A-cluster positivity (%)  0.6274  0.2149  0.8902     24
+rate per 100              0.6736  0.2692  0.8257     24
+weekly count              0.6816  0.3770  0.8725     24
+
+    median kappa by smoothing convention
+                median     min     max  count
+smoothing                                    
+causal MA-3     0.7444  0.4648  0.8902     24
+raw             0.5950  0.2149  0.7738     24
+symmetric MA-3  0.7324  0.4571  0.8902     24
+
+    median kappa by consensus rule
+                median     min     max  count
+consensus_rule                               
+>=1             0.7595  0.4865  0.8902     36
+>=2             0.6274  0.2149  0.8725     36
+
+Internal consistency: in each scoring window the grid row carrying the specification of record equals the value that same specification produces in the aberration panel (A56):
+  full season          grid 0.83500  panel 0.83500
+  early-warning window grid 0.89017  panel 0.89017
+full season, all 33 weeks (value of record)  kappa 0.83500
+omitting the flagged closing week 2026-W20, 32 weeks  kappa 0.91304
+the flagged week costs +0.07804 of kappa; it carries a participatory alarm the sentinel series does not
+
+the closing week is retained in every reported analysis; this block discloses its influence and does not remove it
+
+week-by-week alarm comparison written for all 33 weeks; the two series agree in 31 of 33
+weights are applied to a model whose estimates of record are unweighted
+                    HR_unweighted  HR_IPRW  unweighted_CI_width  abs_shift  shift_pct_of_CI_width
+covariate                                                                                        
+vax_protected             0.96549  0.94618              0.39245    0.01931                4.92079
+age10                     0.86106  0.83994              0.17225    0.02112               12.26258
+female                    1.11314  1.02867              0.43778    0.08447               19.29488
+sees_pat                  1.18348  1.18588              0.43679    0.00240                0.55020
+school_kids_any           1.27223  1.27331              0.48547    0.00108                0.22337
+comp_risk_any             0.90392  0.94064              0.42924    0.03671                8.55336
+pub_transport_user        1.10726  1.09502              0.47961    0.01224                2.55199
+ili_freq_ord4             1.33176  1.33489              0.40464    0.00313                0.77334
+sought_care               1.04005  1.03494              0.45796    0.00511                1.11684
+active                    0.97924  0.98810              0.35830    0.00887                2.47450
+smoker_current            1.14261  1.09587              0.55937    0.04674                8.35627
+allergy                   1.04271  1.03160              0.39349    0.01111                2.82227
+social_risk_score         0.92006  0.96470              0.26577    0.04465               16.79989
+
+largest shift: female at 19.3% of that coefficient's own unweighted interval width
+no coefficient moves by an amount comparable to its own uncertainty, so the unweighted estimates stand
+                 IRR_Poisson_robust  p_Poisson_robust  IRR_negative_binomial  p_negative_binomial
+weeks10                     0.80455           0.00069                0.82009              0.00317
+age10                       0.85574           0.00913                0.85948              0.01018
+school_kids_any             1.28233           0.03520                1.32452              0.01919
+ili_freq_ord4               1.24463           0.00975                1.25401              0.01381
+
+dispersion parameter alpha  0.25534 (SE 0.06775)
+overdispersion likelihood-ratio test  chi-square 28.9896, p = 3.64e-08 (one-sided, boundary parameter)
+Pearson dispersion of the Poisson fit  1.7023
+
+the two families agree in direction and magnitude, so the gradient does not depend on how the extra variance is handled
+                                                        risk_set  person_weeks  physicians  events  crude_OR    lo    hi
+at-risk weeks after the first observed week (risk set of record)          4378         232     449    1.7755 1.372 2.298
+                    all at-risk weeks, including each first week          4626         248     497    1.6597 1.286 2.143
+             risk set of record, excluding the final season week          4222         231     441    1.7453 1.343 2.269
+                   all filed weeks after the first observed week          4481         233     449    1.8280 1.412 2.366
+
+crude odds ratio ranges 1.660 to 1.828 across the four risk sets
+the conditional estimate of record, with a per-physician random intercept, is fitted in the R notebook
+interior grid (first to last observed week, per physician)  5,667 weeks
+filed person-weeks                                         4,729
+unfiled interior person-weeks                              938 (16.5520% of the interior grid)
+
+bounding the season incidence per 100 at-risk person-weeks
+   k  implied_extra_episodes  season_incidence_per_100
+0.50                    50.4                    9.8380
+0.75                    75.6                   10.2908
+1.00                   100.8                   10.7436
+1.28                   129.0                   11.2508
+1.46                   147.1                   11.5768
+1.50                   151.2                   11.6492
+2.00                   201.6                   12.5548
+
+observed rate at k = 1 reproduces the estimate of record, 10.7436 per 100; the band over k from 0.5 to 2.0 is the deterministic bound
+season positivity  18.3099%
+achieved  design effect 1.9574 -> effective sample 2415.9; half-width plus or minus 0.01542 (1.54 percentage points)
+planning  design effect 3.2947 -> effective sample 1435.3; half-width plus or minus 0.02001 (2.00 percentage points)
+
+independent observations for a 5-percentage-point margin  230
+  reports required under the achieved design effect  450
+  reports required under the planning design effect  758
+         coefficient       r  fisher_z  weeks_required
+early-warning window 0.64196   0.76150              17
+         full season 0.53804   0.60140              25
+  pre-epidemic phase 0.88609   1.40342               7
+
+the season observed here is 33 weeks long
+exposed person-time share 0.3411; A-cluster events achieved 91
+ true_VE_pct  events_required  achieved_A_cluster_events detectable
+          50               73                         91        yes
+          40              134                         91         no
+          30              275                         91         no
+          20              702                         91         no
+sentinel reliability held at 0.96197; participatory reliability achieved 0.29331
+ target_correlation  participatory_reliability_required  achieved attainable
+                0.6                              0.3742    0.2933        yes
+                0.7                              0.5094    0.2933        yes
+                0.8                              0.6653    0.2933        yes
+                0.9                              0.8420    0.2933        yes
+
+the current ceiling on the observable correlation is 0.53118

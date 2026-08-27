@@ -1,0 +1,8 @@
+check,result,detail
+Row counts per sheet,ALL FIVE EXACT,"304 / 4,729 / 497 / 33 / 248 stated, and the dataset returns exactly those"
+Variable counts per sheet,ALL FIVE EXACT,64 / 117 / 27 / 26 / 29 stated; listed rows and actual sheet columns agree on every sheet
+"n non-missing | n missing, all 263 rows",263 of 263 EXACT,every cell recomputed from the dataset; zero mismatches
+Declared numeric ranges,NO CONTRADICTION,every cell stating a numeric range matches the observed minimum and maximum; declared binaries contain only 0/1
+Raw vs DERIVED flags,INTERNALLY CONSISTENT,"186 DERIVED and 77 RAW; every DERIVED row names at least one source variable, none is left blank"
+Coverage against the repository codebook,IDENTICAL SET,"263 sheet-variable pairs on both sides, no variable in one and not the other"
+"Derivation wording, A2 vs repository codebook","DEFECT FOUND IN THE REPOSITORY COPY, NOW FIXED","A2 flags 91 variables as DERIVED and names their source (age from birth_year, comp_risk_any from own_complication_risk_n, ili_freq_ord from ili_freq_per_year, and so on), while the repository codebook described the same 91 as 'taken directly from the recorded response'. A2 is right; the repository column was rewritten to name the source and point at A2. No wording was invented beyond the source A2 already states."

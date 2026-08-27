@@ -1,27 +1,26 @@
 cff-version: 1.2.0
-message: If you use this code, please cite the archived release and the thesis it accompanies.
-title: SALGINTR 2025/26 analysis code
+message: If you use this software or its outputs, please cite the article below.
+title: SALGINTR analysis code and codebook
 abstract: >-
-  Analysis code, pseudocode and computational specifications for the SALGINTR study, a
-  physician-based digital participatory surveillance system for influenza-like illness in Türkiye,
-  covering the 2025/26 season (ISO weeks 40/2025 to 20/2026). Includes the variable codebook and the
-  aberration-detection ensemble implemented from published detector definitions. The analysis dataset
-  is not distributed; see the data-availability statement in README.md.
+  Analysis notebooks, variable codebook and analysis specifications for SALGINTR, a
+  physician-based digital participatory influenza-like-illness surveillance system in Türkiye,
+  covering the 2025/26 season (ISO weeks 40/2025 to 20/2026).
 type: software
 license: MIT
 repository-code: https://github.com/salgintr/SALGINTR-2025-2026-analysis
 keywords:
   - participatory surveillance
   - influenza-like illness
+  - digital epidemiology
   - syndromic surveillance
-  - aberration detection
-  - recurrent-event analysis
-  - reproducible research
-authors:
-  - name: SALGINTR study
-    website: https://github.com/salgintr
-
-# Fill in when the archived release is created, then keep in step with README.md and the thesis:
-#   doi: 10.5281/zenodo.XXXXXXX
-#   version: v1.0.0
-#   date-released: YYYY-MM-DD
+preferred-citation:
+  type: article
+  title: >-
+    SALGINTR: development and early evaluation of a low-cost cloud-based digital participatory
+    surveillance system for influenza-like illness among physicians in Türkiye — a proof of
+    concept
+  journal: BMC Infectious Diseases
+  year: 2026
+  volume: 26
+  start: 1506
+  doi: 10.1186/s12879-026-14153-1

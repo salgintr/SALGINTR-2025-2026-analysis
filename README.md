@@ -1,4 +1,4 @@
-# SALGINTR 2025/26 analysis code (version:20260816_2000)
+# SALGINTR 2025/26 analysis code
 
 Analysis code, pseudocode and computational specifications for the SALGINTR study — a
 physician-based digital participatory surveillance system for influenza-like illness in Türkiye,
@@ -10,21 +10,20 @@ use. **It does not contain the data** — see [Data availability](#data-availabi
 
 ## Associated publication
 
-This repository accompanies the following proof-of-concept study:
-
-> Ontaş E, Güçlü H, Aydın Son Y. (2026). SALGINTR: development and early evaluation of a low-cost cloud-based digital participatory surveillance system for influenza-like illness among physicians in Türkiye — a proof of concept. *BMC Infectious Diseases*.  
+> Ontaş E, Güçlü H, Aydın Son Y. (2026). SALGINTR: development and early evaluation of a low-cost cloud-based digital participatory surveillance system for influenza-like illness among physicians in Türkiye — a proof of concept. *BMC Infectious Diseases*, 26, 1506.  
 > https://doi.org/10.1186/s12879-026-14153-1
 
 ## What is here
 
 | Path | Contents |
 |---|---|
-| `notebooks/` | The two analysis notebooks, one per language, with outputs embedded as executed |
-| `pseudocode/` | Language-neutral pseudocode for each analysis, for reimplementation in any language |
-| `codebook/` | Every variable used in the analyses: label, type, permitted values, derivation rule |
-| `specs/` | The locked analysis protocol, the detector specification and the seed register |
-| `environment/` | Version-pinned environment files for Python and R |
-| `docs/` | Repository documentation, including how the notebooks map to the thesis supplement |
+| `notebooks/` | The two analysis notebooks, one per language, with outputs embedded as executed, and the verbatim run log of each |
+| `codebook/` | All 263 variables the analyses consume, across the five dataset sheets: label, type, permitted values, derivation rule, and which analyses use each one |
+| `specs/` | The analysis inventory, one row per analysis, and the canonical value of every quantity the manuscript reports more than once |
+| `pseudocode/` | The collection-pipeline pseudocode, and the revision record for the supplement's pseudocode blocks |
+| `figures/` | The directed acyclic graphs behind the identification strategy for each hypothesis |
+| `environment/` | Version-pinned environment files for Python and R, and the note recording how the notebooks were run |
+| `docs/` | Audit records: the codebook against the dataset, the shipped figures against the notebook output, and the items of both questionnaires |
 
 ## Analyses
 
@@ -42,15 +41,63 @@ equations, which are fitted with R packages that have no equivalent implementati
 Figure generation is deliberately outside the scope of these notebooks: they produce the numbers, and
 the thesis figures are drawn separately.
 
+## Pseudocode
+
+`pseudocode/COLLECTION-PIPELINE.md` describes the weekly collection cycle in language-neutral form:
+enrolment, the Saturday send of each physician's own pre-filled link, the retry chain that carries an
+interrupted send across the following days, and the operator procedures around it. The two
+questionnaires it drives are itemised in `docs/questionnaire_items.csv`. The script that implemented
+the cycle is not distributed: it carries the live form endpoint, the response workbook and the
+study's mailbox addresses, and a Google Form endpoint accepts submissions from anyone holding it.
+
+Participant identifiers were drawn at random and are not derived from the email address or from any
+other participant attribute, which is why the generation rule can be stated openly in that file. An
+identifier computed from an identifier — a digest of an address, say — would be invertible by
+enumeration over a small and guessable address space, and describing the rule would then amount to
+describing a re-identification method.
+
+`pseudocode/pseudocode.csv` is a revision record rather than the corpus: five entries covering four
+analyses, each giving the block as it now reads and what changed from the previous version. The
+pseudocode of record for each analysis is in the thesis supplement, and
+`specs/analysis_inventory.csv` names the supplement section carrying it for every analysis, in its
+`current_supplement_pseudocode` column.
+
+## Aberration detection
+
+The detection ensemble is implemented directly from the published detector definitions rather than
+through a historical-baseline surveillance package, because the available series is a single season
+and those packages require multi-year baselines. Six detectors run on the causal three-week moving
+average of each series with a seven-week rolling baseline and a seven-week warm-up:
+
+| Detector | Statistic | Alarm threshold |
+|---|---|---|
+| EARS C1 | standardised deviate against the prior seven weeks | statistic > 3 |
+| EARS C2 | as C1, baseline ending two weeks before the current week | statistic > 3 |
+| EARS C3 | cumulative positive C2 excess over three weeks, inheriting C2's guard band | statistic > 2 |
+| Negative-binomial CUSUM | log-likelihood ratio on weekly counts, dispersion by method of moments, accumulator reset after an alarm | series-specific decision interval, Monte-Carlo calibrated |
+| EWMA | exponentially weighted average, smoothing constant 0.4, control limit re-arming to the baseline mean after an alarm | Z > baseline mean + 3 standard deviations of Z |
+| Empirical 95th percentile | current value against the prior ten weeks | value above the 95th percentile |
+
+A week is flagged when at least one detector alarms; a two-detector consensus variant is reported
+separately. The Farrington Flexible algorithm was excluded for the reason above.
+
+Three details are load-bearing and easy to get wrong, so they are stated explicitly here as well as
+in the code: EARS C3 inherits C2's two-week guard band; the CUSUM decision interval is calibrated
+separately for each series rather than shared; and the EWMA control limit re-arms after an alarm,
+without which the statistic latches and reports consecutive weeks as separate alarms.
+
 ## Reproducibility
 
-Random seeds are fixed for every resampling procedure and recorded in `specs/seeds.md`. Bootstraps
-use 2,000 replicates. The environment files pin the package versions the reported results were
-produced under.
+Every resampling procedure sets its seed in the cell that uses it, and bootstraps use 2,000
+replicates. `environment/ENVIRONMENT.md` pins the package versions the reported results were produced
+under and records the one quantity that still moves between runs. `specs/canonical_specifications.csv`
+fixes the value of each quantity the manuscript reports in more than one place, so that the
+Results and the Discussion cannot drift apart.
 
 ## Data availability
 
-The analysis dataset is **not** distributed with this repository.
+The analysis dataset is **not** distributed with this repository, and the `.gitignore` is written to
+prevent it being added inadvertently.
 
 The cohort is a small professional panel of physicians in a single country. Even with direct
 identifiers removed, the combination of specialty, institution type, region, household composition
@@ -70,11 +117,7 @@ audited and adapted without the data in hand.
 See `CITATION.cff`. The archived release carries a DOI; cite that DOI for a specific version and this
 repository for the code in general.
 
-## Contact
-
-For questions about the repository, analysis code, data access, or reproducibility, please contact:
-> **eray.ontas@metu.edu.tr**
-
 ## Licence
 
-The code will be released under the MIT Licence, and the codebook and written documentation will be released under the Creative Commons Attribution 4.0 International (CC BY 4.0) licence.
+Code is released under the MIT Licence (`LICENSE`). The codebook and written documentation are
+released under CC BY 4.0 (`LICENSE-docs`), so they may be reused with attribution.

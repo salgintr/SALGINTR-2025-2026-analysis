@@ -1,0 +1,7 @@
+quantity,value,spec,note
+"Naive (pairing-broken) bootstrap, lag-0 share",94.2%,"seed 20260707, B=2000, block length 4, resample index then form lagged pairs","This is the ARTEFACT being demonstrated, not a finding. Results and Discussion both state 94.2%."
+"Lag-preserving (paired) bootstrap, modal lag","-1, in 31.6% of resamples","seed 20260707, B=2000, block length 4, form lagged pairs FIRST then resample pairs","Lag 0 falls to 17.9%. 95% interval [-3, +1]. No lead identifiable."
+Reporting-propensity apparent AUC,0.698,"pre-specified 7-covariate set, n=298 (242 reporters, 56 non-reporters)",0.727 comes from a different covariate set and is superseded by the pre-specified-set rule.
+Reporting-propensity optimism-corrected AUC,0.652,"Efron bootstrap, seed 20260707, B=1000, model refitted in each replicate",Chapter 3's printed 0.651 is this quantity mislabelled as apparent. Both values now stated as a pair.
+A-cluster VE against the detection boundary,46.32% observed vs 46.18% boundary,"Schoenfeld, 91 events, protected person-time share 0.3411, 80% power","The observed effect is ON/marginally ABOVE the boundary, NOT below it."
+Magnitude exaggeration at this design's power,1.7x at a true VE of 30%,"200,000 draws at se(logHR)=0.2772",Power 24.8% at true VE 30%; significant estimates average VE 50.7%. This is the honest limitation.
