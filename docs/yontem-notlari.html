@@ -1,0 +1,904 @@
+<meta charset="utf-8">
+<title>SALGINTR Yöntem Notları</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,500;0,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+
+<style>
+/* ═══════════════════════════════════════════════ tokens */
+:root{
+  --paper:#FFFFFF;
+  --surface:#F4F6F9;
+  --surface-2:#EAEEF3;
+  --ink:#14171C;
+  --slate:#5C6472;
+  --slate-2:#7E8695;
+  --rule:#E3E7EC;
+  --rule-strong:#CBD2DA;
+  --crimson:#C5102A;
+  --crimson-soft:#FCEEF0;
+  --sage:#1F6F55;
+  --sage-soft:#EBF5F1;
+  --amber:#8F5C00;
+  --amber-soft:#FCF3E4;
+  --code-bg:#F6F7FA;
+
+  --sans:"IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --serif:"Newsreader", ui-serif, Georgia, "Times New Roman", serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --measure:71ch;
+  --wide:1040px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0E1116; --surface:#161A20; --surface-2:#1D222A;
+    --ink:#E9ECF1; --slate:#9BA3B0; --slate-2:#808896;
+    --rule:#242932; --rule-strong:#333944;
+    --crimson:#FF6076; --crimson-soft:#2A1418;
+    --sage:#4FBF95; --sage-soft:#0F2119;
+    --amber:#D69A3C; --amber-soft:#241B0C;
+    --code-bg:#12161B;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0E1116; --surface:#161A20; --surface-2:#1D222A;
+  --ink:#E9ECF1; --slate:#9BA3B0; --slate-2:#808896;
+  --rule:#242932; --rule-strong:#333944;
+  --crimson:#FF6076; --crimson-soft:#2A1418;
+  --sage:#4FBF95; --sage-soft:#0F2119;
+  --amber:#D69A3C; --amber-soft:#241B0C;
+  --code-bg:#12161B;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--sans); font-size:16px; line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--crimson);color:#fff}
+:focus-visible{outline:2px solid var(--crimson);outline-offset:3px;border-radius:2px}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* ═══════════════════════════════════════════════ layout
+   Tek sütun akış — Google Sites gibi bir iframe içine gömüldüğünde
+   sabit yükseklikli bir kenar çubuğu sıkışacağı için kullanılmadı. */
+.page{padding:0 clamp(18px,4vw,40px) 96px}
+.col{max-width:var(--measure);margin:0 auto}
+.wide{max-width:var(--wide);margin:26px auto}
+
+/* ───────── header */
+.hd{border-bottom:1px solid var(--rule);padding:clamp(36px,6vw,64px) 0 30px;margin-bottom:14px}
+.kicker{font:600 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--crimson);margin:0 0 15px}
+.hd h1{
+  font-family:var(--serif);font-weight:500;font-size:clamp(31px,5vw,48px);
+  line-height:1.08;letter-spacing:-.022em;margin:0 0 16px;text-wrap:balance;
+}
+.hd .sub{font-size:17.5px;line-height:1.58;color:var(--slate);margin:0 0 22px;max-width:62ch}
+.hd .sub strong{color:var(--ink);font-weight:500}
+.byline{display:flex;flex-wrap:wrap;gap:7px}
+.byline span{
+  font:500 11.5px/1 var(--mono);border:1px solid var(--rule-strong);
+  color:var(--slate);padding:6px 9px;border-radius:3px;background:var(--surface);
+}
+
+/* ───────── audience box */
+.who{
+  border:1px solid var(--rule);border-left:3px solid var(--crimson);
+  border-radius:0 6px 6px 0;background:var(--surface);
+  padding:18px 20px;margin:30px auto;max-width:var(--measure);
+}
+.who h2{font:600 13px/1.4 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--crimson);margin:0 0 11px}
+.who ul{margin:0;padding-left:19px}
+.who li{margin:0 0 6px;font-size:15px;line-height:1.55}
+.who li:last-child{margin-bottom:0}
+.who li::marker{color:var(--slate-2)}
+
+/* ───────── toc */
+.toc{margin:34px auto;max-width:var(--wide);border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+.toc h2{
+  font:600 11px/1 var(--sans);letter-spacing:.11em;text-transform:uppercase;color:var(--slate-2);
+  margin:0;padding:13px 18px;background:var(--surface-2);border-bottom:1px solid var(--rule);
+}
+.toc ol{list-style:none;margin:0;padding:8px;display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:1px}
+.toc li{margin:0}
+.toc a{
+  display:grid;grid-template-columns:26px 1fr;gap:9px;align-items:baseline;
+  text-decoration:none;color:var(--ink);font-size:14.5px;line-height:1.4;
+  padding:9px 11px;border-radius:4px;
+}
+.toc a:hover{background:var(--surface)}
+.toc a i{font-family:var(--mono);font-style:normal;font-size:11.5px;color:var(--crimson);font-variant-numeric:tabular-nums}
+
+/* ───────── sections */
+section{scroll-margin-top:18px;padding-top:34px}
+.sh{margin:0 0 4px;padding-bottom:11px;border-bottom:2px solid var(--ink)}
+.sh .n{font-family:var(--mono);font-size:11.5px;font-weight:600;color:var(--crimson);letter-spacing:.07em;display:block;margin-bottom:7px}
+.sh h2{font-family:var(--serif);font-weight:600;font-size:clamp(24px,3.2vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;text-wrap:balance}
+.standfirst{font-size:15.5px;color:var(--slate);margin:14px 0 26px;line-height:1.6}
+
+h3{font-family:var(--serif);font-weight:600;font-size:21px;line-height:1.24;letter-spacing:-.012em;margin:34px 0 10px;text-wrap:balance}
+h4{font:600 12.5px/1.35 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--slate);margin:24px 0 8px}
+p{margin:0 0 15px}
+ul,ol{margin:0 0 15px;padding-left:21px}
+li{margin:0 0 7px}
+li::marker{color:var(--slate-2)}
+a{color:var(--crimson)}
+code{font-family:var(--mono);font-size:.885em;background:var(--code-bg);border:1px solid var(--rule);padding:1px 4px;border-radius:3px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:.92em}
+
+/* ───────── blocks */
+.eq{
+  background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--crimson);
+  border-radius:0 5px 5px 0;padding:15px 17px;margin:18px 0;overflow-x:auto;
+}
+.eq pre{margin:0;font-family:var(--mono);font-size:14px;line-height:1.8;white-space:pre;color:var(--ink)}
+.eq .gloss{font-size:13.5px;color:var(--slate);margin:11px 0 0;line-height:1.55;white-space:normal}
+
+.src{margin:18px 0;border:1px solid var(--rule);border-radius:5px;overflow:hidden;background:var(--code-bg)}
+.src header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 13px;border-bottom:1px solid var(--rule);background:var(--surface-2)}
+.src header .l{font:600 10.5px/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--crimson)}
+.src header .d{font:400 11.5px/1.3 var(--sans);color:var(--slate-2)}
+.src pre{margin:0;padding:14px 15px;overflow-x:auto;font-family:var(--mono);font-size:12.8px;line-height:1.7;color:var(--ink);tab-size:2}
+.src pre .c{color:var(--slate-2);font-style:italic}
+.src pre .k{color:var(--crimson);font-weight:500}
+
+.box{border-radius:5px;padding:14px 17px;margin:18px 0;font-size:14.8px;line-height:1.6;border:1px solid var(--rule)}
+.box b.t{display:block;font:600 10.5px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;margin:0 0 8px}
+.box p:last-child{margin-bottom:0}
+.box.good{background:var(--sage-soft);border-color:color-mix(in srgb,var(--sage) 32%,transparent)}
+.box.good b.t{color:var(--sage)}
+.box.care{background:var(--amber-soft);border-color:color-mix(in srgb,var(--amber) 34%,transparent)}
+.box.care b.t{color:var(--amber)}
+.box.stop{background:var(--crimson-soft);border-color:color-mix(in srgb,var(--crimson) 30%,transparent)}
+.box.stop b.t{color:var(--crimson)}
+
+.tw{overflow-x:auto;margin:20px 0;border:1px solid var(--rule);border-radius:5px}
+table{border-collapse:collapse;width:100%;font-size:13.6px;min-width:520px}
+thead th{
+  text-align:left;font:600 10.8px/1.4 var(--sans);letter-spacing:.07em;text-transform:uppercase;
+  color:var(--slate);background:var(--surface-2);padding:10px 13px;
+  border-bottom:1px solid var(--rule-strong);vertical-align:bottom;white-space:nowrap;
+}
+tbody td{padding:10px 13px;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.5}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:var(--surface)}
+td.n,th.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+td.lead{font-weight:500}
+
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:11px;margin:20px 0}
+.fig{border:1px solid var(--rule);border-radius:5px;padding:13px 14px;background:var(--surface)}
+.fig b{display:block;font-family:var(--mono);font-size:21px;font-weight:600;letter-spacing:-.02em;line-height:1.15;font-variant-numeric:tabular-nums}
+.fig span{display:block;font-size:12px;color:var(--slate);line-height:1.42;margin-top:5px}
+
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:720px){.pair{grid-template-columns:1fr}}
+
+/* ───────── faq */
+.faq{margin:30px 0 8px}
+.faq > h3{display:flex;align-items:center;gap:12px;margin:0 0 13px;font-family:var(--sans);font-size:12.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--slate-2)}
+.faq > h3::after{content:"";flex:1;height:1px;background:var(--rule)}
+details.f{border:1px solid var(--rule);border-radius:5px;margin:0 0 8px;background:var(--paper);overflow:hidden}
+details.f > summary{list-style:none;cursor:pointer;padding:12px 16px 12px 36px;position:relative;font-size:15px;line-height:1.5;font-weight:500}
+details.f > summary::-webkit-details-marker{display:none}
+details.f > summary::after{
+  content:"";position:absolute;left:16px;top:19px;width:7px;height:7px;
+  border-right:1.6px solid var(--crimson);border-bottom:1.6px solid var(--crimson);
+  transform:rotate(-45deg);transition:transform .16s ease;
+}
+details.f[open] > summary::after{transform:rotate(45deg);top:17px}
+details.f[open] > summary{background:var(--surface);border-bottom:1px solid var(--rule)}
+details.f > summary:hover{background:var(--surface)}
+.a{padding:13px 16px 15px 36px;display:flex;flex-direction:column;gap:10px}
+.a p{margin:0;font-size:14.6px;line-height:1.62}
+.a .en{color:var(--slate);padding-top:10px;border-top:1px dashed var(--rule)}
+.a .tag{
+  font:600 9.5px/1 var(--mono);letter-spacing:.09em;border:1px solid var(--rule-strong);
+  color:var(--slate-2);padding:3px 5px;border-radius:2px;margin-right:8px;vertical-align:2px;
+}
+.a .en .tag{border-color:color-mix(in srgb,var(--crimson) 35%,transparent);color:var(--crimson)}
+
+/* ───────── footer */
+footer{border-top:2px solid var(--ink);margin-top:64px;padding-top:26px}
+footer h3{margin-top:0}
+.cite{
+  font-family:var(--mono);font-size:12.8px;line-height:1.7;background:var(--surface);
+  border:1px solid var(--rule);border-radius:5px;padding:14px 16px;margin:14px 0;overflow-x:auto;
+}
+.small{font-size:13.2px;color:var(--slate-2);line-height:1.62}
+</style>
+
+<div class="page">
+
+<!-- ══════════════════════════════════ header -->
+<header class="hd col">
+  <p class="kicker">Açık yöntem notları</p>
+  <h1>Düşük maliyetli bir katılımcı sürveyans sistemi nasıl kuruldu ve nasıl analiz edildi</h1>
+  <p class="sub">SALGINTR, Türkiye'de bir hekim kohortunun her hafta kendi grip benzeri hastalık durumunu bildirdiği bir sürveyans sistemidir. Bu sayfa <strong>sonuçları değil, yöntemi</strong> anlatır: hangi veri yapısı hangi modeli gerektirdi, hangi parametreler neden seçildi, hangi kararlar analiz görülmeden önce sabitlendi ve <strong>hangi sınırlar tasarımın kendisinden geliyor</strong>. Benzer bir sistem kurmak isteyen araştırmacılar için yazıldı.</p>
+  <div class="byline">
+    <span>2025/26 sezonu · 33 ISO haftası</span>
+    <span>248 hekim · 4.729 kişi-hafta</span>
+    <span>≈100 ABD doları donanım maliyeti</span>
+  </div>
+</header>
+
+<div class="who">
+  <h2>Bu sayfa kimin işine yarar</h2>
+  <ul>
+    <li><strong>Katılımcı sürveyans kurmak isteyenler</strong> — platform mimarisi, haftalık ritim, maliyet kalemleri ve neyin gerçekten tekrarlanabilir olduğu.</li>
+    <li><strong>Tekrarlayan olay verisiyle çalışanlar</strong> — aynı kişinin bir sezonda birden çok kez hastalandığı bir panelde model seçimi ve tuzakları.</li>
+    <li><strong>Sürveyans sinyallerini karşılaştıranlar</strong> — iki akışın uyumu nasıl ölçülür ve ölçüm hatası bu uyuma nasıl bir tavan koyar.</li>
+    <li><strong>Metodoloji dersi verenler</strong> — Poisson, negatif binom, gama frailty ve nedensel diyagram kavramları tek bir gerçek veri kümesi üzerinde, sayılarıyla.</li>
+  </ul>
+</div>
+
+<!-- ══════════════════════════════════ toc -->
+<nav class="toc">
+  <h2>İçindekiler</h2>
+  <ol>
+    <li><a href="#s1"><i>01</i><span>Sistem: ne toplandı, nasıl toplandı</span></a></li>
+    <li><a href="#s2"><i>02</i><span>Analiz birimi ve payda</span></a></li>
+    <li><a href="#s3"><i>03</i><span>Veri yapısı modeli seçer</span></a></li>
+    <li><a href="#s4"><i>04</i><span>Sayım verisi: Poisson ve negatif binom</span></a></li>
+    <li><a href="#s5"><i>05</i><span>Tekrarlayan olay: frailty Andersen–Gill</span></a></li>
+    <li><a href="#s6"><i>06</i><span>Gama dağılımı: iki modelde tek fikir</span></a></li>
+    <li><a href="#s7"><i>07</i><span>Nedensel çerçeve ve düzeltme kümeleri</span></a></li>
+    <li><a href="#s8"><i>08</i><span>Katılımın kendisi bir değişken</span></a></li>
+    <li><a href="#s9"><i>09</i><span>İki sürveyans sinyalini karşılaştırmak</span></a></li>
+    <li><a href="#s10"><i>10</i><span>Ölçüm hatasının koyduğu tavan</span></a></li>
+    <li><a href="#s11"><i>11</i><span>Alarm algoritmaları ve spesifikasyon eğrisi</span></a></li>
+    <li><a href="#s12"><i>12</i><span>Güç, kesinlik, tasarım etkisi</span></a></li>
+    <li><a href="#s13"><i>13</i><span>Tekrarlanabilirlik altyapısı</span></a></li>
+    <li><a href="#s14"><i>14</i><span>Bu tasarımı yeniden kullanmak</span></a></li>
+  </ol>
+</nav>
+
+<!-- ══════════════════════════════════ 01 -->
+<section id="s1"><div class="col">
+  <div class="sh"><span class="n">01</span><h2>Sistem: ne toplandı, nasıl toplandı</h2></div>
+  <p class="standfirst">Katılımcı sürveyansta veri, hastanın kliniğe gitmesini beklemek yerine doğrudan kişiden gelir. SALGINTR bu modeli genel topluma değil, mesleki maruziyeti daha yüksek bir gruba — çalışan hekimlere — uyguladı.</p>
+
+  <h3>Haftalık ritim</h3>
+  <p>Kayıt bir kez yapılır (yaklaşık üç dakika): demografi, hasta bakıyorsa mesleki maruziyet, riski artıran ve azaltan etkenler. Sonrasında her hafta tek bir soru sorulur ve yanıt bir dakikadan kısa sürer.</p>
+  <div class="eq"><pre>Cumartesi 09.00   otomatik hatırlatma e-postası + ön dolgulu bağlantı
+      ↓
+Salı 23.59        yanıt penceresi kapanır
+      ↓
+Çarşamba          halka açık pano yenilenir
+
+hatırlama dönemi = ÖNCEKİ yedi gün
+  → salı doldurulan form, biten haftayı anlatır; doldurma gününü değil</pre>
+    <p class="gloss">Düzenli ve öngörülebilir bir uyarı, katılımcı panellerde paydayı ayakta tutan tek şeydir. Haftalık form bilerek kısa tutuldu: bildirim yükü, bu tür panellerde bırakmanın başlıca nedenidir.</p>
+  </div>
+
+  <h3>Kaynak kuralları — sonradan tartışma çıkarmamak için baştan yazılır</h3>
+  <ul>
+    <li><strong>Geç gelen bildirim</strong> anlattığı ISO haftasına yazılır, geldiği haftaya değil. Sonuç: bir haftanın paydası geriye dönük değişebilir; sezon içinde panoda görünen sayılar bu anlamda geçicidir.</li>
+    <li><strong>Aynı hafta için ikinci bildirim</strong> geldiğinde sonuncusu tutulur — yeniden gönderim bir düzeltme sayılır. Ayrı bir düzeltme kanalı yoktur.</li>
+    <li><strong>Doldurulmamış hafta</strong> "sağlıklı" demek değildir; gözlenmemiş zamandır. Bu ayrım Bölüm 02 ve 08'de belirleyici hâle gelir.</li>
+  </ul>
+
+  <h3>Mimari ve maliyet</h3>
+  <p>Sistem dört bileşenden oluşur ve hiçbiri belirli bir sağlayıcıya bağlı değildir: <strong>form servisi</strong>; <strong>fiziksel olarak ayrı iki depo</strong> (biri kayıt ve kimlik, diğeri haftalık bildirimler); jetonu üreten, ön dolgulu bağlantıyı hazırlayan, hatırlatmayı gönderen ve haftalık toplamı yazan bir <strong>betik katmanı</strong>; ve yalnızca toplamları okuyan bir <strong>pano</strong>.</p>
+  <div class="figs">
+    <div class="fig"><b>2.535 TL</b><span>alan adı, bir yıl</span></div>
+    <div class="fig"><b>2.049,6 TL</b><span>çalışma alanı aboneliği, 12 ay</span></div>
+    <div class="fig"><b>≈100 USD</b><span>toplam nakit maliyet</span></div>
+    <div class="fig"><b>≈1 kişi-ay</b><span>ücretsiz akademik emek</span></div>
+  </div>
+  <div class="box care"><b class="t">Dürüst maliyet</b>
+    <p>Yüz dolar yalnızca <em>nakit</em> maliyettir. Sistem ayrıca sezon boyunca yaklaşık bir kişi-aylık ücretsiz araştırmacı emeği tüketti: kurulum, haftalık işletim, hatırlatma takibi, veri düzenleme ve pano bakımı. Bu, en ekonomik gönüllü Influenzanet düğümlerinin bildirdiği bakım yüküyle karşılaştırılabilir. Para ihmal edilebilir; insan zamanı değil. Benzer bir sistem planlayan herkesin bütçelemesi gereken kalem budur.</p>
+  </div>
+  <div class="box stop"><b class="t">Erişim kısıtı — küçümsenmemeli</b>
+    <p>Tek bildirim yolu, e-postadaki bağlantıyla açılan bir web formuydu. Uygulama yok, SMS yok, telefon yok, kâğıt yok, çevrimdışı mod yok. Katılım; takip edilen bir e-posta adresi, tarayıcılı bir cihaz ve o anda bağlantı gerektiriyordu. Genel topluma açılacak bir tasarımda bu, doğrudan bir temsil sorunu hâline gelir.</p>
+  </div>
+</div></section>
+
+<!-- ══════════════════════════════════ 02 -->
+<section id="s2"><div class="col">
+  <div class="sh"><span class="n">02</span><h2>Analiz birimi ve payda</h2></div>
+  <p class="standfirst">Katılımcı panellerde en sık yapılan hata paydayı yanlış seçmektir. Herkes aynı süre gözlenmediği için "kişi" bir payda değildir.</p>
+
+  <p>İzlem birimi <strong>kişi-hafta</strong>dır: bir hekimin bir haftalık gözlemi. Hekimler eşit süre bildirim yapmadı — biri 33 hafta, biri 5 hafta, ortanca 20 hafta. Payda "hekim sayısı" olsaydı, beş hafta gözlenen kişiyle otuz üç hafta gözlenen kişi aynı ağırlığı taşırdı.</p>
+
+  <div class="wide"><div class="tw"><table>
+    <thead><tr><th>Sayı</th><th class="n">Değer</th><th>Ne işe yarar</th></tr></thead>
+    <tbody>
+      <tr><td class="lead">Doldurulmuş kişi-hafta</td><td class="n">4.729</td><td>Modelin kurulduğu panel. On üç değişkenin tamamı bu haftaların hepsinde eksiksiz, dolayısıyla hiçbir olgu dışlanmadı.</td></tr>
+      <tr><td class="lead">Risk altındaki kişi-hafta</td><td class="n">4.626</td><td><strong>Her insidans hızının paydası.</strong> Aradaki 103 hafta, önceki haftadan süregelen bir hastalığın haftasıdır; o haftada yeni bir epizod başlayamaz.</td></tr>
+      <tr><td class="lead">Yeni epizod</td><td class="n">497</td><td>600 semptomlu haftanın 103'ü devam haftası olarak birleştirildi. Bir hastalığın defalarca sayılmasını engelleyen kural budur.</td></tr>
+    </tbody>
+  </table></div></div>
+
+  <div class="eq"><pre>insidans = 497 / 4.626 = 0,1074
+         → 100 risk altındaki kişi-haftada 10,74 yeni epizod
+           (haftalık ortanca 10,49; aralık 5,00–18,18)</pre></div>
+
+  <h3>Epizod bağlama kuralı ve iki sınır durumu</h3>
+  <p>Ardışık semptomlu haftalar, kişi "devam ediyor" dediğinde tek bir epizoda birleşir. Ama iki durum kuralın sınırında kalır ve <strong>ikisi de açıkça sayılmalıdır</strong>:</p>
+  <ul>
+    <li><strong>76 hafta</strong> semptomlu bir haftayı izliyor ama yeni sayıldı, çünkü kişi yeni bir hastalık beyan etti. Bunların 44'ünde bildirilen etken kümesi de değişmişti — ayrı bir hastalık lehine olumlu kanıt.</li>
+    <li><strong>83 hafta</strong> hiç doldurulmamış bir haftayı izliyor. Gözlenmemiş bir hafta üzerinden devamlılık tanınamayacağı için bunlar <em>kuruluş gereği</em> yeni sayıldı. Bu, kuralın kaçınılmaz bir özelliğidir ve Bölüm 08'de doğrudan ölçülür.</li>
+  </ul>
+
+  <h3>Sol kesilme</h3>
+  <p>Katılımcılar aynı haftada başlamadı. Bir kişi, kayıt haftası ile ilk bildirim haftasından geç olanında gözleme girer. Girişten önceki hücreler <strong>doldurulmamış değil, gözlenemez</strong>dir. Bu ayrım yapılmazsa katılım oranları olduğundan düşük görünür; bu yüzden bütün doluluk oranları <em>gözlenebilir hücreler</em> üzerinden verilmelidir.</p>
+
+  <div class="faq"><h3>Sık sorulanlar</h3>
+    <details class="f"><summary>Bir kişinin 33 haftası, diğerinin 5 haftası varken karşılaştırma adil olur mu?</summary>
+      <div class="a">
+        <p><span class="tag">TR</span>Payda kişi değil kişi-zaman olduğu sürece adildir: herkes gözlendiği kadar sayılır. Ancak bu dengesizliğin kendisi ölçülmelidir. Bu kohortta bildirim yoğunluğu ile ölçülen insidans arasında gerçek bir ilişki var: her on ek bildirilen hafta için hız yaklaşık %20 düşüyor (IRR 0,805; 0,710–0,912). Bu düzeltilmeye çalışılmadı, açıkça raporlandı.</p>
+        <p class="en"><span class="tag">EN</span>It is fair as long as the denominator is person-time rather than persons: everyone counts for as long as they were observed. But the imbalance itself must be measured. In this cohort there is a real gradient between reporting intensity and measured incidence: the rate falls by about 20% per ten additional reported weeks (IRR 0.805; 0.710–0.912). It was reported rather than corrected.</p>
+      </div></details>
+    <details class="f"><summary>Doldurulmamış bir hafta neden "hastalık yok" sayılmıyor?</summary>
+      <div class="a">
+        <p><span class="tag">TR</span>Çünkü bu, sonlanımı maruziyetin içine taşır. Semptom durumu yalnızca doldurulmuş bir bildirimde kayıtlıdır; doldurulmamış haftayı "sağlıklı" saymak, katılım davranışını hastalık verisine dönüştürür ve karşılaştırmayı kuruluş gereği tersine çevirir. Doğru muamele, o haftayı risk altında olmayan zaman olarak ele almak ve bu varsayımın geçerliliğini ayrıca sınamaktır.</p>
+        <p class="en"><span class="tag">EN</span>Because it carries the outcome into the exposure. Symptom status is recorded only on a filed report; scoring an unfiled week as healthy turns reporting behaviour into illness data and inverts the comparison by construction. The correct treatment is to hold that week as time not at risk, and then test the assumption separately.</p>
+      </div></details>
+  </div>
+</div></section>
+
+<!-- ══════════════════════════════════ 03 -->
+<section id="s3"><div class="col">
+  <div class="sh"><span class="n">03</span><h2>Veri yapısı modeli seçer</h2></div>
+  <p class="standfirst">Model tercihi bir üslup meselesi değildir. Sonlanımın biçimi — ikili mi, sayım mı, zamanlı mı, tekrarlı mı — hangi ailenin kullanılabileceğini büyük ölçüde belirler.</p>
+
+  <div class="wide"><div class="tw"><table>
+    <thead><tr><th>Sonlanım neye benziyor</th><th>Uygun model ailesi</th><th>Neden diğerleri değil</th></tr></thead>
+    <tbody>
+      <tr><td class="lead">Kişi başına tek bir evet/hayır</td><td>İkili lojistik regresyon</td><td>Zaman ve tekrar yok; sağkalım çerçevesi gereksiz karmaşıklık getirir.</td></tr>
+      <tr><td class="lead">Kişi başına sayım, izlem süreleri farklı</td><td>Log ofsetli Poisson; aşırı yayılımda negatif binom</td><td>Ham sayı karşılaştırılamaz. Ofset olmadan model "kim daha çok gözlendi"yi ölçer.</td></tr>
+      <tr><td class="lead">Aynı kişide tekrarlanan evet/hayır</td><td>Rastgele kesişimli karma etkili lojistik</td><td>Sıradan lojistik, kişi içi bağımlılığı yok sayarak standart hataları küçültür.</td></tr>
+      <tr><td class="lead">Olay zamanı + kişi başına birden çok olay</td><td>Tekrarlayan olay sağkalım modeli (Andersen–Gill), paylaşılan frailty ile</td><td>İlk-olay modeli olayların çoğunu atar ve soruyu "ne sıklıkla"dan "hiç oldu mu"ya çevirir.</td></tr>
+      <tr><td class="lead">İki haftalık zaman serisi</td><td>Korelasyon, blok bootstrap, ROC, kontrol grafikleri</td><td>Birey düzeyi yok; bu bir sinyal karşılaştırmasıdır, regresyon değil.</td></tr>
+    </tbody>
+  </table></div></div>
+
+  <div class="box good"><b class="t">Aktarılabilir ilke</b>
+    <p>Analiz planını veri toplanmadan önce yazmak, yöntemin en ucuz ve en etkili parçasıdır. Bu çalışmada sekiz analizin popülasyonu, kestiricisi, düzeltme kümesi ve formal spesifikasyonu model kurulmadan önce sabitlendi; hiçbir terim kendi p değeri yüzünden modele girmedi veya çıkmadı, hiçbir aşamada ileri/geri eleme kullanılmadı. Bunun bedeli sıfır, kazancı ise sonuçların "arayarak bulunmuş" olmadığını gösterebilmektir.</p>
+  </div>
+</div></section>
+
+<!-- ══════════════════════════════════ 04 -->
+<section id="s4"><div class="col">
+  <div class="sh"><span class="n">04</span><h2>Sayım verisi: Poisson, ofset ve negatif binom</h2></div>
+  <p class="standfirst">Kişi başına epizod sayısı gibi bir sonlanımda üç kavram birlikte gelir: log bağlantı, ofset ve aşırı yayılım.</p>
+
+  <h3>Ofset: modeli sayımdan hıza çeviren terim</h3>
+  <div class="eq"><pre>log( E[Y_i] ) = β₀ + β₁·x_i + … + <b>log(risk_süresi_i)</b>
+                                    └─ katsayısı 1'e SABİTLENMİŞ terim
+
+eşdeğer yazım:
+log( E[Y_i] / risk_süresi_i ) = β₀ + β₁·x_i + …
+       └─ yani model artık bir HIZ modeli</pre>
+    <p class="gloss">Ofsetin katsayısı tahmin edilmez, çünkü ne olması gerektiği bilinir: iki kat süre gözlenen bir kişide, hız aynıysa iki kat olay beklenir. Bu bir hipotez değil, tanımın sonucudur. Ofseti serbest bir değişken yapmak, bilinen bir aritmetiği veriden tahmin etmeye çalışmak olur.</p>
+  </div>
+
+  <h3>Poisson'un varsayımı ve nerede kırıldığı</h3>
+  <p>Poisson dağılımının tek parametresi vardır, dolayısıyla <strong>ortalama = varyans</strong> gerektirir. Gerçek kohort verisinde bu genellikle sağlanmaz:</p>
+  <div class="figs">
+    <div class="fig"><b>2,00</b><span>kişi başına epizod ortalaması</span></div>
+    <div class="fig"><b>4,14</b><span>kişi başına epizod varyansı</span></div>
+    <div class="fig"><b>2,07×</b><span>aşırı yayılım</span></div>
+  </div>
+  <p>Aşırı yayılım <em>nokta kestirimini</em> yanlı yapmaz; <em>standart hatayı</em> olduğundan küçük gösterir. Sonuç: dar güven aralıkları ve şişmiş p değerleri. İki bağımsız çözüm vardır ve bu çalışmada ikisi de kullanıldı.</p>
+
+  <div class="pair">
+    <div class="box good"><b class="t">Sağlam (sandwich) varyans</b>
+      <p>Poisson katsayıları korunur, standart hata Huber–White kestiricisiyle yeniden hesaplanır. Dağılım varsayımına dokunmadan doğru genişlikte aralık verir.</p>
+    </div>
+    <div class="box good"><b class="t">Negatif binom</b>
+      <p>Dağılımın kendisi değiştirilir: fazladan bir yayılım parametresi eklenir. Burada ilan edilmiş duyarlılık analizi olarak kuruldu.</p>
+    </div>
+  </div>
+  <p>Üç yaklaşım da aynı yönü ve büyüklüğü verdi: düzeltilmiş Poisson <span class="num">0,805</span>, düzeltilmemiş <span class="num">0,791</span>, negatif binom <span class="num">0,830</span>. Bir sonucun model varsayımına değil veriye dayandığını göstermenin pratik yolu budur.</p>
+
+  <h3>Negatif binom aslında bir karışımdır</h3>
+  <div class="eq"><pre>Y_i | u_i  ~  Poisson( μ_i · u_i )          her kişi kendi Poisson'unu yaşar
+u_i        ~  Gama( ortalama 1, varyans α )   ama kişilerin hızı birbirinden farklı
+──────────────────────────────────────────
+Y_i        ~  NegatifBinom( μ_i , α )         Var(Y) = μ + α·μ²</pre>
+    <p class="gloss">Herkesin gerçek hızı aynı olsaydı Poisson doğru olurdu. Kişiler arasında ölçülmemiş bir farklılık varsa, o farklılık gama dağılımıyla modellenir ve dışarıdan bakıldığında sayımlar negatif binom görünür. <code>α → 0</code> olduğunda model tam olarak Poisson'a döner.</p>
+  </div>
+
+  <div class="src">
+    <header><span class="l">R</span><span class="d">Log ofsetli Poisson + sağlam varyans, ve negatif binom eşlikçisi</span></header>
+    <pre>m &lt;- glm(n_epizod ~ I(bildirilen_hafta/10) + yas10 + hanede_cocuk + yatkinlik,
+         <span class="k">offset</span> = log(risk_haftasi),
+         family = poisson(link = "log"),
+         data   = kisi)
+
+<span class="c"># aşırı yayılım için sağlam (sandwich) varyans</span>
+library(sandwich); library(lmtest)
+coeftest(m, vcov = vcovHC(m, type = "HC0"))
+
+<span class="c"># ilan edilmiş duyarlılık: aynı spesifikasyon, negatif binom</span>
+library(MASS)
+m_nb &lt;- glm.nb(n_epizod ~ I(bildirilen_hafta/10) + yas10 + hanede_cocuk +
+                          yatkinlik + <span class="k">offset</span>(log(risk_haftasi)), data = kisi)</pre>
+  </div>
+
+  <div class="faq"><h3>Sık sorulanlar</h3>
+    <details class="f"><summary>Aşırı yayılım varken neden Poisson kullanılmaya devam edildi?</summary>
+      <div class="a">
+        <p><span class="tag">TR</span>Aşırı yayılım Poisson'un nokta kestirimini yanlı yapmaz, yalnızca standart hatasını küçültür. Bu yüzden katsayıları Poisson'dan almak ve varyansı sandwich kestiricisiyle düzeltmek geçerli bir seçimdir; negatif binom ise bağımsız bir kontrol sağlar. Üç uyum da aynı sonucu verdiğinde, bulgunun dağılım varsayımına bağlı olmadığı gösterilmiş olur.</p>
+        <p class="en"><span class="tag">EN</span>Overdispersion does not bias the Poisson point estimate; it understates the standard error. Keeping the Poisson coefficients and correcting the variance with a sandwich estimator is therefore a valid choice, while the negative binomial provides an independent check. When all three fits agree, the finding is shown not to rest on a distributional assumption.</p>
+      </div></details>
+    <details class="f"><summary>Sayım yerine oran modellenseydi ne değişirdi?</summary>
+      <div class="a">
+        <p><span class="tag">TR</span>Sonlanım bir oran olsaydı (örneğin "test edilenlerin kaçı pozitif"), ofset yerine binom aile ve lojistik bağlantı kullanılırdı. Ofset yalnızca sayım sonlanımlarında, farklı gözlem sürelerini hesaba katmak için gereklidir. Bu ayrımın karıştırılması, katılımcı sürveyans literatüründe sık görülen bir hatadır.</p>
+        <p class="en"><span class="tag">EN</span>If the outcome were a proportion (for example, how many of those tested were positive), one would use a binomial family with a logit link instead of an offset. The offset belongs to count outcomes, where it accounts for differing observation time. Confusing the two is a common error in the participatory surveillance literature.</p>
+      </div></details>
+  </div>
+</div></section>
+
+<!-- ══════════════════════════════════ 05 -->
+<section id="s5"><div class="col">
+  <div class="sh"><span class="n">05</span><h2>Tekrarlayan olay: paylaşılan gama-frailty Andersen–Gill</h2></div>
+  <p class="standfirst">Mevsimsel bir enfeksiyonda aynı kişi bir sezonda birden çok kez hastalanır. Bu, tekrarlayan olay verisidir ve klasik sağkalım modelleri onu doğrudan taşıyamaz.</p>
+
+  <div class="eq"><pre>λ_ij(t) = λ₀(t) · z_i · exp(β′X_ij)
+
+  λ_ij(t)   i kişisinin j haftasındaki hazard'ı
+  λ₀(t)     ORTAK temel hazard, takvim zamanında — tahmin edilmez
+  z_i       kişiye özgü frailty ~ Gama(ortalama 1, varyans θ)
+  β′X_ij    değişkenlerin doğrusal birleşimi</pre></div>
+
+  <h3>Neden ilk-olay modeli değil</h3>
+  <p>Bu kohortta 248 bildirimcinin yalnızca 192'sinde herhangi bir epizod var. İlk-olay modeli 497 epizodun 305'ini — beşte üçünü — atardı. Daha da önemlisi, soruyu sessizce değiştirirdi: "insanlar ne sıklıkla hastalanıyor" sorusu "insanlar hastalanıyor mu" sorusuna dönüşürdü. Sürveyans için anlamlı olan ilkidir. Kişi başına epizod sayısının varyansının ortalamasının iki katından fazla olması da tekrarın ihmal edilemeyeceğinin doğrudan kanıtıdır.</p>
+
+  <h3>Sayma süreci gösterimi</h3>
+  <div class="eq"><pre>kisi   basla  bitir  yeni_epizod  asi_korumali
+────────────────────────────────────────────
+K017     0      1        0             0
+K017     1      2        1             0        ← epizod
+K017     2      3        0             0        ← risk kümesine geri döner
+K017     3      4        0             1        ← koruma başladı
+K017     4      5        1             1        ← ikinci epizod</pre>
+    <p class="gloss">Veri "uzun" formattadır: bir kişi = birçok satır. Her doldurulmuş hafta, kendi giriş ve çıkış zamanı olan bir risk aralığıdır; kişi her epizoddan sonra risk kümesine geri girer, böylece bütün olaylar olabilirliğe katkı verir.</p>
+  </div>
+
+  <h3>Frailty terimi ne yapar</h3>
+  <p>Frailty, her kişiye ait, hazard'ı yukarı veya aşağı kaydıran gizli bir çarpandır. Ortalaması 1'e sabitlenir; aksi hâlde model tanımlanamaz olurdu (frailty ortalamasını iki katına çıkarıp temel hazard'ı yarıya bölmek aynı olabilirliği verir). İki iş birden yapar: ölçülmemiş kişisel yatkınlığı soğurur ve tekrarlayan olaylar arasındaki bağımlılığı <strong>modelin içinde</strong> temsil eder — yalnızca standart hatayı düzelterek değil.</p>
+
+  <div class="eq"><pre>bu kohortta θ = 0,322
+
+  log-hazard ölçeğinde SS = √0,322 = 0,567
+  çeyrekler arası fark    = 1,349 × 0,567 = 0,765
+  exp(0,765) ≈ 2,2</pre>
+    <p class="gloss">Yani on üç değişkenin tamamı düzeltildikten <em>sonra bile</em>, ölçülmemiş yatkınlığın 75. yüzdeliğindeki bir kişi, 25. yüzdeliktekinin yaklaşık 2,2 katı haftalık hazard taşıyor. Bu teknik bir ayrıntı değil, kendi başına bir bulgudur: risk kohorta eşit yayılmamış, bireylerde yoğunlaşmıştır.</p>
+  </div>
+
+  <h3>Zamanla değişen maruziyet ve ölümsüz zaman tuzağı</h3>
+  <div class="box stop"><b class="t">Ölümsüz zaman yanlılığı (immortal time bias)</b>
+    <p>Bir kişiyi tüm sezon boyunca "aşılı" olarak etiketlemek, aşıdan <em>önceki</em> haftaları da korunmuş saymak demektir. Bu, var olmayan bir koruma icat eder ve etkiyi yapay olarak büyütür. Aynı tuzak, sezon ortasında başlayan her maruziyet için geçerlidir: tedavi, işe dönüş, maske politikası değişikliği.</p>
+  </div>
+  <div class="eq"><pre>korumali(i, t) = 1   eğer  t ≥ maruziyet_haftası_i + 2 hafta
+               = 0   aksi hâlde
+
+  bu kohortta 4.729 haftanın 1.613'ü korumalı (%34,1)
+  1.874 aşılı haftanın 83'ü (%4,4) iki haftalık gecikme aralığına düşer
+  → bu haftalar korumasız sayılır, istisnasız</pre>
+    <p class="gloss">İki haftalık gecikme, bağışık yanıtın gelişmesi için geçen süredir. Benzer tasarımlarda bu gecikmenin süresi ve gerekçesi analiz öncesinde yazılmalıdır, çünkü sonradan seçilirse sonucu ayarlama aracına dönüşür.</p>
+  </div>
+
+  <h3>Varsayımlar nasıl sınandı</h3>
+  <ul>
+    <li><strong>Orantılı hazard</strong> — ölçeklenmiş Schoenfeld artıkları üzerinde. Küresel test rahat (χ² = 11,14; sd 13; p = 0,60); on üç terimden biri saptı ve izlem ortanca olay haftasından bölünerek incelendi. İki yarı da anlamsız çıktı, dolayısıyla ortalamada gizlenen zamanla değişen bir etki yoktu.</li>
+    <li><strong>Eşit olay zamanları</strong> — haftalık veri ayrık zamanlıdır, yani eşitlik yoğundur. Efron yaklaşımı bu durumda tercih edilir; Breslow, eşitlik çoksa katsayıları sıfıra doğru çeker.</li>
+    <li><strong>Varyans kestiricisi</strong> — bu bir spesifikasyon seçimidir, nötr bir hesaplama ayrıntısı değil. Aşağıdaki tablo neden önemli olduğunu gösteriyor.</li>
+  </ul>
+
+  <div class="wide"><div class="tw"><table>
+    <thead><tr><th>Kişi içi bağımlılık nasıl ele alınıyor</th><th class="n">HR (%95 GA)</th><th class="n">SH</th></tr></thead>
+    <tbody>
+      <tr><td class="lead">Paylaşılan gama frailty <em>(kayıt spesifikasyonu)</em></td><td class="n">1,325 (1,018–1,724)</td><td class="n">0,134</td></tr>
+      <tr><td class="lead">Bağımsızlık, model temelli standart hata</td><td class="n">1,272 (1,052–1,538)</td><td class="n">0,097</td></tr>
+      <tr><td class="lead">Bağımsızlık, küme-sağlam standart hata</td><td class="n">1,272 (0,981–1,650)</td><td class="n">0,133</td></tr>
+    </tbody>
+  </table></div></div>
+  <div class="box care"><b class="t">Bu tablonun aktarılabilir dersi</b>
+    <p>Üçüncü satırın aralığı biri kesiyor, ama sebep <em>genişlik değil nokta kestirimi</em>. Sağlam standart hata (0,133) ile frailty standart hatası (0,134) binde bire kadar aynı. Bağımsızlık uyumu kişi içi bağımlılığı hiç modellemediği için kestirimi bire doğru çekiyor. Aynı sağlam standart hata, frailty kestirimine uygulandığında 1,021–1,720 veriyor. Yani "sağlam standart hata kullanınca sonuç kayboldu" cümlesi çoğu zaman yanlış teşhistir: değişen genellikle varyans değil, katsayının kendisidir.</p>
+  </div>
+
+  <div class="src">
+    <header><span class="l">R</span><span class="d">Paylaşılan gama-frailty Andersen–Gill ve tanıları</span></header>
+    <pre>library(survival)
+
+m &lt;- coxph(<span class="k">Surv</span>(basla, bitir, yeni_epizod) ~ yas10 + cinsiyet + hanede_cocuk +
+             komorbidite + yatkinlik + asi_korumali + <span class="c">/* … */</span>
+             <span class="k">frailty</span>(kisi_id, distribution = "gamma"),
+           data = panel, ties = "efron")
+
+<span class="c"># orantılı hazard: testin tanımlı olduğu SAĞLAM uyum üzerinde</span>
+m_rob &lt;- coxph(Surv(basla, bitir, yeni_epizod) ~ <span class="c">/* aynı terimler */</span> +
+                 <span class="k">cluster</span>(kisi_id), data = panel, ties = "efron")
+<span class="k">cox.zph</span>(m_rob)</pre>
+  </div>
+
+  <div class="faq"><h3>Sık sorulanlar</h3>
+    <details class="f"><summary>Frailty yerine yalnızca sağlam standart hata kullanmak yeterli olmaz mı?</summary>
+      <div class="a">
+        <p><span class="tag">TR</span>Olmaz, çünkü ikisi farklı şeyleri düzeltir. Sağlam standart hata yalnızca belirsizliği düzeltir; nokta kestirimi bağımsızlık varsayımı altında hesaplanmış hâliyle kalır ve bire doğru sönümlenir. Frailty ise bağımlılığı modelin içine koyar ve hem kestirimi hem varyansı etkiler. Ayrıca frailty varyansının kendisi yorumlanabilir bir çıktıdır: kişiler arası ölçülmemiş heterojenliğin büyüklüğünü verir.</p>
+        <p class="en"><span class="tag">EN</span>No, because they correct different things. A robust standard error adjusts only the uncertainty; the point estimate remains as computed under independence and is attenuated toward one. A frailty puts the dependence inside the model and affects both the estimate and the variance. The frailty variance is also an interpretable output in its own right: it quantifies unmeasured between-person heterogeneity.</p>
+      </div></details>
+    <details class="f"><summary>Frailty dağılımı olarak neden gama seçildi?</summary>
+      <div class="a">
+        <p><span class="tag">TR</span>Gama pozitif değerlidir ve analitik olarak elverişlidir: frailty üzerinden alınan integralin kapalı formu vardır, bu yüzden cezalandırılmış olabilirlikle kararlı biçimde kurulur ve yaygın yazılımların standart uygulamasıdır. Log-normal frailty de meşrudur ama sayısal integrasyon gerektirir. Frailty varyansı bu büyüklükteyken iki dağılım, değişken kestirimlerinde pratikte ayırt edilemez sonuç verir.</p>
+        <p class="en"><span class="tag">EN</span>The gamma is positive-valued and analytically convenient: the integral over the frailty has a closed form, so the model fits stably by penalised likelihood and it is the standard implementation in common software. A log-normal frailty is equally legitimate but requires numerical integration. At a frailty variance of this magnitude the two distributions give practically indistinguishable covariate estimates.</p>
+      </div></details>
+  </div>
+</div></section>
+
+<!-- ══════════════════════════════════ 06 -->
+<section id="s6"><div class="col">
+  <div class="sh"><span class="n">06</span><h2>Gama dağılımı: iki modelde tek fikir</h2></div>
+  <p class="standfirst">Gama dağılımı bu analizde iki ayrı yerde görünür ve ikisi aynı fikrin farklı veri yapılarına uygulanmış hâlidir.</p>
+
+  <div class="pair">
+    <div class="box"><b class="t">Negatif binomun içinde</b>
+      <p><code>Y | u ~ Poisson(μ·u)</code>, <code>u ~ Gama(1, α)</code><br>
+      Soğurduğu: kişiler arası ölçülmemiş <em>hız</em> farklılığı → aşırı yayılım.<br>
+      Kullanıldığı yer: kişi düzeyinde toplanmış sayımlar, zaman bilgisi olmadan.</p>
+    </div>
+    <div class="box"><b class="t">Frailty olarak</b>
+      <p><code>λ(t) = λ₀(t)·z·exp(β′X)</code>, <code>z ~ Gama(1, θ)</code><br>
+      Soğurduğu: kişiler arası ölçülmemiş <em>hazard</em> farklılığı → kişi içi bağımlılık.<br>
+      Kullanıldığı yer: kişi-hafta paneli, zaman bilgisi korunarak.</p>
+    </div>
+  </div>
+
+  <div class="box good"><b class="t">Bağlantı</b>
+    <p>Her iki durumda da gama, ortalaması bire sabitlenmiş <strong>kişiye özgü bir çarpandır</strong> ve aynı olguyu modele alır: bazı kişiler gerçekten daha yatkındır. Fark yalnızca neyi çarptığıdır — sayım modelinde Poisson ortalamasını, sağkalım modelinde hazard'ı. Nitekim izlem süresi sabit tutulduğunda paylaşılan gama frailty'li tekrarlayan olay modeli ile negatif binom sayım modeli aynı sonuca yakınsar. Bu yüzden mesleki maruziyet alt grubunda her iki uyum eşlikçi olarak birlikte raporlandı: bir sonuç yalnızca tek bir modelin varsayımından geliyorsa bunun görünmesi gerekir.</p>
+  </div>
+</div></section>
+
+<!-- ══════════════════════════════════ 07 -->
+<section id="s7"><div class="col">
+  <div class="sh"><span class="n">07</span><h2>Nedensel çerçeve ve düzeltme kümeleri</h2></div>
+  <p class="standfirst">"Eldeki bütün değişkenleri modele koymak" bir strateji değildir. Bazı değişkenler için düzeltmek yanlılığı giderir, bazıları için yaratır.</p>
+
+  <p>Yönlü çevrimsiz çizge (DAG), her değişkenin bir düğüm, her okun varsayılan bir doğrudan nedensel etki olduğu bir diyagramdır. İşlevi, hangi değişkenler için düzeltileceğini — ve hangileri için <em>düzeltilmeyeceğini</em> — herhangi bir sonlanım modeli kurulmadan önce sabitlemektir.</p>
+
+  <div class="eq"><pre>izlenen yol:
+
+  24 ilişki epidemiyolojik gerekçeyle iddia edildi
+       ↓  her biri BU kohortta ölçüldü, diyagram çizilmeden önce
+       ↓  ikili → lojistik | sıralı → orantılı olasılık
+       ↓  yaşla ilgili her ilişki HEM doğrusal HEM kategorik biçimde
+       ↓  + doğrusallıktan sapma için olabilirlik oranı testi
+       ↓  + parametrik olmayan kontroller
+   7 ilişki saptanabilir → 6 ok çizildi</pre>
+    <p class="gloss">Bu bir değişken seçimi prosedürü değildir: hiçbir terim bu testler yüzünden bir sonlanım modeline girdi ya da çıktı. Amaç, düzeltme kümelerinin hangi arka kapı yollarını kapatması gerektiğini belirlemekti.</p>
+  </div>
+
+  <h3>Düzeltme kümeleri karşılaştırma başına tanımlanır</h3>
+  <p>Tek bir "tam model" yerine, her karşılaştırma için minimal yeterli küme kullanılır. Bu kohortta yaş, iki sağlam çıkan oka sahip tek düğüm olduğu için her kümede yer aldı. Hanede çocuk karşılaştırması için küme yalnızca {yaş}; aşılanma için {yaş, komorbidite}.</p>
+  <p>On üç terimin tamamını aynı anda kurmak ile bir karşılaştırmanın minimal kümesini kurmak <strong>iki farklı analizdir ve iki farklı soruya cevap verir</strong>. Bu çalışmada ikisi de ayrı ayrı raporlandı: on üç terimli uyum bütün terim kümesinin betimidir, minimal küme uyumu ise ilgili karşılaştırmanın toplam etkisini kestirir (1,325'e karşı 1,475).</p>
+
+  <h3>Çarpıştırıcı: modele girmesi zarar veren değişken</h3>
+  <p>Çarpıştırıcı, iki okun içine doğru gittiği bir değişkendir. Ona koşullanmak, ebeveynleri arasında <strong>gerçekte olmayan bir ilişki yaratabilir</strong>. Bu çalışmada iki çarpıştırıcı vardı ve farklı biçimde ele alındılar:</p>
+  <ul>
+    <li><strong>Öz bildirimli yatkınlık</strong> — model terimi olarak tutuldu (kendi başına epidemiyolojik olarak bilgi verici), ama hiçbir düzeltme kümesine konmadı. Çarpıştırıcı yanlılığının mekanizması doğrudan ölçüldü ve saptanamadı; ilgili kestirim hem terimle hem onsuz raporlandı.</li>
+    <li><strong>Bildirim davranışının kendisi</strong> — hiçbir sonlanım modeline konmadı, ne değişken ne ağırlık olarak. Bunun nedeni Bölüm 08'de.</li>
+  </ul>
+
+  <div class="box care"><b class="t">Genelleştirilebilir bir uyarı</b>
+    <p>Bu kohortta bir ilişki doğrusal terimde <span class="num">p = 0,044</span>'e ulaşıyordu, ama bant ortalamaları monoton değildi (1,424 · 1,425 · 1,257 · 1,195) ve iki parametrik olmayan test de anlamsızdı. Anlamlılık, monoton olmayan bir örüntüye doğrusal bir biçim dayatmanın yarattığı bir yapaylıktı. <strong>Yalnızca doğrusal biçim kurulsaydı bu ok yanlışlıkla çizilecekti.</strong> Sürekli değişkenlerin fonksiyonel biçimi, ilişki iddia edilmeden önce en az iki biçimde incelenmelidir.</p>
+  </div>
+</div></section>
+
+<!-- ══════════════════════════════════ 08 -->
+<section id="s8"><div class="col">
+  <div class="sh"><span class="n">08</span><h2>Katılımın kendisi bir değişken</h2></div>
+  <p class="standfirst">Katılımcı sürveyansta gözlenen kişiler aynı zamanda gözlemcilerdir. Bu, diğer kohort tasarımlarında olmayan bir geçerlilik tehdidi yaratır ve doğrudan ölçülmesi gerekir.</p>
+
+  <p>Üç ayrı soru, üç ayrı karşılaştırmayla ele alındı. Hepsinin ortak özelliği, <strong>düzeltmek yerine ölçmek</strong> olması.</p>
+
+  <div class="wide"><div class="tw"><table>
+    <thead><tr><th>Soru</th><th>Nasıl ölçüldü</th><th class="n">Sonuç</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="lead">Bildirim yapanlar, kaydolup hiç bildirmeyenlerden farklı mı?</td>
+        <td>Standartlaştırılmış ortalama farkla temel özellik karşılaştırması; ardından önceden tanımlı sekiz terimli eğilim modeli</td>
+        <td class="n">16 özellikten 12'si |SMD| &gt; 0,10 · kestirimleri taşıyan terimler dengeye yakın</td>
+      </tr>
+      <tr>
+        <td class="lead">Hasta olmak, ertesi hafta bildirim yapmayı değiştiriyor mu?</td>
+        <td>Kişi düzeyinde rastgele kesişimli karma etkili lojistik; karşılaştırma kişinin kendi bildirim geçmişi içinde</td>
+        <td class="n">koşullu OR 1,016 → anlamsız</td>
+      </tr>
+      <tr>
+        <td class="lead">Bildirim boşluğu sahte bir "yeni epizod" yaratıyor mu?</td>
+        <td>Aynı kestirici ailesi, geri yönde</td>
+        <td class="n">koşullu OR 1,664 → kodlama kuralının özelliği</td>
+      </tr>
+    </tbody>
+  </table></div></div>
+
+  <div class="box stop"><b class="t">Neden ağırlıklandırma yapılmadı</b>
+    <p><strong>Yapısal sebep:</strong> bildirim bir çarpıştırıcıdır — hem sonlanımdan hem maruziyet etkenlerinden ona ok gider. Ağırlıklandırma bir tür koşullanmadır, dolayısıyla yanlılığı gidermek yerine yaratabilir.</p>
+    <p><strong>Ampirik sebep:</strong> ağırlıklar yine de hesaplandı ve dağıtacak neredeyse hiçbir şey olmadığı görüldü. Dengelenmiş ağırlıklar 0,829–1,960 arasında, ortalama 1,001; Kish etkin örneklemi 242'nin 235,4'ü; tasarım etkisi 1,028. Zayıf ayrım gücüne sahip bir eğilim skorunu tersine çevirmek, hiçbir kazanç sağlamadan kestirim gürültüsü yayardı. Kayıt kestirimleri ağırlıksız bırakıldı, ağırlıklı uyum ilan edilmiş duyarlılık analizi olarak raporlandı.</p>
+  </div>
+
+  <div class="box good"><b class="t">Aktarılabilir yaklaşım</b>
+    <p>İki mekanizma zıt yönlerde çalışıyordu: biri insidansı yukarı, diğeri aşağı iter. Net etkinin işareti verilemediği için sonuç <strong>işaretsiz</strong> raporlandı — düzeltilmiş gibi sunulmadı. Ölçülebilen bir yanlılığı ölçüp büyüklüğünü vermek, ölçülemeyen bir düzeltme uygulamaktan daha savunulabilirdir.</p>
+  </div>
+</div></section>
+
+<!-- ══════════════════════════════════ 09 -->
+<section id="s9"><div class="col">
+  <div class="sh"><span class="n">09</span><h2>İki sürveyans sinyalini karşılaştırmak</h2></div>
+  <p class="standfirst">Yeni bir sürveyans akışının değeri, çoğu zaman yerleşik bir akışla ne kadar uyuştuğuyla değerlendirilir. Bu karşılaştırmanın adil olması için birkaç kararın önceden verilmesi gerekir.</p>
+
+  <h3>Karşılaştırılan büyüklük: oran, düzey değil</h3>
+  <p>Dünya Sağlık Örgütü rehberi, internet ve topluluk temelli katılımcı sistemlerin göreli eğilimi iyi izlediğini ama <strong>mutlak düzeyi</strong> ölçmekte zorlandığını belirtir; çünkü payda oynaktır. Çözüm, iki akışta da bir oran karşılaştırmaktır:</p>
+  <div class="eq"><pre>katılımcı akış :  viral-sistemik epizod / tüm yeni epizod
+yerleşik akış  :  laboratuvar pozitif  / test edilen örnek
+
+  → iki taraf da "sendromik hastalığın viral fraksiyonunu" ölçer
+  → payda oynaklığından etkilenmez, çünkü pay ve payda aynı akıştan gelir
+  → bu kohortta sezon farkı yalnızca 1,25 yüzde puanı (%18,31 – %19,56)</pre></div>
+
+  <h3>Düzleştirme: nedensel mi, simetrik mi</h3>
+  <div class="eq"><pre>nedensel MA-3(t) = ( x(t−2) + x(t−1) + x(t) ) / 3      ✓
+simetrik MA-3(t) = ( x(t−1) + x(t)   + x(t+1) ) / 3      ✗</pre>
+    <p class="gloss">Simetrik ortalama <strong>sonraki haftayı</strong> kullanır. Gerçek zamanlı bir erken uyarı sisteminde o hafta henüz mevcut değildir, dolayısıyla simetrik düzleştirmeyle elde edilen performans sahada tekrarlanamaz. Bu, sürveyans literatüründe sık gözden kaçan bir ayrımdır.</p>
+  </div>
+  <div class="box care"><b class="t">Demir kural</b>
+    <p>İki seri her zaman <strong>özdeş</strong> işlenmelidir: ya ikisi de ham, ya ikisi de aynı biçimde düzleştirilmiş. Düzleştirilmiş bir seriyi ham bir seriyle karşılaştırmak, uyumu yapay olarak yükseltir.</p>
+  </div>
+
+  <h3>Fazlar önceden sabitlenir</h3>
+  <p>Katılımcı bir sinyal, epidemi dalgasının içinde ve dışında çok farklı davranır: dalgadan önce haftalık sayılar küçüktür ve gürültü baskındır; dalga sırasında sinyal güçlüdür; dalgadan sonra kapalı kohortun duyarlı havuzu tükendiği için sinyal çöker. Tüm sezonu tek bir uyum sayısına indirgemek bu üç rejimi ortalayarak gizler.</p>
+  <div class="wide"><div class="tw"><table>
+    <thead><tr><th>Faz</th><th class="n">n (hafta)</th><th class="n">Uyum (düzleştirilmiş)</th><th class="n">Uyum (ham)</th></tr></thead>
+    <tbody>
+      <tr><td class="lead">Epidemi öncesi</td><td class="n">10</td><td class="n">0,886</td><td class="n">0,524</td></tr>
+      <tr><td class="lead">Epidemi</td><td class="n">9</td><td class="n">0,754</td><td class="n">0,437</td></tr>
+      <tr><td class="lead">Erken uyarı penceresi <em>(önceden tanımlı birincil)</em></td><td class="n">19</td><td class="n">0,642</td><td class="n">0,489</td></tr>
+      <tr><td class="lead">Epidemi sonrası</td><td class="n">14</td><td class="n">0,047</td><td class="n">−0,226</td></tr>
+      <tr><td class="lead">Tüm sezon</td><td class="n">33</td><td class="n">0,538</td><td class="n">0,243</td></tr>
+    </tbody>
+  </table></div></div>
+  <p>Faz sınırları, on sezonluk yerleşik veriye uygulanan Hareketli Epidemi Yöntemi eşiğinden geldi — çalışmanın kendi verisinden değil. Bu ayrım önemlidir: sınırları kendi verinizden türetirseniz karşılaştırma döngüsel hâle gelir.</p>
+
+  <h3>Belirsizlik: neden sıradan bootstrap değil</h3>
+  <div class="eq"><pre>hareketli blok bootstrap · blok uzunluğu 4 hafta · 2.000 tekrar
+
+sıradan bootstrap:  haftaları tek tek çeker
+                    → haftalar arası otokorelasyonu yok eder
+                    → güven aralığını olduğundan DAR gösterir
+
+blok bootstrap:     ardışık hafta bloklarını çeker
+                    → epidemi eğrisinin yerel yapısını korur</pre></div>
+
+  <h3>Zamanlılık iddiası için önceden yazılmış kural</h3>
+  <p>"Bizim sinyalimiz daha erken uyarıyor" iddiası, katılımcı sürveyansın en cazip ve en kırılgan iddiasıdır. Bu çalışmada karar kuralı analiz öncesinde yazıldı: çapraz korelasyonun tepe gecikmesi bootstrap ile yeniden örneklenir ve <strong>aralık iki gecikmeden genişse sonuç "öncelik" değil "tanımlanamaz" olarak raporlanır</strong>.</p>
+  <div class="box good"><b class="t">Kuralın uygulanması</b>
+    <p>Nokta kestirimi bir tepe gösteriyordu, ama profil merkez gecikmelerde neredeyse düzdü ve %95 tepe-gecikme aralığı sıfırı içeriyordu. Kural gereği hiçbir öncelik iddia edilmedi; desteklenen bulgu <em>eşzamanlı doğrulama</em> olarak raporlandı. Tek sezonluk veriyle bu sorunun çözülemeyeceği de ayrıca belirtildi.</p>
+  </div>
+
+  <h3>Yön uyumu, düzey uyumu değildir</h3>
+  <p>Korelasyon tek başına ölçek uyuşmazlığını gizler. Bland–Altman analizi ve regresyon eğimi bu çalışmada birlikte raporlandı: ortalama haftalık fark küçüktü (+2,8 yüzde puanı) ama uyum sınırları çok genişti (−32,1 ile +37,7). Pratik sonuç açıkça yazıldı — <strong>katılımcı seri yön ve faz göstergesi olarak kullanılabilir, yerleşik akışın düzeyinin kalibre edilmiş bir kestirimi olarak kullanılamaz.</strong></p>
+</div></section>
+
+<!-- ══════════════════════════════════ 10 -->
+<section id="s10"><div class="col">
+  <div class="sh"><span class="n">10</span><h2>Ölçüm hatasının koyduğu tavan</h2></div>
+  <p class="standfirst">Bu, küçük paydalı sürveyans sinyalleriyle çalışan herkesin bilmesi gereken kavram. Gözlenen bir korelasyonu 1,0'a karşı okumak, çoğu zaman sistemin haksız yere kötü görünmesine yol açar.</p>
+
+  <p>Güvenilirlik, bir göstergedeki haftadan haftaya değişimin ne kadarının <strong>gerçek epidemiyolojik sinyal</strong>, ne kadarının örnekleme gürültüsü olduğunu ifade eder. Küçük haftalık paydalarda bu oran hızla düşer.</p>
+
+  <div class="eq"><pre>1) örnekleme (binom) gürültüsünün payı
+   Var_örnekleme = ortalama_t [ p_t (1 − p_t) / n_t ]
+
+2) güvenilirlik
+   R = ( Var_gözlenen − Var_örnekleme ) / Var_gözlenen
+
+   bu çalışmada:
+     R_katılımcı = 0,293      (haftada ortanca 15 epizod)
+     R_yerleşik  = 0,962      (haftada ~115 test)
+
+3) klasik sönümleme tavanı
+   r_maks = √( R_katılımcı × R_yerleşik )
+          = √( 0,293 × 0,962 ) = 0,531</pre>
+    <p class="gloss">Anlamı: sistem ne kadar iyi olursa olsun, bu iki ham haftalık seri arasında 0,531'den yüksek bir korelasyon <em>gözlenemez</em>. Çünkü katılımcı serideki haftalık hareketin yaklaşık %71'i örnekleme hatasıdır.</p>
+  </div>
+
+  <div class="box good"><b class="t">Sonucu doğru okumak</b>
+    <p>Bu kohortta ham ölçekteki epidemi öncesi katsayı 0,524 — yani neredeyse tam tavanın üzerinde. Doğru ifade "uyum vasat" değil, <strong>"uyum, ölçümün izin verdiği kadar iyi"</strong>dir. Bu, sınırlanmış ve daha güçlü bir ifadedir.</p>
+  </div>
+
+  <div class="eq"><pre>tavanı yükseltmek için ne gerekir:
+
+  hedef tavan 0,70  →  R_katılımcı ≈ 0,51
+  hedef tavan 0,80  →  R_katılımcı ≈ 0,67
+
+  ikisi de yalnızca HAFTALIK OLAY SAYISINI artırarak elde edilir
+  — olgu tanımını, düzleştirmeyi veya algoritmayı değiştirerek DEĞİL</pre></div>
+
+  <div class="box care"><b class="t">İki farklı yeterlilik sorusunu karıştırmayın</b>
+    <p>Korelasyon <em>testi</em> için hafta sayısı yeterliydi: Fisher z dönüşümüyle bu büyüklükte bir katsayıyı %80 güçle göstermek yaklaşık 17 hafta gerektiriyor, elde 19 hafta vardı. Yetersiz olan hafta sayısı değil, <strong>her haftanın paydasıydı</strong>. Bu iki soru sık sık birbirine karıştırılır ve yanlış çözüme yönlendirir.</p>
+  </div>
+</div></section>
+
+<!-- ══════════════════════════════════ 11 -->
+<section id="s11"><div class="col">
+  <div class="sh"><span class="n">11</span><h2>Alarm algoritmaları ve spesifikasyon eğrisi</h2></div>
+  <p class="standfirst">Tek bir aberasyon dedektörü seçmek, sonucu en iyi gösteren yöntemi seçme riskini taşır. Bu çalışmada altı standart dedektör birlikte ve önceden kilitlenmiş bir uzlaşma kuralıyla kullanıldı.</p>
+
+  <div class="wide"><div class="tw"><table>
+    <thead><tr><th>Dedektör</th><th>Tespit ilkesi</th><th>Temel / ısınma</th><th>Alarm eşiği</th></tr></thead>
+    <tbody>
+      <tr><td class="lead">EARS C1</td><td>Kısa temelli kontrol grafiği</td><td class="n">7 hafta yuvarlanan</td><td class="n">≈3 standart sapma</td></tr>
+      <tr><td class="lead">EARS C2</td><td>C1 + iki haftalık koruma bandı</td><td class="n">koruma sonrası 7 hafta</td><td class="n">≈3 standart sapma</td></tr>
+      <tr><td class="lead">EARS C3</td><td>C2 aşımlarının üç haftalık birikimi</td><td class="n">koruma bandını devralır</td><td class="n">birikimli &gt; 2</td></tr>
+      <tr><td class="lead">NB-CUSUM</td><td>Ardışık sayım toplamı, negatif binom olabilirlik oranı</td><td class="n">7 hafta yuvarlanan ortalama</td><td class="n">akış başına Monte-Carlo kalibrasyonu</td></tr>
+      <tr><td class="lead">EWMA</td><td>Üstel ağırlıklı hareketli ortalama (λ = 0,4)</td><td class="n">7 hafta ortalama/SS</td><td class="n">alarmdan sonra yeniden kurulur</td></tr>
+      <tr><td class="lead">Yüzdelik-95</td><td>Parametrik olmayan dağılım eşiği</td><td class="n">10 hafta kayan pencere</td><td class="n">önceki pencerenin 95. yüzdeliği</td></tr>
+    </tbody>
+  </table></div></div>
+
+  <h3>Uygulama ayrıntıları alarm kümesini değiştirir</h3>
+  <p>Bu tür dedektörleri kullanan çalışmalarda üç karar genellikle yazılmaz, ama sonucu doğrudan etkiler ve <strong>yazılmalıdır</strong>:</p>
+  <ol>
+    <li><strong>Birikimli istatistiğin alarmdan sonra sıfırlanıp sıfırlanmadığı.</strong> Sıfırlanmazsa mandallanır ve yalnızca bir kez ateşler. Bu çalışmada sıfırlamalı ve sıfırlamasız karşılaştırıldığında, incelenen kombinasyonların çoğunda alarm kümesi değişti.</li>
+    <li><strong>Eşiğin akış başına mı ortak mı kalibre edildiği.</strong> Haftada 15 olaylık bir seri ile haftada 115 testlik bir seri aynı eşikte aynı yanlış alarm hızını vermez; ortak eşik, küçük ölçekli seriyi ya aşırı duyarlı ya sağır yapar.</li>
+    <li><strong>Ağırlıklı ortalamanın nasıl tohumlandığı ve alarmdan sonra nasıl yeniden kurulduğu.</strong> Bu ayrıntı tek başına bir haftanın alarm durumunu belirleyebilir.</li>
+  </ol>
+
+  <div class="box care"><b class="t">Isınma dönemi bir sonuç değil, bir kısıttır</b>
+    <p>Yedi haftalık temel penceresi dolmadan hiçbir dedektör alarm veremez. Bu, sezonun ilk yedi haftasında "hiç yanlış alarm vermedik" demenin anlamsız olduğu anlamına gelir — o haftalarda alarm vermek zaten mümkün değildi. Bu çalışmada epidemi öncesi özgüllüğün yalnızca üç değerlendirilebilir haftaya dayandığı açıkça belirtildi.</p>
+  </div>
+  <p>Aynı sebeple, birkaç geçmiş sezondan beklenen sayı kestiren yöntemler (Farrington ailesi) tek sezonluk veriye <strong>uygulanabilir değildir</strong>; denenip elenmedikleri, tasarım gereği dışlandıkları belirtilmelidir.</p>
+
+  <h3>Spesifikasyon eğrisi</h3>
+  <p>Tek bir uyum katsayısı, "çok tarif denendi, en iyisi raporlandı" eleştirisine açıktır. Bunu ortadan kaldırmanın pratik yolu, tarifi önce kilitlemek, sonra <strong>bütün savunulabilir alternatifleri çalıştırıp sonucun o dağılımın neresinde durduğunu göstermektir.</strong></p>
+  <div class="figs">
+    <div class="fig"><b>72</b><span>savunulabilir spesifikasyon</span></div>
+    <div class="fig"><b>0,53</b><span>ortanca uyum</span></div>
+    <div class="fig"><b>0,42–0,72</b><span>çeyrekler arası aralık</span></div>
+    <div class="fig"><b>2 / 72</b><span>kilitli spesifikasyonun sırası</span></div>
+  </div>
+  <p>Değiştirilen boyutlar: izlenen büyüklük, düzleştirme, temel pencere uzunluğu, alarm eşiği ve uzlaşma kuralı. Kilitli spesifikasyondan daha yüksek puan alan tek alternatif, epidemi haftalarını ayırt edemeyen bir büyüklüğü izliyordu — yani o tek katsayı dışında hiçbir gerekçeyle tercih edilebilir değildi.</p>
+</div></section>
+
+<!-- ══════════════════════════════════ 12 -->
+<section id="s12"><div class="col">
+  <div class="sh"><span class="n">12</span><h2>Güç, kesinlik, tasarım etkisi</h2></div>
+  <p class="standfirst">Tekrarlı ölçüm panellerinde toplanan gözlem sayısı, taşınan bilgi miktarıyla aynı şey değildir.</p>
+
+  <div class="eq"><pre>tasarım etkisi
+  DEFF = 1 + (m − 1) × ICC
+       = 1 + (19,1 − 1) × 0,127
+       = 3,295
+
+etkin örneklem = 4.729 / 3,295 ≈ 1.435 kişi-hafta
+
+  m   = kişi başına ortalama bildirim sayısı
+  ICC = sınıf içi korelasyon</pre>
+    <p class="gloss">Aynı kişiden gelen iki bildirim, farklı kişilerden gelen iki bildirimden daha benzerdir. Toplanan her üç gözlemden kabaca biri yeni bilgi taşır. Bir katılımcı panelde her güç ifadesi nominal değil, <strong>etkin</strong> örneklem üzerinden yapılmalıdır.</p>
+  </div>
+
+  <div class="box care"><b class="t">Sık karıştırılan iki nicelik</b>
+    <p>Haftalık serinin sınıf içi korelasyonu (burada 0,127) ile insidans modelinin frailty varyansı (0,322) <strong>aynı şey değildir</strong>. İki farklı model, iki farklı ölçek. Raporlarken hangisinin kastedildiği açıkça yazılmalıdır.</p>
+  </div>
+
+  <h3>Panel büyüklüğü hedefi nasıl hesaplanır</h3>
+  <div class="eq"><pre>Cochran (bir oranı ±5 puanla, %95 güvenle):
+   n = z² p(1−p) / e² = 1,96² × 0,25 / 0,05² = 384 bağımsız gözlem
+
+tasarım etkisiyle şişir:
+   384 × 3,295 ≈ 1.267 eşdeğer haftalık bildirim
+
+kişiye çevir (kişi başına ~19 bildirim):
+   ≈ 70 sürekli bildirim yapan kişi
+
++ alt bölge kestirimi ve gerçekçi katılım kaybı
+   ≈ 824 kayıtlı kişi  ← ölçeklendirme hedefi</pre></div>
+
+  <h3>Olay/değişken bütçesi: manşet oran yanıltır</h3>
+  <p>Bir modelin kaç terim taşıyabileceği, olay sayısının terim sayısına oranıyla değerlendirilir; geleneksel taban 10'dur. Ancak <strong>bağlayıcı kısıt en seyrek maruz hücredir</strong>, manşet oran değil.</p>
+  <div class="wide"><div class="tw"><table>
+    <thead><tr><th>Model</th><th class="n">Manşet oran</th><th>Bağlayıcı hücre</th><th class="n">Gerçek oran</th></tr></thead>
+    <tbody>
+      <tr><td class="lead">Birincil insidans modeli</td><td class="n">38,0</td><td>Güncel tütün kullanımı: 49 kişi, 89 epizod</td><td class="n">6,85</td></tr>
+      <tr><td class="lead">Aşılanma modeli (9 terim)</td><td class="n">10,0</td><td>Önceki sezon sağlık başvurusu: 18 olay</td><td class="n">2,00</td></tr>
+    </tbody>
+  </table></div></div>
+  <p>İkinci satır, bir modelin neden "tek bir etkinin kestirimi" değil "terim kümesinin betimi" olarak sunulması gerektiğini gösterir. Bu ayrımı yazmak, sonradan aşırı yorumlanmayı engeller.</p>
+
+  <div class="box stop"><b class="t">Sonradan güç hesabı hakkında</b>
+    <p>Gözlenen p değerinden gözlenen güç hesaplayıp bulguyu yeniden test etmek metodolojik olarak hatalıdır. Bu çalışmada raporlanan şey farklıdır: <strong>tasarımın çözebileceği etki büyüklüğü</strong> — minimum saptanabilir etki ve ulaşılan kesinlik. Bu ileriye dönük bir ifadedir ve bir sonraki çalışmanın ne kadar büyük olması gerektiğini söyler.</p>
+  </div>
+</div></section>
+
+<!-- ══════════════════════════════════ 13 -->
+<section id="s13"><div class="col">
+  <div class="sh"><span class="n">13</span><h2>Tekrarlanabilirlik altyapısı</h2></div>
+  <p class="standfirst">Bireysel veri paylaşılamadığında bile analiz tam olarak denetlenebilir hâle getirilebilir. Gereken şey, kodun tükettiği her değişkenin tanımlı olmasıdır.</p>
+
+  <div class="pair">
+    <div class="box"><b class="t">Dil bölüşümü konuya göre değil, rutine göre</b>
+      <p>Paylaşılan gama-frailty modelleri, uyarlamalı Gauss–Hermite kuadratürüyle kurulan rastgele etkili modeller, genelleştirilmiş kestirim denklemleri ve negatif binom sayım modelleri R'da; betimsel analizler, lojistik ve ordinal modeller, sistem düzeyi uyum çalışması ve dedektör kümesi Python'da.</p>
+    </div>
+    <div class="box"><b class="t">Tohum kütüğü</b>
+      <p>Rastgelelik içeren her işlem sabit bir tohumla çalışır ve tohumlar ayrı bir dosyada listelenir: bootstrap'ler ve Monte-Carlo kalibrasyonu için bir tohum, iyimserlik düzeltmesi için bir başkası, ek analizler için üçüncüsü. Böylece raporlanan sayılar yaklaşık değil <strong>birebir</strong> yeniden üretilir.</p>
+    </div>
+  </div>
+
+  <h4>Depoda ne bulunur</h4>
+  <ul>
+    <li><strong>Çıktıları gömülü defterler</strong> — her raporlanan sayı, onu üreten hücreye kadar izlenebilir.</li>
+    <li><strong>Dilden bağımsız sözde kod</strong> — analizin üçüncü bir ortamda, defterleri okumadan yeniden kurulabilmesi için.</li>
+    <li><strong>Kod kitabı</strong> — ham ve türetilmiş her değişkenin tanımı, hem makine okunur hem belge biçiminde.</li>
+    <li><strong>Spesifikasyon dosyaları</strong> — dedektör tanımları, tohum kütüğü, spesifikasyon eğrisi çıktıları.</li>
+    <li><strong>Ortam tanımları</strong> — paket sürümleriyle birlikte, iki dil için de.</li>
+    <li><strong>Eşleme belgesi</strong> — her analizi, sonucunun raporlandığı yere bağlar.</li>
+  </ul>
+
+  <div class="box good"><b class="t">Veri paylaşılamıyorsa ne yapılır</b>
+    <p>Küçük bir profesyonel kohortta uzmanlık, kurum tipi, bölge, hane bileşimi ve haftalık bildirim örüntüsünün <em>bileşimi</em>, doğrudan tanımlayıcılar kaldırılsa bile yeniden tanımlayıcı olabilir. Bu durumda bireysel veri yatırılmaz. Ancak kod kitabı kodun tükettiği her değişkeni tanımladığı sürece, <strong>kod veri elde olmadan da tam olarak okunabilir ve denetlenebilir.</strong> Erişim kısıtı, tekrarlanabilirliğin tamamen terk edilmesini gerektirmez.</p>
+  </div>
+</div></section>
+
+<!-- ══════════════════════════════════ 14 -->
+<section id="s14"><div class="col">
+  <div class="sh"><span class="n">14</span><h2>Bu tasarımı yeniden kullanmak</h2></div>
+  <p class="standfirst">Benzer bir sistem kurmayı düşünenler için: neyin doğrudan kopyalanabileceği, neyin bağlama göre değişmesi gerektiği ve bu uygulamada neyin farklı yapılmasının isteneceği.</p>
+
+  <h3>Doğrudan aktarılabilir olanlar</h3>
+  <ul>
+    <li><strong>Dört bileşenli mimari ve iki depolu ayrım.</strong> Kimlik bir yerde, sağlık verisi başka yerde, ikisini yalnızca kişisel hiçbir şeyden türetilmemiş rastgele bir jeton bağlar. Belirli bir sağlayıcıya bağlı değildir.</li>
+    <li><strong>Sabit haftalık ritim.</strong> Öngörülebilir bir hatırlatma, açık bir yanıt penceresi ve kısa bir form. Bildirim yükü, paydayı ayakta tutan tek değişkendir.</li>
+    <li><strong>Analiz planının önceden yazılması.</strong> Popülasyon, kestirici, düzeltme kümesi ve spesifikasyon, veri görülmeden sabitlenir. Maliyeti sıfırdır.</li>
+    <li><strong>Katılımı bir sonuç olarak ölçmek.</strong> Kimin bildirim yaptığı, ne sıklıkla yaptığı ve bunun ölçülen insidansla ilişkisi ayrı analizler olarak planlanmalıdır.</li>
+    <li><strong>Spesifikasyon eğrisi mantığı.</strong> Kilitle, sonra bütün savunulabilir alternatifleri çalıştır ve sonucun dağılımdaki yerini göster.</li>
+  </ul>
+
+  <h3>Bağlama göre değişmesi gerekenler</h3>
+  <ul>
+    <li><strong>Olgu tanımı</strong>, karşılaştırılacak yerleşik sistemin kullandığıyla aynı olmalıdır. Aksi hâlde iki akış farklı şeyleri ölçer ve karşılaştırma meşru değildir.</li>
+    <li><strong>Faz sınırları ve epidemi eşikleri</strong> dış bir kaynaktan, tercihen çok sezonlu tarihsel veriden gelmelidir; kendi verinizden türetirseniz değerlendirme döngüsel olur.</li>
+    <li><strong>Dedektör eşikleri</strong> her akış için ayrı kalibre edilmelidir; sayım ölçekleri farklıysa ortak eşik kullanılamaz.</li>
+    <li><strong>Koruma gecikmesi</strong> gibi zamanla değişen maruziyet parametreleri, ilgili biyolojik gerekçeyle ve analiz öncesinde belirlenmelidir.</li>
+  </ul>
+
+  <h3>Bu uygulamada farklı yapılması istenecekler</h3>
+  <div class="box care"><b class="t">Dört somut nokta</b>
+    <p><strong>1 · Etken sınıflaması doğrulanmalı.</strong> Bu çalışmada hastalık nedeni, kişinin kendi körlenmemiş klinik kanaatiydi ve epizod başına tek bir atama yapıldı; ikinci okuyucu olmadığı için uyum katsayısı hesaplanamıyor. Küçük bir öz-sürüntü alt çalışması bu sınırı kapatırdı ve <em>baştan planlanmalıydı</em>.</p>
+    <p><strong>2 · Panel, haftalık payda hedefine göre boyutlandırılmalı.</strong> Uyum tavanını belirleyen şey kişi sayısı değil, haftalık olay sayısıdır. Hedef tavan baştan seçilip gereken panel büyüklüğü ondan geriye doğru hesaplanabilir.</p>
+    <p><strong>3 · Birden fazla bildirim yolu olmalı.</strong> Tek yolun e-posta bağlantısı olması, katılımı belirli bir dijital erişim profiline sınırlar. Genel topluma açılacak bir tasarımda bu doğrudan bir temsil sorunudur.</p>
+    <p><strong>4 · Birlikte çalışabilirlik baştan tasarlanmalı.</strong> Bu uygulamada sendromik kümeler dışsal bir terminolojiye (ICD-10, SNOMED CT, LOINC gibi) eşlenmedi ve makine okunur bir değişim arayüzü kurulmadı. Ulusal bir sisteme bağlanma hedefi varsa, bu bir sonradan ekleme değil bir gereksinim olarak yazılmalıdır.</p>
+  </div>
+
+  <div class="box good"><b class="t">Genel ilke</b>
+    <p>Bu tasarımın en aktarılabilir yanı istatistiksel değil, yazımsaldır: <strong>her sınırın yanına onu sınırlayan sayıyı yazmak.</strong> "Az sayıda olay vardı" yerine "91 olayın 21'i maruziyet altındaydı ve tasarımın %80 güçle saptayabileceği en küçük etki gözlenen etkiye neredeyse eşitti" demek, aynı sınırı savunulabilir bir ifadeye dönüştürür.</p>
+  </div>
+</div></section>
+
+<!-- ══════════════════════════════════ footer -->
+<footer class="col">
+  <h3>Kaynak, atıf ve yeniden kullanım</h3>
+  <p>Bu sayfa, SALGINTR doktora tezinin yöntem bölümünden kamuya açık bir özet olarak hazırlanmıştır. Sayılar tezin ilgili bölümlerinden alınmıştır; yöntemin tam ayrıntısı, kod, sözde kod ve kod kitabı proje deposundadır.</p>
+  <div class="cite">SALGINTR — Development and Evaluation of a Digital Participatory
+Surveillance System to Monitor Influenza-like Illness in Türkiye,
+Based on Self-reported Data from a Physician Cohort.
+Orta Doğu Teknik Üniversitesi, Enformatik Enstitüsü.
+
+Kod ve dokümantasyon: github.com/salgintr/SALGINTR-2025-2026-analysis
+Sistem ve pano: salgin.com.tr</div>
+  <p class="small">Bu sayfadaki kod parçaları, tarif edilen spesifikasyonların okunabilir karşılıklarıdır; analiz deposundaki kodun birebir kopyası değildir. Çalışma, Orta Doğu Teknik Üniversitesi İnsan Araştırmaları Etik Kurulu onayıyla yürütülmüş, sağlık verisi açık rızaya dayanarak işlenmiş ve bireysel düzeyde veri hiçbir kuruma açıklanmamıştır.</p>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  document.documentElement.lang = "tr";
+})();
+</script>
