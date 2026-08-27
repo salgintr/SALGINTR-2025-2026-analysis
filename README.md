@@ -8,16 +8,22 @@ This repository accompanies a doctoral thesis at Middle East Technical Universit
 code that produced the reported analyses and the codebook that defines every variable those analyses
 use. **It does not contain the data** — see [Data availability](#data-availability).
 
+## Associated publication
+
+> Ontaş E, Güçlü H, Aydın Son Y. (2026). SALGINTR: development and early evaluation of a low-cost cloud-based digital participatory surveillance system for influenza-like illness among physicians in Türkiye — a proof of concept. *BMC Infectious Diseases*, 26, 1506.  
+> https://doi.org/10.1186/s12879-026-14153-1
+
 ## What is here
 
 | Path | Contents |
 |---|---|
-| `notebooks/` | The two analysis notebooks, one per language, with outputs embedded as executed |
-| `pseudocode/` | Language-neutral pseudocode for each analysis, for reimplementation in any language |
-| `codebook/` | Every variable used in the analyses: label, type, permitted values, derivation rule |
-| `specs/` | The locked analysis protocol, the detector specification and the seed register |
-| `environment/` | Version-pinned environment files for Python and R |
-| `docs/` | Repository documentation, including how the notebooks map to the thesis supplement |
+| `notebooks/` | The two analysis notebooks, one per language, with outputs embedded as executed, and the verbatim run log of each |
+| `codebook/` | All 263 variables the analyses consume, across the five dataset sheets: label, type, permitted values, derivation rule, and which analyses use each one |
+| `specs/` | The analysis inventory, one row per analysis, and the canonical value of every quantity the manuscript reports more than once |
+| `pseudocode/` | The collection-pipeline pseudocode, and the revision record for the supplement's pseudocode blocks |
+| `figures/` | The directed acyclic graphs behind the identification strategy for each hypothesis |
+| `environment/` | Version-pinned environment files for Python and R, and the note recording how the notebooks were run |
+| `docs/` | Audit records: the codebook against the dataset, the shipped figures against the notebook output, and the items of both questionnaires |
 
 ## Analyses
 
@@ -34,6 +40,27 @@ equations, which are fitted with R packages that have no equivalent implementati
 
 Figure generation is deliberately outside the scope of these notebooks: they produce the numbers, and
 the thesis figures are drawn separately.
+
+## Pseudocode
+
+`pseudocode/COLLECTION-PIPELINE.md` describes the weekly collection cycle in language-neutral form:
+enrolment, the Saturday send of each physician's own pre-filled link, the retry chain that carries an
+interrupted send across the following days, and the operator procedures around it. The two
+questionnaires it drives are itemised in `docs/questionnaire_items.csv`. The script that implemented
+the cycle is not distributed: it carries the live form endpoint, the response workbook and the
+study's mailbox addresses, and a Google Form endpoint accepts submissions from anyone holding it.
+
+Participant identifiers were drawn at random and are not derived from the email address or from any
+other participant attribute, which is why the generation rule can be stated openly in that file. An
+identifier computed from an identifier — a digest of an address, say — would be invertible by
+enumeration over a small and guessable address space, and describing the rule would then amount to
+describing a re-identification method.
+
+`pseudocode/pseudocode.csv` is a revision record rather than the corpus: five entries covering four
+analyses, each giving the block as it now reads and what changed from the previous version. The
+pseudocode of record for each analysis is in the thesis supplement, and
+`specs/analysis_inventory.csv` names the supplement section carrying it for every analysis, in its
+`current_supplement_pseudocode` column.
 
 ## Aberration detection
 
@@ -61,9 +88,11 @@ without which the statistic latches and reports consecutive weeks as separate al
 
 ## Reproducibility
 
-Random seeds are fixed for every resampling procedure and recorded in `specs/seeds.md`. Bootstraps
-use 2,000 replicates. The environment files pin the package versions the reported results were
-produced under.
+Every resampling procedure sets its seed in the cell that uses it, and bootstraps use 2,000
+replicates. `environment/ENVIRONMENT.md` pins the package versions the reported results were produced
+under and records the one quantity that still moves between runs. `specs/canonical_specifications.csv`
+fixes the value of each quantity the manuscript reports in more than one place, so that the
+Results and the Discussion cannot drift apart.
 
 ## Data availability
 
