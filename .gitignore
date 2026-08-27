@@ -22,3 +22,6 @@ renv/library/
 .vscode/
 .idea/
 *.swp
+
+# Apps Script project binding (carries the script id)
+.clasp.json

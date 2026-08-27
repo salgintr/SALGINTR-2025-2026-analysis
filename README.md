@@ -19,12 +19,28 @@ This repository accompanies the following proof-of-concept study:
 
 | Path | Contents |
 |---|---|
+| `apps-script/` | The collection instrument: the Apps Script that ran the weekly reporting cycle |
 | `notebooks/` | The two analysis notebooks, one per language, with outputs embedded as executed |
-| `pseudocode/` | Language-neutral pseudocode for each analysis, for reimplementation in any language |
+| `pseudocode/` | Language-neutral pseudocode for each analysis and for the collection pipeline |
 | `codebook/` | Every variable used in the analyses: label, type, permitted values, derivation rule |
 | `specs/` | The locked analysis protocol, the detector specification and the seed register |
 | `environment/` | Version-pinned environment files for Python and R |
 | `docs/` | Repository documentation, including how the notebooks map to the thesis supplement |
+
+## Collection instrument
+
+`apps-script/` holds the Google Apps Script that operated the weekly cycle: it enrolled each
+physician once, sent every enrolled physician their own pre-filled link to the weekly form each
+Saturday morning, and retried across the following days when the platform's daily mail quota ran out
+before the cohort was covered. `pseudocode/COLLECTION-PIPELINE.md` describes the same cycle in
+language-neutral form.
+
+Participant identifiers are drawn at random and are not derived from the email address or from any
+other participant attribute. There is no hash and no key to protect, so the generation rule is
+published in full; a random identifier carries no information about the person it names. The link
+between an identifier and an address exists only in the private response workbook, which is not
+distributed. No live form endpoint, mailbox or workbook identifier is committed — those are read at
+run time from script properties held with the script project.
 
 ## Analyses
 

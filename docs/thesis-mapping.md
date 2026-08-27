@@ -6,6 +6,7 @@ archival record inside the thesis; this repository is the runnable version.
 | Thesis | Repository |
 |---|---|
 | Supplement S1 — study questionnaire | not included; the instrument is reproduced in the thesis |
+| Methods 2.2 — data collection and the weekly cycle | `apps-script/` and `pseudocode/COLLECTION-PIPELINE.md` |
 | Supplement S2 — codebook | `codebook/codebook.csv` and `codebook/CODEBOOK.md` |
 | Supplement S3 — statistical methods, code and pseudocode | `notebooks/`, `pseudocode/` and `specs/` |
 | Methods 2.10 — software and reproducibility | `environment/` and `specs/seeds.md` |
