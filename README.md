@@ -20,10 +20,10 @@ use. **It does not contain the data** — see [Data availability](#data-availabi
 | `notebooks/` | The two analysis notebooks, one per language, with outputs embedded as executed, and the verbatim run log of each |
 | `codebook/` | All 263 variables the analyses consume, across the five dataset sheets: label, type, permitted values, derivation rule, and which analyses use each one |
 | `specs/` | The analysis inventory, one row per analysis, and the canonical value of every quantity the manuscript reports more than once |
-| `pseudocode/` | The collection-pipeline pseudocode, and the revision record for the supplement's pseudocode blocks |
+| `pseudocode/` | The collection-pipeline pseudocode |
 | `figures/` | The directed acyclic graphs behind the identification strategy for each hypothesis |
 | `environment/` | Version-pinned environment files for Python and R, and the note recording how the notebooks were run |
-| `docs/` | Audit records: the codebook against the dataset, the shipped figures against the notebook output, and the items of both questionnaires |
+| `docs/` | The shipped figures checked against the notebook output, the items of both questionnaires, and a bilingual methods companion |
 
 ## Analyses
 
@@ -55,10 +55,7 @@ other participant attribute, which is why the generation rule can be stated open
 identifier computed from an identifier — a digest of an address, say — would be invertible by
 enumeration over a small and guessable address space, and describing the rule would then amount to
 describing a re-identification method.
-
-`pseudocode/pseudocode.csv` is a revision record rather than the corpus: five entries covering four
-analyses, each giving the block as it now reads and what changed from the previous version. The
-pseudocode of record for each analysis is in the thesis supplement, and
+The pseudocode of record for each analysis is in the thesis supplement;
 `specs/analysis_inventory.csv` names the supplement section carrying it for every analysis, in its
 `current_supplement_pseudocode` column.
 
