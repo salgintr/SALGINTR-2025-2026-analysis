@@ -1,5 +1,7 @@
 # SALGINTR 2025/26 analysis code
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22552866.svg)](https://doi.org/10.5281/zenodo.22552866)
+
 Analysis code, pseudocode and computational specifications for the SALGINTR study — a
 physician-based digital participatory surveillance system for influenza-like illness in Türkiye,
 covering the 2025/26 season, ISO weeks 40/2025 to 20/2026 (33 weeks).
