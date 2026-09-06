@@ -208,570 +208,971 @@ footer h3{margin-top:0}
   border:1px solid var(--rule);border-radius:5px;padding:14px 16px;margin:14px 0;overflow-x:auto;
 }
 .small{font-size:13.2px;color:var(--slate-2);line-height:1.62}
+
+/* ═══════════════════════════════════════════════ dil anahtarı / language switch */
+[data-lang="tr"] .en{display:none!important}
+[data-lang="en"] .tr{display:none!important}
+.langbar{
+  position:sticky;top:0;z-index:50;background:var(--paper);
+  border-bottom:1px solid var(--rule);
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:9px clamp(18px,4vw,40px);
+}
+.langbar .mark{font:600 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--slate-2)}
+.seg{display:inline-flex;border:1px solid var(--rule-strong);border-radius:999px;overflow:hidden;background:var(--surface)}
+.seg button{
+  appearance:none;border:0;background:transparent;cursor:pointer;
+  font:600 11.5px/1 var(--mono);letter-spacing:.06em;color:var(--slate);
+  padding:7px 15px;transition:background .15s,color .15s;
+}
+.seg button[aria-pressed="true"]{background:var(--crimson);color:#fff}
+.seg button:not([aria-pressed="true"]):hover{background:var(--surface-2);color:var(--ink)}
 </style>
+
+<div id="doc" data-lang="tr">
+
+<div class="langbar">
+  <span class="mark">SALGINTR</span>
+  <span class="seg" role="group" aria-label="Dil / Language">
+    <button type="button" id="btn-tr" aria-pressed="true">TÜRKÇE</button>
+    <button type="button" id="btn-en" aria-pressed="false">ENGLISH</button>
+  </span>
+</div>
 
 <div class="page">
 
-<!-- ══════════════════════════════════ header -->
-<header class="hd col">
-  <p class="kicker">Açık yöntem notları</p>
-  <h1>Düşük maliyetli bir katılımcı sürveyans sistemi nasıl kuruldu ve nasıl analiz edildi</h1>
-  <p class="sub">SALGINTR, Türkiye'de bir hekim kohortunun her hafta kendi grip benzeri hastalık durumunu bildirdiği bir sürveyans sistemidir. Bu sayfa <strong>sonuçları değil, yöntemi</strong> anlatır: hangi veri yapısı hangi modeli gerektirdi, hangi parametreler neden seçildi, hangi kararlar analiz görülmeden önce sabitlendi ve <strong>hangi sınırlar tasarımın kendisinden geliyor</strong>. Benzer bir sistem kurmak isteyen araştırmacılar için yazıldı.</p>
+<header class="hd"><div class="col">
+  <p class="kicker tr">Açık yöntem notları</p>
+  <p class="kicker en">Open methods notes</p>
+  <h1 class="tr">Düşük maliyetli bir katılımcı sürveyans sistemi nasıl kuruldu ve nasıl analiz edildi</h1>
+  <h1 class="en">How a low-cost participatory surveillance system was built and analysed</h1>
+  <p class="sub tr">SALGINTR, Türkiye'de bir hekim kohortunun her hafta kendi grip benzeri hastalık durumunu bildirdiği bir sürveyans sistemidir. Bu sayfa sonuçları değil, <strong>yöntemi</strong> anlatır: hangi veri yapısı hangi modeli gerektirdi, hangi parametreler neden seçildi, hangi kararlar analiz görülmeden önce sabitlendi ve hangi sınırlar tasarımın kendisinden geliyor. Benzer bir sistem kurmak isteyen araştırmacılar için yazıldı.</p>
+  <p class="sub en">SALGINTR is a surveillance system in which a cohort of physicians in Türkiye reported their own influenza-like illness every week. This page is not about the findings but about the <strong>method</strong>: which data structure forced which model, why each parameter was chosen, which decisions were fixed before the data were seen, and which limits come from the design itself. It is written for researchers who want to build something similar.</p>
   <div class="byline">
-    <span>2025/26 sezonu · 33 ISO haftası</span>
-    <span>248 hekim · 4.729 kişi-hafta</span>
-    <span>≈100 ABD doları donanım maliyeti</span>
+    <span class="tr">2025/26 sezonu · 33 ISO haftası</span><span class="en">2025/26 season · 33 ISO weeks</span>
+    <span class="tr">248 hekim · 4.729 kişi-hafta</span><span class="en">248 physicians · 4,729 person-weeks</span>
+    <span class="tr">≈100 ABD doları nakit maliyet</span><span class="en">≈US$100 cash outlay</span>
   </div>
-</header>
+</div></header>
 
-<div class="who">
-  <h2>Bu sayfa kimin işine yarar</h2>
-  <ul>
-    <li><strong>Katılımcı sürveyans kurmak isteyenler</strong> — platform mimarisi, haftalık ritim, maliyet kalemleri ve neyin gerçekten tekrarlanabilir olduğu.</li>
-    <li><strong>Tekrarlayan olay verisiyle çalışanlar</strong> — aynı kişinin bir sezonda birden çok kez hastalandığı bir panelde model seçimi ve tuzakları.</li>
-    <li><strong>Sürveyans sinyallerini karşılaştıranlar</strong> — iki akışın uyumu nasıl ölçülür ve ölçüm hatası bu uyuma nasıl bir tavan koyar.</li>
-    <li><strong>Metodoloji dersi verenler</strong> — Poisson, negatif binom, gama frailty ve nedensel diyagram kavramları tek bir gerçek veri kümesi üzerinde, sayılarıyla.</li>
-  </ul>
-</div>
+<section><div class="col">
+  <div class="who">
+    <h2 class="tr">Bu sayfa kimin işine yarar</h2>
+    <h2 class="en">Who this page is for</h2>
+    <ul class="tr">
+      <li><b>Katılımcı sürveyans kurmak isteyenler</b> — platform mimarisi, haftalık ritim, maliyet kalemleri ve neyin gerçekten tekrarlanabilir olduğu.</li>
+      <li><b>Tekrarlayan olay verisiyle çalışanlar</b> — aynı kişinin bir sezonda birden çok kez hastalandığı bir panelde model seçimi ve tuzakları.</li>
+      <li><b>Sürveyans sinyallerini karşılaştıranlar</b> — iki akışın uyumu nasıl ölçülür ve ölçüm hatası bu uyuma nasıl bir tavan koyar.</li>
+      <li><b>Kendi kendini seçen panellerle çalışanlar</b> — temsiliyet sapması nasıl ölçülür, ağırlıklandırma ne zaman işe yaramaz.</li>
+      <li><b>Metodoloji dersi verenler</b> — Poisson, negatif binom, gama frailty, bootstrap aileleri ve nedensel diyagram kavramları tek bir gerçek veri kümesi üzerinde, sayılarıyla.</li>
+    </ul>
+    <ul class="en">
+      <li><b>People building participatory surveillance</b> — platform architecture, the weekly rhythm, what it actually costs and what is genuinely reproducible.</li>
+      <li><b>People working with recurrent-event data</b> — model choice and its traps in a panel where the same person falls ill several times in a season.</li>
+      <li><b>People comparing surveillance signals</b> — how to measure agreement between two streams, and the ceiling measurement error puts on it.</li>
+      <li><b>People working with self-selected panels</b> — how to measure selection bias, and when weighting buys you nothing.</li>
+      <li><b>People teaching methods</b> — Poisson, negative binomial, gamma frailty, the bootstrap families and causal diagrams, on one real dataset, with the numbers.</li>
+    </ul>
+  </div>
+</div></section>
 
-<!-- ══════════════════════════════════ toc -->
-<nav class="toc">
-  <h2>İçindekiler</h2>
-  <ol>
-    <li><a href="#s1"><i>01</i><span>Sistem: ne toplandı, nasıl toplandı</span></a></li>
-    <li><a href="#s2"><i>02</i><span>Analiz birimi ve payda</span></a></li>
-    <li><a href="#s3"><i>03</i><span>Veri yapısı modeli seçer</span></a></li>
-    <li><a href="#s4"><i>04</i><span>Sayım verisi: Poisson ve negatif binom</span></a></li>
-    <li><a href="#s5"><i>05</i><span>Tekrarlayan olay: frailty Andersen–Gill</span></a></li>
-    <li><a href="#s6"><i>06</i><span>Gama dağılımı: iki modelde tek fikir</span></a></li>
-    <li><a href="#s7"><i>07</i><span>Nedensel çerçeve ve düzeltme kümeleri</span></a></li>
-    <li><a href="#s8"><i>08</i><span>Katılımın kendisi bir değişken</span></a></li>
-    <li><a href="#s9"><i>09</i><span>İki sürveyans sinyalini karşılaştırmak</span></a></li>
-    <li><a href="#s10"><i>10</i><span>Ölçüm hatasının koyduğu tavan</span></a></li>
-    <li><a href="#s11"><i>11</i><span>Alarm algoritmaları ve spesifikasyon eğrisi</span></a></li>
-    <li><a href="#s12"><i>12</i><span>Güç, kesinlik, tasarım etkisi</span></a></li>
-    <li><a href="#s13"><i>13</i><span>Tekrarlanabilirlik altyapısı</span></a></li>
-    <li><a href="#s14"><i>14</i><span>Bu tasarımı yeniden kullanmak</span></a></li>
-  </ol>
-</nav>
+<section><div class="col">
+  <h2 class="tr">İçindekiler</h2>
+  <h2 class="en">Contents</h2>
+  <nav class="toc tr">
+    <a href="#s1"><b>01</b> Sistem: ne toplandı, nasıl toplandı</a>
+    <a href="#s2"><b>02</b> Analiz birimi ve payda</a>
+    <a href="#s3"><b>03</b> Veri yapısı modeli seçer</a>
+    <a href="#s4"><b>04</b> Sayım verisi: Poisson ve negatif binom</a>
+    <a href="#s5"><b>05</b> İkili ve sıralı sonuçlar</a>
+    <a href="#s6"><b>06</b> Tekrarlayan olay: frailty Andersen–Gill</a>
+    <a href="#s7"><b>07</b> Gama dağılımı: iki modelde tek fikir</a>
+    <a href="#s8"><b>08</b> Nedensel çerçeve ve düzeltme kümeleri</a>
+    <a href="#s9"><b>09</b> Örneklem çerçevesi ve temsiliyet</a>
+    <a href="#s10"><b>10</b> Katılımın kendisi bir değişken</a>
+    <a href="#s11"><b>11</b> İki sürveyans sinyalini karşılaştırmak</a>
+    <a href="#s12"><b>12</b> Ölçüm hatasının koyduğu tavan</a>
+    <a href="#s13"><b>13</b> Alarm algoritmaları ve spesifikasyon eğrisi</a>
+    <a href="#s14"><b>14</b> Model performansı: dört ayrı soru</a>
+    <a href="#s15"><b>15</b> Bootstrap: beş kullanım, beş gerekçe</a>
+    <a href="#s16"><b>16</b> Güç, kesinlik, tasarım etkisi</a>
+    <a href="#s17"><b>17</b> Tekrarlanabilirlik altyapısı</a>
+    <a href="#s18"><b>18</b> Bu tasarımı yeniden kullanmak</a>
+  </nav>
+  <nav class="toc en">
+    <a href="#s1"><b>01</b> The system: what was collected, and how</a>
+    <a href="#s2"><b>02</b> Unit of analysis and denominator</a>
+    <a href="#s3"><b>03</b> The data structure picks the model</a>
+    <a href="#s4"><b>04</b> Count data: Poisson and negative binomial</a>
+    <a href="#s5"><b>05</b> Binary and ordinal outcomes</a>
+    <a href="#s6"><b>06</b> Recurrent events: frailty Andersen–Gill</a>
+    <a href="#s7"><b>07</b> The gamma: one idea in two models</a>
+    <a href="#s8"><b>08</b> Causal framework and adjustment sets</a>
+    <a href="#s9"><b>09</b> Sampling frame and representativeness</a>
+    <a href="#s10"><b>10</b> Participation is itself a variable</a>
+    <a href="#s11"><b>11</b> Comparing two surveillance signals</a>
+    <a href="#s12"><b>12</b> The ceiling measurement error imposes</a>
+    <a href="#s13"><b>13</b> Alarm algorithms and the specification curve</a>
+    <a href="#s14"><b>14</b> Model performance: four separate questions</a>
+    <a href="#s15"><b>15</b> Bootstrap: five uses, five rationales</a>
+    <a href="#s16"><b>16</b> Power, precision, design effect</a>
+    <a href="#s17"><b>17</b> Reproducibility infrastructure</a>
+    <a href="#s18"><b>18</b> Reusing this design</a>
+  </nav>
+</div></section>
 
-<!-- ══════════════════════════════════ 01 -->
+<!-- ══════════════════════════════ 01 -->
 <section id="s1"><div class="col">
-  <div class="sh"><span class="n">01</span><h2>Sistem: ne toplandı, nasıl toplandı</h2></div>
-  <p class="standfirst">Katılımcı sürveyansta veri, hastanın kliniğe gitmesini beklemek yerine doğrudan kişiden gelir. SALGINTR bu modeli genel topluma değil, mesleki maruziyeti daha yüksek bir gruba — çalışan hekimlere — uyguladı.</p>
+  <div class="sh"><span class="n">01</span><h2 class="tr">Sistem: ne toplandı, nasıl toplandı</h2><h2 class="en">The system: what was collected, and how</h2></div>
+  <p class="standfirst tr">Katılımcı sürveyansta veri, hastanın kliniğe gitmesini beklemek yerine doğrudan kişiden gelir. SALGINTR bu modeli genel topluma değil, mesleki maruziyeti daha yüksek bir gruba — çalışan hekimlere — uyguladı.</p>
+  <p class="standfirst en">In participatory surveillance the data come straight from the person rather than waiting for them to reach a clinic. SALGINTR applied that model not to the general public but to a group with higher occupational exposure — practising physicians.</p>
 
-  <h3>Haftalık ritim</h3>
-  <p>Kayıt bir kez yapılır (yaklaşık üç dakika): demografi, hasta bakıyorsa mesleki maruziyet, riski artıran ve azaltan etkenler. Sonrasında her hafta tek bir soru sorulur ve yanıt bir dakikadan kısa sürer.</p>
-  <div class="eq"><pre>Cumartesi 09.00   otomatik hatırlatma e-postası + ön dolgulu bağlantı
+  <h3 class="tr">Haftalık ritim</h3><h3 class="en">The weekly rhythm</h3>
+  <p class="tr">Kayıt bir kez yapılır (yaklaşık üç dakika): demografi, hasta bakıyorsa mesleki maruziyet, riski artıran ve azaltan etkenler. Sonrasında her hafta tek bir soru sorulur ve yanıt bir dakikadan kısa sürer.</p>
+  <p class="en">Registration happens once (about three minutes): demographics, occupational exposure for those seeing patients, and the factors that raise or lower risk. After that a single question arrives each week and takes under a minute to answer.</p>
+  <div class="eq tr"><pre>Cumartesi 09.00   otomatik hatırlatma e-postası + ön dolgulu bağlantı
       ↓
 Salı 23.59        yanıt penceresi kapanır
       ↓
 Çarşamba          halka açık pano yenilenir
 
 hatırlama dönemi = ÖNCEKİ yedi gün
-  → salı doldurulan form, biten haftayı anlatır; doldurma gününü değil</pre>
-    <p class="gloss">Düzenli ve öngörülebilir bir uyarı, katılımcı panellerde paydayı ayakta tutan tek şeydir. Haftalık form bilerek kısa tutuldu: bildirim yükü, bu tür panellerde bırakmanın başlıca nedenidir.</p>
-  </div>
+  → salı doldurulan form, biten haftayı anlatır; doldurma gününü değil</pre></div>
+  <div class="eq en"><pre>Saturday 09:00   automated reminder e-mail + pre-filled link
+      ↓
+Tuesday 23:59    response window closes
+      ↓
+Wednesday        public dashboard refreshes
 
-  <h3>Kaynak kuralları — sonradan tartışma çıkarmamak için baştan yazılır</h3>
-  <ul>
-    <li><strong>Geç gelen bildirim</strong> anlattığı ISO haftasına yazılır, geldiği haftaya değil. Sonuç: bir haftanın paydası geriye dönük değişebilir; sezon içinde panoda görünen sayılar bu anlamda geçicidir.</li>
-    <li><strong>Aynı hafta için ikinci bildirim</strong> geldiğinde sonuncusu tutulur — yeniden gönderim bir düzeltme sayılır. Ayrı bir düzeltme kanalı yoktur.</li>
-    <li><strong>Doldurulmamış hafta</strong> "sağlıklı" demek değildir; gözlenmemiş zamandır. Bu ayrım Bölüm 02 ve 08'de belirleyici hâle gelir.</li>
+recall period = the PRECEDING seven days
+  → a form filed on Tuesday describes the week that ended,
+    not the day it was filed</pre></div>
+  <p class="tr">Düzenli ve öngörülebilir bir uyarı, katılımcı panellerde paydayı ayakta tutan tek şeydir. Haftalık form bilerek kısa tutuldu: bildirim yükü, bu tür panellerde bırakmanın başlıca nedenidir.</p>
+  <p class="en">A regular, predictable prompt is the one thing that keeps the denominator alive in a participatory panel. The weekly form was deliberately kept short: reporting burden is the main reason people drop out of panels like this.</p>
+
+  <h3 class="tr">Kaynak kuralları — sonradan tartışma çıkarmamak için baştan yazılır</h3>
+  <h3 class="en">Source rules — written in advance so they cannot be argued about later</h3>
+  <ul class="tr">
+    <li><b>Geç gelen bildirim</b> anlattığı ISO haftasına yazılır, geldiği haftaya değil. Sonuç: bir haftanın paydası geriye dönük değişebilir; sezon içinde panoda görünen sayılar bu anlamda geçicidir.</li>
+    <li><b>Aynı hafta için ikinci bildirim</b> geldiğinde sonuncusu tutulur — yeniden gönderim bir düzeltme sayılır. Ayrı bir düzeltme kanalı yoktur.</li>
+    <li><b>Doldurulmamış hafta</b> "sağlıklı" demek değildir; gözlenmemiş zamandır. Bu ayrım Bölüm 02 ve 10'da belirleyici hâle gelir.</li>
+  </ul>
+  <ul class="en">
+    <li><b>A late report</b> is credited to the ISO week it describes, not the week it arrived. Consequence: a week's denominator can change retrospectively, so the numbers shown on the dashboard during the season are provisional in that sense.</li>
+    <li><b>A second report for the same week</b> replaces the first — a resubmission counts as a correction. There is no separate correction channel.</li>
+    <li><b>An unfiled week</b> does not mean "healthy"; it is unobserved time. This distinction becomes decisive in Sections 02 and 10.</li>
   </ul>
 
-  <h3>Mimari ve maliyet</h3>
-  <p>Sistem dört bileşenden oluşur ve hiçbiri belirli bir sağlayıcıya bağlı değildir: <strong>form servisi</strong>; <strong>fiziksel olarak ayrı iki depo</strong> (biri kayıt ve kimlik, diğeri haftalık bildirimler); jetonu üreten, ön dolgulu bağlantıyı hazırlayan, hatırlatmayı gönderen ve haftalık toplamı yazan bir <strong>betik katmanı</strong>; ve yalnızca toplamları okuyan bir <strong>pano</strong>.</p>
+  <h3 class="tr">Mimari ve maliyet</h3><h3 class="en">Architecture and cost</h3>
+  <p class="tr">Sistem dört bileşenden oluşur ve hiçbiri belirli bir sağlayıcıya bağlı değildir: bir <b>form servisi</b>; fiziksel olarak <b>ayrı iki depo</b> (biri kayıt ve kimlik, diğeri haftalık bildirimler); jetonu üreten, ön dolgulu bağlantıyı hazırlayan, hatırlatmayı gönderen ve haftalık toplamı yazan bir <b>betik katmanı</b>; ve yalnızca toplamları okuyan bir <b>pano</b>.</p>
+  <p class="en">The system has four components and none is tied to a particular vendor: a <b>form service</b>; two <b>physically separate stores</b> (one for registration and identity, one for the weekly reports); a <b>script layer</b> that mints the token, prepares the pre-filled link, sends the reminder and writes the weekly totals; and a <b>dashboard</b> that reads only the totals.</p>
   <div class="figs">
-    <div class="fig"><b>2.535 TL</b><span>alan adı, bir yıl</span></div>
-    <div class="fig"><b>2.049,6 TL</b><span>çalışma alanı aboneliği, 12 ay</span></div>
-    <div class="fig"><b>≈100 USD</b><span>toplam nakit maliyet</span></div>
-    <div class="fig"><b>≈1 kişi-ay</b><span>ücretsiz akademik emek</span></div>
+    <div class="fig tr"><b>2.535 TL</b><span>alan adı, bir yıl</span></div><div class="fig en"><b>₺2,535</b><span>domain, one year</span></div>
+    <div class="fig tr"><b>2.049,6 TL</b><span>çalışma alanı aboneliği, 12 ay</span></div><div class="fig en"><b>₺2,049.6</b><span>workspace subscription, 12 months</span></div>
+    <div class="fig tr"><b>≈100 USD</b><span>toplam nakit maliyet</span></div><div class="fig en"><b>≈US$100</b><span>total cash outlay</span></div>
+    <div class="fig tr"><b>≈1 kişi-ay</b><span>ücretsiz akademik emek</span></div><div class="fig en"><b>≈1 person-month</b><span>unpaid academic labour</span></div>
   </div>
-  <div class="box care"><b class="t">Dürüst maliyet</b>
-    <p>Yüz dolar yalnızca <em>nakit</em> maliyettir. Sistem ayrıca sezon boyunca yaklaşık bir kişi-aylık ücretsiz araştırmacı emeği tüketti: kurulum, haftalık işletim, hatırlatma takibi, veri düzenleme ve pano bakımı. Bu, en ekonomik gönüllü Influenzanet düğümlerinin bildirdiği bakım yüküyle karşılaştırılabilir. Para ihmal edilebilir; insan zamanı değil. Benzer bir sistem planlayan herkesin bütçelemesi gereken kalem budur.</p>
-  </div>
-  <div class="box stop"><b class="t">Erişim kısıtı — küçümsenmemeli</b>
-    <p>Tek bildirim yolu, e-postadaki bağlantıyla açılan bir web formuydu. Uygulama yok, SMS yok, telefon yok, kâğıt yok, çevrimdışı mod yok. Katılım; takip edilen bir e-posta adresi, tarayıcılı bir cihaz ve o anda bağlantı gerektiriyordu. Genel topluma açılacak bir tasarımda bu, doğrudan bir temsil sorunu hâline gelir.</p>
-  </div>
+  <div class="box care tr"><b class="t">Dürüst maliyet</b>
+    <p>Yüz dolar yalnızca <em>nakit</em> maliyettir. Sistem ayrıca sezon boyunca yaklaşık bir kişi-aylık ücretsiz araştırmacı emeği tüketti: kurulum, haftalık işletim, hatırlatma takibi, veri düzenleme ve pano bakımı. Para ihmal edilebilir; insan zamanı değil. Benzer bir sistem planlayan herkesin bütçelemesi gereken kalem budur.</p></div>
+  <div class="box care en"><b class="t">The honest cost</b>
+    <p>A hundred dollars is the <em>cash</em> cost only. The system also consumed roughly one person-month of unpaid researcher time across the season: setup, weekly operation, chasing reminders, data cleaning and dashboard maintenance. The money is negligible; the human time is not. That is the line item anyone planning a similar system has to budget for.</p></div>
+  <div class="box stop tr"><b class="t">Erişim kısıtı — küçümsenmemeli</b>
+    <p>Tek bildirim yolu, e-postadaki bağlantıyla açılan bir web formuydu. Uygulama yok, SMS yok, telefon yok, kâğıt yok, çevrimdışı mod yok. Katılım; takip edilen bir e-posta adresi, tarayıcılı bir cihaz ve o anda bağlantı gerektiriyordu. Genel topluma açılacak bir tasarımda bu, doğrudan bir temsil sorunu hâline gelir.</p></div>
+  <div class="box stop en"><b class="t">The access constraint — do not underrate it</b>
+    <p>The only reporting route was a web form opened from a link in an e-mail. No app, no SMS, no telephone, no paper, no offline mode. Participation required a monitored e-mail address, a device with a browser, and connectivity at the moment of reporting. In a design opened to the general public this becomes a representation problem directly.</p></div>
 </div></section>
 
-<!-- ══════════════════════════════════ 02 -->
+<!-- ══════════════════════════════ 02 -->
 <section id="s2"><div class="col">
-  <div class="sh"><span class="n">02</span><h2>Analiz birimi ve payda</h2></div>
-  <p class="standfirst">Katılımcı panellerde en sık yapılan hata paydayı yanlış seçmektir. Herkes aynı süre gözlenmediği için "kişi" bir payda değildir.</p>
-
-  <p>İzlem birimi <strong>kişi-hafta</strong>dır: bir hekimin bir haftalık gözlemi. Hekimler eşit süre bildirim yapmadı — biri 33 hafta, biri 5 hafta, ortanca 20 hafta. Payda "hekim sayısı" olsaydı, beş hafta gözlenen kişiyle otuz üç hafta gözlenen kişi aynı ağırlığı taşırdı.</p>
-
+  <div class="sh"><span class="n">02</span><h2 class="tr">Analiz birimi ve payda</h2><h2 class="en">Unit of analysis and denominator</h2></div>
+  <p class="standfirst tr">Katılımcı panellerde en sık yapılan hata paydayı yanlış seçmektir. Herkes aynı süre gözlenmediği için "kişi" bir payda değildir.</p>
+  <p class="standfirst en">The most common mistake in participatory panels is choosing the wrong denominator. Because nobody is observed for the same length of time, "persons" is not a denominator.</p>
+  <p class="tr">İzlem birimi <b>kişi-hafta</b>dır: bir hekimin bir haftalık gözlemi. Hekimler eşit süre bildirim yapmadı — biri 33 hafta, biri 5 hafta, ortanca 20 hafta. Payda "hekim sayısı" olsaydı, beş hafta gözlenen kişiyle otuz üç hafta gözlenen kişi aynı ağırlığı taşırdı.</p>
+  <p class="en">The unit of follow-up is the <b>person-week</b>: one physician observed for one week. Physicians did not report for equal lengths of time — one filed 33 weeks, another 5, with a median of 20. Had the denominator been "number of physicians", someone observed for five weeks would have carried the same weight as someone observed for thirty-three.</p>
   <div class="wide"><div class="tw"><table>
-    <thead><tr><th>Sayı</th><th class="n">Değer</th><th>Ne işe yarar</th></tr></thead>
+    <thead><tr><th class="tr">Sayı</th><th class="en">Quantity</th><th class="tr">Değer</th><th class="en">Value</th><th class="tr">Ne işe yarar</th><th class="en">What it is for</th></tr></thead>
     <tbody>
-      <tr><td class="lead">Doldurulmuş kişi-hafta</td><td class="n">4.729</td><td>Modelin kurulduğu panel. On üç değişkenin tamamı bu haftaların hepsinde eksiksiz, dolayısıyla hiçbir olgu dışlanmadı.</td></tr>
-      <tr><td class="lead">Risk altındaki kişi-hafta</td><td class="n">4.626</td><td><strong>Her insidans hızının paydası.</strong> Aradaki 103 hafta, önceki haftadan süregelen bir hastalığın haftasıdır; o haftada yeni bir epizod başlayamaz.</td></tr>
-      <tr><td class="lead">Yeni epizod</td><td class="n">497</td><td>600 semptomlu haftanın 103'ü devam haftası olarak birleştirildi. Bir hastalığın defalarca sayılmasını engelleyen kural budur.</td></tr>
-    </tbody>
-  </table></div></div>
-
-  <div class="eq"><pre>insidans = 497 / 4.626 = 0,1074
+      <tr><td class="lead"><span class="tr">Doldurulmuş kişi-hafta</span><span class="en">Filed person-weeks</span></td><td>4.729 / 4,729</td><td><span class="tr">Modelin kurulduğu panel. On üç değişkenin tamamı bu haftaların hepsinde eksiksiz, dolayısıyla hiçbir olgu dışlanmadı.</span><span class="en">The panel the models are fitted on. All thirteen covariates are complete on every one of these weeks, so no case was excluded.</span></td></tr>
+      <tr><td class="lead"><span class="tr">Risk altındaki kişi-hafta</span><span class="en">Person-weeks at risk</span></td><td>4.626</td><td><span class="tr">Her insidans hızının paydası. Aradaki 103 hafta, önceki haftadan süregelen bir hastalığın haftasıdır; o haftada yeni bir epizod başlayamaz.</span><span class="en">The denominator of every incidence rate. The 103-week difference is weeks continuing an illness from the previous week; a new episode cannot begin in such a week.</span></td></tr>
+      <tr><td class="lead"><span class="tr">Yeni epizod</span><span class="en">Incident episodes</span></td><td>497</td><td><span class="tr">600 semptomlu haftanın 103'ü devam haftası olarak birleştirildi. Bir hastalığın defalarca sayılmasını engelleyen kural budur.</span><span class="en">103 of the 600 symptomatic weeks were consolidated as continuation weeks. This is the rule that stops one illness being counted several times.</span></td></tr>
+    </tbody></table></div></div>
+  <div class="eq tr"><pre>insidans = 497 / 4.626 = 0,1074
          → 100 risk altındaki kişi-haftada 10,74 yeni epizod
            (haftalık ortanca 10,49; aralık 5,00–18,18)</pre></div>
+  <div class="eq en"><pre>incidence = 497 / 4,626 = 0.1074
+          → 10.74 new episodes per 100 person-weeks at risk
+            (weekly median 10.49; range 5.00–18.18)</pre></div>
 
-  <h3>Epizod bağlama kuralı ve iki sınır durumu</h3>
-  <p>Ardışık semptomlu haftalar, kişi "devam ediyor" dediğinde tek bir epizoda birleşir. Ama iki durum kuralın sınırında kalır ve <strong>ikisi de açıkça sayılmalıdır</strong>:</p>
-  <ul>
-    <li><strong>76 hafta</strong> semptomlu bir haftayı izliyor ama yeni sayıldı, çünkü kişi yeni bir hastalık beyan etti. Bunların 44'ünde bildirilen etken kümesi de değişmişti — ayrı bir hastalık lehine olumlu kanıt.</li>
-    <li><strong>83 hafta</strong> hiç doldurulmamış bir haftayı izliyor. Gözlenmemiş bir hafta üzerinden devamlılık tanınamayacağı için bunlar <em>kuruluş gereği</em> yeni sayıldı. Bu, kuralın kaçınılmaz bir özelliğidir ve Bölüm 08'de doğrudan ölçülür.</li>
+  <h3 class="tr">Epizod bağlama kuralı ve iki sınır durumu</h3>
+  <h3 class="en">The episode-linking rule and two boundary cases</h3>
+  <p class="tr">Ardışık semptomlu haftalar, kişi "devam ediyor" dediğinde tek bir epizoda birleşir. Ama iki durum kuralın sınırında kalır ve ikisi de <b>açıkça sayılmalıdır</b>:</p>
+  <p class="en">Consecutive symptomatic weeks merge into one episode when the person reports the illness as continuing. But two situations sit at the rule's boundary and both must be <b>counted openly</b>:</p>
+  <ul class="tr">
+    <li><b>76 hafta</b> semptomlu bir haftayı izliyor ama yeni sayıldı, çünkü kişi yeni bir hastalık beyan etti. Bunların 44'ünde bildirilen etken kümesi de değişmişti — ayrı bir hastalık lehine olumlu kanıt.</li>
+    <li><b>83 hafta</b> hiç doldurulmamış bir haftayı izliyor. Gözlenmemiş bir hafta üzerinden devamlılık tanınamayacağı için bunlar kuruluş gereği yeni sayıldı. Bu, kuralın kaçınılmaz bir özelliğidir ve Bölüm 10'da doğrudan ölçülür.</li>
+  </ul>
+  <ul class="en">
+    <li><b>76 weeks</b> follow a symptomatic week but were counted as new, because the person declared a new illness. In 44 of those the reported agent cluster had changed too — positive evidence for a distinct illness.</li>
+    <li><b>83 weeks</b> follow a week that was never filed. Continuity cannot be recognised across an unobserved week, so these were counted as new by construction. That is an unavoidable property of the rule, and it is measured directly in Section 10.</li>
   </ul>
 
-  <h3>Sol kesilme</h3>
-  <p>Katılımcılar aynı haftada başlamadı. Bir kişi, kayıt haftası ile ilk bildirim haftasından geç olanında gözleme girer. Girişten önceki hücreler <strong>doldurulmamış değil, gözlenemez</strong>dir. Bu ayrım yapılmazsa katılım oranları olduğundan düşük görünür; bu yüzden bütün doluluk oranları <em>gözlenebilir hücreler</em> üzerinden verilmelidir.</p>
+  <h3 class="tr">Sol kesilme</h3><h3 class="en">Left truncation</h3>
+  <p class="tr">Katılımcılar aynı haftada başlamadı. Bir kişi, kayıt haftası ile ilk bildirim haftasından geç olanında gözleme girer. Girişten önceki hücreler doldurulmamış değil, <b>gözlenemez</b>dir. Bu ayrım yapılmazsa katılım oranları olduğundan düşük görünür; bu yüzden bütün doluluk oranları gözlenebilir hücreler üzerinden verilmelidir.</p>
+  <p class="en">Participants did not all start in the same week. A person enters observation at the later of their registration week and their first filed week. Cells before entry are not unfilled — they are <b>unobservable</b>. Without that distinction participation rates look worse than they are, which is why every fill rate must be computed over observable cells.</p>
 
-  <div class="faq"><h3>Sık sorulanlar</h3>
-    <details class="f"><summary>Bir kişinin 33 haftası, diğerinin 5 haftası varken karşılaştırma adil olur mu?</summary>
-      <div class="a">
-        <p><span class="tag">TR</span>Payda kişi değil kişi-zaman olduğu sürece adildir: herkes gözlendiği kadar sayılır. Ancak bu dengesizliğin kendisi ölçülmelidir. Bu kohortta bildirim yoğunluğu ile ölçülen insidans arasında gerçek bir ilişki var: her on ek bildirilen hafta için hız yaklaşık %20 düşüyor (IRR 0,805; 0,710–0,912). Bu düzeltilmeye çalışılmadı, açıkça raporlandı.</p>
-        <p class="en"><span class="tag">EN</span>It is fair as long as the denominator is person-time rather than persons: everyone counts for as long as they were observed. But the imbalance itself must be measured. In this cohort there is a real gradient between reporting intensity and measured incidence: the rate falls by about 20% per ten additional reported weeks (IRR 0.805; 0.710–0.912). It was reported rather than corrected.</p>
+  <div class="faq">
+    <h3 class="tr">Sık sorulanlar</h3><h3 class="en">Frequently asked</h3>
+    <details><summary><span class="tr">Bir kişinin 33 haftası, diğerinin 5 haftası varken karşılaştırma adil olur mu?</span><span class="en">Is the comparison fair when one person has 33 weeks and another 5?</span></summary>
+      <div class="pair">
+        <div class="a tr"><p>Payda kişi değil kişi-zaman olduğu sürece adildir: herkes gözlendiği kadar sayılır. Ancak bu dengesizliğin kendisi ölçülmelidir. Bu kohortta bildirim yoğunluğu ile ölçülen insidans arasında gerçek bir ilişki var: her on ek bildirilen hafta için hız yaklaşık %20 düşüyor (IRR 0,805; 0,710–0,912). Bu düzeltilmeye çalışılmadı, açıkça raporlandı.</p></div>
+        <div class="a en"><p>It is fair as long as the denominator is person-time rather than persons: everyone counts for as long as they were observed. But the imbalance itself must be measured. In this cohort there is a real gradient between reporting intensity and measured incidence: the rate falls by about 20% per ten additional reported weeks (IRR 0.805; 0.710–0.912). It was reported rather than corrected.</p></div>
       </div></details>
-    <details class="f"><summary>Doldurulmamış bir hafta neden "hastalık yok" sayılmıyor?</summary>
-      <div class="a">
-        <p><span class="tag">TR</span>Çünkü bu, sonlanımı maruziyetin içine taşır. Semptom durumu yalnızca doldurulmuş bir bildirimde kayıtlıdır; doldurulmamış haftayı "sağlıklı" saymak, katılım davranışını hastalık verisine dönüştürür ve karşılaştırmayı kuruluş gereği tersine çevirir. Doğru muamele, o haftayı risk altında olmayan zaman olarak ele almak ve bu varsayımın geçerliliğini ayrıca sınamaktır.</p>
-        <p class="en"><span class="tag">EN</span>Because it carries the outcome into the exposure. Symptom status is recorded only on a filed report; scoring an unfiled week as healthy turns reporting behaviour into illness data and inverts the comparison by construction. The correct treatment is to hold that week as time not at risk, and then test the assumption separately.</p>
+    <details><summary><span class="tr">Doldurulmamış bir hafta neden "hastalık yok" sayılmıyor?</span><span class="en">Why isn't an unfiled week scored as "no illness"?</span></summary>
+      <div class="pair">
+        <div class="a tr"><p>Çünkü bu, sonlanımı maruziyetin içine taşır. Semptom durumu yalnızca doldurulmuş bir bildirimde kayıtlıdır; doldurulmamış haftayı "sağlıklı" saymak, katılım davranışını hastalık verisine dönüştürür ve karşılaştırmayı kuruluş gereği tersine çevirir. Doğru muamele, o haftayı risk altında olmayan zaman olarak ele almak ve bu varsayımın geçerliliğini ayrıca sınamaktır.</p></div>
+        <div class="a en"><p>Because it carries the outcome into the exposure. Symptom status is recorded only on a filed report; scoring an unfiled week as healthy turns reporting behaviour into illness data and inverts the comparison by construction. The correct treatment is to hold that week as time not at risk, and then test the assumption separately.</p></div>
       </div></details>
   </div>
 </div></section>
 
-<!-- ══════════════════════════════════ 03 -->
+<!-- ══════════════════════════════ 03 -->
 <section id="s3"><div class="col">
-  <div class="sh"><span class="n">03</span><h2>Veri yapısı modeli seçer</h2></div>
-  <p class="standfirst">Model tercihi bir üslup meselesi değildir. Sonlanımın biçimi — ikili mi, sayım mı, zamanlı mı, tekrarlı mı — hangi ailenin kullanılabileceğini büyük ölçüde belirler.</p>
-
+  <div class="sh"><span class="n">03</span><h2 class="tr">Veri yapısı modeli seçer</h2><h2 class="en">The data structure picks the model</h2></div>
+  <p class="standfirst tr">Model tercihi bir üslup meselesi değildir. Sonlanımın biçimi — ikili mi, sayım mı, zamanlı mı, tekrarlı mı — hangi ailenin kullanılabileceğini büyük ölçüde belirler.</p>
+  <p class="standfirst en">Model choice is not a matter of taste. The shape of the outcome — binary, count, timed, repeated — largely determines which family is available to you.</p>
   <div class="wide"><div class="tw"><table>
-    <thead><tr><th>Sonlanım neye benziyor</th><th>Uygun model ailesi</th><th>Neden diğerleri değil</th></tr></thead>
+    <thead><tr>
+      <th class="tr">Sonlanım neye benziyor</th><th class="en">What the outcome looks like</th>
+      <th class="tr">Uygun model ailesi</th><th class="en">Appropriate model family</th>
+      <th class="tr">Neden diğerleri değil</th><th class="en">Why not the others</th></tr></thead>
     <tbody>
-      <tr><td class="lead">Kişi başına tek bir evet/hayır</td><td>İkili lojistik regresyon</td><td>Zaman ve tekrar yok; sağkalım çerçevesi gereksiz karmaşıklık getirir.</td></tr>
-      <tr><td class="lead">Kişi başına sayım, izlem süreleri farklı</td><td>Log ofsetli Poisson; aşırı yayılımda negatif binom</td><td>Ham sayı karşılaştırılamaz. Ofset olmadan model "kim daha çok gözlendi"yi ölçer.</td></tr>
-      <tr><td class="lead">Aynı kişide tekrarlanan evet/hayır</td><td>Rastgele kesişimli karma etkili lojistik</td><td>Sıradan lojistik, kişi içi bağımlılığı yok sayarak standart hataları küçültür.</td></tr>
-      <tr><td class="lead">Olay zamanı + kişi başına birden çok olay</td><td>Tekrarlayan olay sağkalım modeli (Andersen–Gill), paylaşılan frailty ile</td><td>İlk-olay modeli olayların çoğunu atar ve soruyu "ne sıklıkla"dan "hiç oldu mu"ya çevirir.</td></tr>
-      <tr><td class="lead">İki haftalık zaman serisi</td><td>Korelasyon, blok bootstrap, ROC, kontrol grafikleri</td><td>Birey düzeyi yok; bu bir sinyal karşılaştırmasıdır, regresyon değil.</td></tr>
-    </tbody>
-  </table></div></div>
-
-  <div class="box good"><b class="t">Aktarılabilir ilke</b>
-    <p>Analiz planını veri toplanmadan önce yazmak, yöntemin en ucuz ve en etkili parçasıdır. Bu çalışmada sekiz analizin popülasyonu, kestiricisi, düzeltme kümesi ve formal spesifikasyonu model kurulmadan önce sabitlendi; hiçbir terim kendi p değeri yüzünden modele girmedi veya çıkmadı, hiçbir aşamada ileri/geri eleme kullanılmadı. Bunun bedeli sıfır, kazancı ise sonuçların "arayarak bulunmuş" olmadığını gösterebilmektir.</p>
-  </div>
+      <tr><td class="lead"><span class="tr">Kişi başına tek bir evet/hayır</span><span class="en">One yes/no per person</span></td><td><span class="tr">İkili lojistik regresyon</span><span class="en">Binary logistic regression</span></td><td><span class="tr">Zaman ve tekrar yok; sağkalım çerçevesi gereksiz karmaşıklık getirir.</span><span class="en">No time, no repetition; a survival framework adds complexity for nothing.</span></td></tr>
+      <tr><td class="lead"><span class="tr">Kişi başına sayım, izlem süreleri farklı</span><span class="en">A count per person, with unequal follow-up</span></td><td><span class="tr">Log ofsetli Poisson; aşırı yayılımda negatif binom</span><span class="en">Poisson with a log offset; negative binomial under overdispersion</span></td><td><span class="tr">Ham sayı karşılaştırılamaz. Ofset olmadan model "kim daha çok gözlendi"yi ölçer.</span><span class="en">Raw counts are not comparable. Without the offset the model measures who was observed longest.</span></td></tr>
+      <tr><td class="lead"><span class="tr">Sıralı bir sonlanım (az / orta / çok)</span><span class="en">An ordered outcome (low / medium / high)</span></td><td><span class="tr">Orantılı olasılık (ordinal) lojistik</span><span class="en">Proportional-odds (ordinal) logistic</span></td><td><span class="tr">Sıralı bilgiyi ikili kategoriye indirmek bilgi atar; çok kategorili logit ise sırayı yok sayar.</span><span class="en">Collapsing to binary throws away the ordering; multinomial logit ignores it.</span></td></tr>
+      <tr><td class="lead"><span class="tr">Aynı kişide tekrarlanan evet/hayır</span><span class="en">A repeated yes/no within the same person</span></td><td><span class="tr">Rastgele kesişimli karma etkili lojistik</span><span class="en">Mixed-effects logistic with a random intercept</span></td><td><span class="tr">Sıradan lojistik, kişi içi bağımlılığı yok sayarak standart hataları küçültür.</span><span class="en">Ordinary logistic ignores within-person dependence and understates the standard errors.</span></td></tr>
+      <tr><td class="lead"><span class="tr">Olay zamanı + kişi başına birden çok olay</span><span class="en">Event time + several events per person</span></td><td><span class="tr">Tekrarlayan olay sağkalım modeli (Andersen–Gill), paylaşılan frailty ile</span><span class="en">Recurrent-event survival (Andersen–Gill) with a shared frailty</span></td><td><span class="tr">İlk-olay modeli olayların çoğunu atar ve soruyu "ne sıklıkla"dan "hiç oldu mu"ya çevirir.</span><span class="en">A first-event model discards most events and changes the question from "how often" to "ever".</span></td></tr>
+      <tr><td class="lead"><span class="tr">İki haftalık zaman serisi</span><span class="en">Two weekly time series</span></td><td><span class="tr">Korelasyon, blok bootstrap, ROC, kontrol grafikleri</span><span class="en">Correlation, block bootstrap, ROC, control charts</span></td><td><span class="tr">Birey düzeyi yok; bu bir sinyal karşılaştırmasıdır, regresyon değil.</span><span class="en">There is no individual level; this is a signal comparison, not a regression.</span></td></tr>
+    </tbody></table></div></div>
+  <div class="box key tr"><b class="t">Aktarılabilir ilke</b>
+    <p>Analiz planını veri toplanmadan önce yazmak, yöntemin en ucuz ve en etkili parçasıdır. Bu çalışmada her analizin popülasyonu, kestiricisi, düzeltme kümesi ve formal spesifikasyonu model kurulmadan önce sabitlendi; hiçbir terim kendi p değeri yüzünden modele girmedi veya çıkmadı, hiçbir aşamada ileri/geri eleme kullanılmadı. Bunun bedeli sıfır, kazancı ise sonuçların "arayarak bulunmuş" olmadığını gösterebilmektir.</p></div>
+  <div class="box key en"><b class="t">Transferable principle</b>
+    <p>Writing the analysis plan before collecting the data is the cheapest and most effective part of the method. Here the population, estimator, adjustment set and formal specification of every analysis were fixed before any model was fitted; no term entered or left a model because of its own p-value, and no stepwise selection was used at any stage. It costs nothing, and it buys the ability to show the results were not found by searching.</p></div>
 </div></section>
 
-<!-- ══════════════════════════════════ 04 -->
+<!-- ══════════════════════════════ 04 -->
 <section id="s4"><div class="col">
-  <div class="sh"><span class="n">04</span><h2>Sayım verisi: Poisson, ofset ve negatif binom</h2></div>
-  <p class="standfirst">Kişi başına epizod sayısı gibi bir sonlanımda üç kavram birlikte gelir: log bağlantı, ofset ve aşırı yayılım.</p>
+  <div class="sh"><span class="n">04</span><h2 class="tr">Sayım verisi: Poisson, ofset ve negatif binom</h2><h2 class="en">Count data: Poisson, offset and negative binomial</h2></div>
+  <p class="standfirst tr">Kişi başına epizod sayısı gibi bir sonlanımda üç kavram birlikte gelir: log bağlantı, ofset ve aşırı yayılım.</p>
+  <p class="standfirst en">For an outcome like the number of episodes per person, three ideas arrive together: the log link, the offset and overdispersion.</p>
 
-  <h3>Ofset: modeli sayımdan hıza çeviren terim</h3>
-  <div class="eq"><pre>log( E[Y_i] ) = β₀ + β₁·x_i + … + <b>log(risk_süresi_i)</b>
-                                    └─ katsayısı 1'e SABİTLENMİŞ terim
+  <h3 class="tr">Ofset: modeli sayımdan hıza çeviren terim</h3>
+  <h3 class="en">The offset: the term that turns a count model into a rate model</h3>
+  <div class="eq tr"><pre>log( E[Y_i] ) = β₀ + β₁·x_i + … + log(risk_süresi_i)
+                                  └─ katsayısı 1'e SABİTLENMİŞ terim
 
 eşdeğer yazım:
 log( E[Y_i] / risk_süresi_i ) = β₀ + β₁·x_i + …
-       └─ yani model artık bir HIZ modeli</pre>
-    <p class="gloss">Ofsetin katsayısı tahmin edilmez, çünkü ne olması gerektiği bilinir: iki kat süre gözlenen bir kişide, hız aynıysa iki kat olay beklenir. Bu bir hipotez değil, tanımın sonucudur. Ofseti serbest bir değişken yapmak, bilinen bir aritmetiği veriden tahmin etmeye çalışmak olur.</p>
-  </div>
+     └─ yani model artık bir HIZ modeli</pre></div>
+  <div class="eq en"><pre>log( E[Y_i] ) = β₀ + β₁·x_i + … + log(time_at_risk_i)
+                                  └─ a term with its coefficient FIXED at 1
 
-  <h3>Poisson'un varsayımı ve nerede kırıldığı</h3>
-  <p>Poisson dağılımının tek parametresi vardır, dolayısıyla <strong>ortalama = varyans</strong> gerektirir. Gerçek kohort verisinde bu genellikle sağlanmaz:</p>
+equivalently:
+log( E[Y_i] / time_at_risk_i ) = β₀ + β₁·x_i + …
+     └─ so the model is now a RATE model</pre></div>
+  <p class="tr">Ofsetin katsayısı tahmin edilmez, çünkü ne olması gerektiği bilinir: iki kat süre gözlenen bir kişide, hız aynıysa iki kat olay beklenir. Bu bir hipotez değil, tanımın sonucudur. Ofseti serbest bir değişken yapmak, bilinen bir aritmetiği veriden tahmin etmeye çalışmak olur.</p>
+  <p class="en">The offset's coefficient is not estimated, because we know what it must be: someone observed for twice as long should have twice as many events if the rate is the same. That is not a hypothesis but a consequence of the definition. Letting the offset float means asking the data to estimate arithmetic you already know.</p>
+
+  <h3 class="tr">Poisson'un varsayımı ve nerede kırıldığı</h3>
+  <h3 class="en">The Poisson assumption and where it breaks</h3>
+  <p class="tr">Poisson dağılımının tek parametresi vardır, dolayısıyla <b>ortalama = varyans</b> gerektirir. Gerçek kohort verisinde bu genellikle sağlanmaz:</p>
+  <p class="en">The Poisson has a single parameter, so it requires <b>mean = variance</b>. In real cohort data that usually fails:</p>
   <div class="figs">
-    <div class="fig"><b>2,00</b><span>kişi başına epizod ortalaması</span></div>
-    <div class="fig"><b>4,14</b><span>kişi başına epizod varyansı</span></div>
-    <div class="fig"><b>2,07×</b><span>aşırı yayılım</span></div>
+    <div class="fig tr"><b>2,00</b><span>kişi başına epizod ortalaması</span></div><div class="fig en"><b>2.00</b><span>mean episodes per person</span></div>
+    <div class="fig tr"><b>4,14</b><span>kişi başına epizod varyansı</span></div><div class="fig en"><b>4.14</b><span>variance of episodes per person</span></div>
+    <div class="fig tr"><b>2,07×</b><span>aşırı yayılım</span></div><div class="fig en"><b>2.07×</b><span>overdispersion</span></div>
   </div>
-  <p>Aşırı yayılım <em>nokta kestirimini</em> yanlı yapmaz; <em>standart hatayı</em> olduğundan küçük gösterir. Sonuç: dar güven aralıkları ve şişmiş p değerleri. İki bağımsız çözüm vardır ve bu çalışmada ikisi de kullanıldı.</p>
-
+  <p class="tr">Aşırı yayılım nokta kestirimini yanlı yapmaz; <b>standart hatayı olduğundan küçük gösterir</b>. Sonuç: dar güven aralıkları ve şişmiş p değerleri. İki bağımsız çözüm vardır ve bu çalışmada ikisi de kullanıldı.</p>
+  <p class="en">Overdispersion does not bias the point estimate; it <b>understates the standard error</b>. The result is intervals that are too narrow and p-values that are too small. There are two independent remedies and both were used here.</p>
   <div class="pair">
-    <div class="box good"><b class="t">Sağlam (sandwich) varyans</b>
-      <p>Poisson katsayıları korunur, standart hata Huber–White kestiricisiyle yeniden hesaplanır. Dağılım varsayımına dokunmadan doğru genişlikte aralık verir.</p>
-    </div>
-    <div class="box good"><b class="t">Negatif binom</b>
-      <p>Dağılımın kendisi değiştirilir: fazladan bir yayılım parametresi eklenir. Burada ilan edilmiş duyarlılık analizi olarak kuruldu.</p>
-    </div>
+    <div class="box tr"><b class="t">Sağlam (sandwich) varyans</b><p>Poisson katsayıları korunur, standart hata Huber–White kestiricisiyle yeniden hesaplanır. Dağılım varsayımına dokunmadan doğru genişlikte aralık verir.</p></div>
+    <div class="box en"><b class="t">Robust (sandwich) variance</b><p>The Poisson coefficients are kept and the standard error is recomputed with the Huber–White estimator. It gives correctly sized intervals without touching the distributional assumption.</p></div>
+    <div class="box tr"><b class="t">Negatif binom</b><p>Dağılımın kendisi değiştirilir: fazladan bir yayılım parametresi eklenir. Burada ilan edilmiş duyarlılık analizi olarak kuruldu.</p></div>
+    <div class="box en"><b class="t">Negative binomial</b><p>The distribution itself is changed by adding a dispersion parameter. Here it was fitted as a declared sensitivity analysis.</p></div>
   </div>
-  <p>Üç yaklaşım da aynı yönü ve büyüklüğü verdi: düzeltilmiş Poisson <span class="num">0,805</span>, düzeltilmemiş <span class="num">0,791</span>, negatif binom <span class="num">0,830</span>. Bir sonucun model varsayımına değil veriye dayandığını göstermenin pratik yolu budur.</p>
+  <p class="tr">Üç yaklaşım da aynı yönü ve büyüklüğü verdi: düzeltilmiş Poisson <b>0,805</b>, düzeltilmemiş <b>0,791</b>, negatif binom <b>0,830</b>. Bir sonucun model varsayımına değil veriye dayandığını göstermenin pratik yolu budur.</p>
+  <p class="en">All three approaches gave the same direction and magnitude: adjusted Poisson <b>0.805</b>, unadjusted <b>0.791</b>, negative binomial <b>0.830</b>. That is the practical way to show a finding rests on the data rather than on a modelling assumption.</p>
 
-  <h3>Negatif binom aslında bir karışımdır</h3>
-  <div class="eq"><pre>Y_i | u_i  ~  Poisson( μ_i · u_i )          her kişi kendi Poisson'unu yaşar
-u_i        ~  Gama( ortalama 1, varyans α )   ama kişilerin hızı birbirinden farklı
+  <h3 class="tr">Negatif binom aslında bir karışımdır</h3>
+  <h3 class="en">The negative binomial is really a mixture</h3>
+  <div class="eq tr"><pre>Y_i | u_i ~ Poisson( μ_i · u_i )      her kişi kendi Poisson'unu yaşar
+u_i       ~ Gama( ortalama 1, varyans α )  ama kişilerin hızı farklı
 ──────────────────────────────────────────
-Y_i        ~  NegatifBinom( μ_i , α )         Var(Y) = μ + α·μ²</pre>
-    <p class="gloss">Herkesin gerçek hızı aynı olsaydı Poisson doğru olurdu. Kişiler arasında ölçülmemiş bir farklılık varsa, o farklılık gama dağılımıyla modellenir ve dışarıdan bakıldığında sayımlar negatif binom görünür. <code>α → 0</code> olduğunda model tam olarak Poisson'a döner.</p>
-  </div>
-
-  <div class="src">
-    <header><span class="l">R</span><span class="d">Log ofsetli Poisson + sağlam varyans, ve negatif binom eşlikçisi</span></header>
-    <pre>m &lt;- glm(n_epizod ~ I(bildirilen_hafta/10) + yas10 + hanede_cocuk + yatkinlik,
-         <span class="k">offset</span> = log(risk_haftasi),
-         family = poisson(link = "log"),
-         data   = kisi)
-
-<span class="c"># aşırı yayılım için sağlam (sandwich) varyans</span>
-library(sandwich); library(lmtest)
-coeftest(m, vcov = vcovHC(m, type = "HC0"))
-
-<span class="c"># ilan edilmiş duyarlılık: aynı spesifikasyon, negatif binom</span>
-library(MASS)
-m_nb &lt;- glm.nb(n_epizod ~ I(bildirilen_hafta/10) + yas10 + hanede_cocuk +
-                          yatkinlik + <span class="k">offset</span>(log(risk_haftasi)), data = kisi)</pre>
-  </div>
-
-  <div class="faq"><h3>Sık sorulanlar</h3>
-    <details class="f"><summary>Aşırı yayılım varken neden Poisson kullanılmaya devam edildi?</summary>
-      <div class="a">
-        <p><span class="tag">TR</span>Aşırı yayılım Poisson'un nokta kestirimini yanlı yapmaz, yalnızca standart hatasını küçültür. Bu yüzden katsayıları Poisson'dan almak ve varyansı sandwich kestiricisiyle düzeltmek geçerli bir seçimdir; negatif binom ise bağımsız bir kontrol sağlar. Üç uyum da aynı sonucu verdiğinde, bulgunun dağılım varsayımına bağlı olmadığı gösterilmiş olur.</p>
-        <p class="en"><span class="tag">EN</span>Overdispersion does not bias the Poisson point estimate; it understates the standard error. Keeping the Poisson coefficients and correcting the variance with a sandwich estimator is therefore a valid choice, while the negative binomial provides an independent check. When all three fits agree, the finding is shown not to rest on a distributional assumption.</p>
-      </div></details>
-    <details class="f"><summary>Sayım yerine oran modellenseydi ne değişirdi?</summary>
-      <div class="a">
-        <p><span class="tag">TR</span>Sonlanım bir oran olsaydı (örneğin "test edilenlerin kaçı pozitif"), ofset yerine binom aile ve lojistik bağlantı kullanılırdı. Ofset yalnızca sayım sonlanımlarında, farklı gözlem sürelerini hesaba katmak için gereklidir. Bu ayrımın karıştırılması, katılımcı sürveyans literatüründe sık görülen bir hatadır.</p>
-        <p class="en"><span class="tag">EN</span>If the outcome were a proportion (for example, how many of those tested were positive), one would use a binomial family with a logit link instead of an offset. The offset belongs to count outcomes, where it accounts for differing observation time. Confusing the two is a common error in the participatory surveillance literature.</p>
-      </div></details>
-  </div>
+Y_i       ~ NegatifBinom( μ_i , α )   Var(Y) = μ + α·μ²</pre></div>
+  <div class="eq en"><pre>Y_i | u_i ~ Poisson( μ_i · u_i )      each person lives their own Poisson
+u_i       ~ Gamma( mean 1, variance α )   but people differ in rate
+──────────────────────────────────────────
+Y_i       ~ NegBinomial( μ_i , α )    Var(Y) = μ + α·μ²</pre></div>
+  <p class="tr">Herkesin gerçek hızı aynı olsaydı Poisson doğru olurdu. Kişiler arasında ölçülmemiş bir farklılık varsa, o farklılık gama dağılımıyla modellenir ve dışarıdan bakıldığında sayımlar negatif binom görünür. α → 0 olduğunda model tam olarak Poisson'a döner.</p>
+  <p class="en">If everyone truly had the same rate, the Poisson would be right. If there is unmeasured variation between people, that variation is modelled with a gamma and, seen from outside, the counts look negative binomial. As α → 0 the model returns exactly to the Poisson.</p>
 </div></section>
 
-<!-- ══════════════════════════════════ 05 -->
+<!-- ══════════════════════════════ 05 -->
 <section id="s5"><div class="col">
-  <div class="sh"><span class="n">05</span><h2>Tekrarlayan olay: paylaşılan gama-frailty Andersen–Gill</h2></div>
-  <p class="standfirst">Mevsimsel bir enfeksiyonda aynı kişi bir sezonda birden çok kez hastalanır. Bu, tekrarlayan olay verisidir ve klasik sağkalım modelleri onu doğrudan taşıyamaz.</p>
+  <div class="sh"><span class="n">05</span><h2 class="tr">İkili ve sıralı sonuçlar</h2><h2 class="en">Binary and ordinal outcomes</h2></div>
+  <p class="standfirst tr">Sayım ve olay-zamanı modellerinin yanında, bu tasarımda üç ayrı ikili/sıralı soru vardı: kim aşılanıyor, kim bildirim yapıyor, ve kişi kendi yatkınlığını nasıl sıralıyor. Her biri farklı bir tuzak taşır.</p>
+  <p class="standfirst en">Alongside the count and event-time models, this design carried three binary or ordinal questions: who gets vaccinated, who files reports, and how people rank their own susceptibility. Each carries a different trap.</p>
 
-  <div class="eq"><pre>λ_ij(t) = λ₀(t) · z_i · exp(β′X_ij)
+  <h3 class="tr">Sıradan ikili lojistik — ve olay/değişken bütçesi</h3>
+  <h3 class="en">Ordinary binary logistic — and the events-per-variable budget</h3>
+  <p class="tr">Kişi başına tek bir evet/hayır varsa lojistik regresyon doğru ailedir. Ama bir modelin kaç terim taşıyabileceği manşet orandan değil, <b>en seyrek maruz hücreden</b> okunur. Aşılanma modelinde manşet oran 10,0 iken bağlayıcı hücre yalnız 18 olay taşıyordu — gerçek oran 2,00. Bu ayrımı yazmak, modeli sonradan aşırı yorumlanmaktan korur.</p>
+  <p class="en">With one yes/no per person, logistic regression is the right family. But how many terms a model can carry is read from the <b>sparsest exposed cell</b>, not from the headline ratio. In the vaccination model the headline ratio was 10.0 while the binding cell held only 18 events — a real ratio of 2.00. Writing that down is what stops the model being over-read later.</p>
 
-  λ_ij(t)   i kişisinin j haftasındaki hazard'ı
-  λ₀(t)     ORTAK temel hazard, takvim zamanında — tahmin edilmez
-  z_i       kişiye özgü frailty ~ Gama(ortalama 1, varyans θ)
-  β′X_ij    değişkenlerin doğrusal birleşimi</pre></div>
+  <h3 class="tr">Görünür performans şişkindir: iyimserlik düzeltmesi</h3>
+  <h3 class="en">Apparent performance is inflated: the optimism correction</h3>
+  <p class="tr">Bir modelin kendi eğitildiği veri üzerindeki performansı her zaman iyimserdir. Efron bootstrap'i bu şişkinliği ölçer ve çıkarır. Kritik ayrıntı, her tekrarda <b>modelin yeniden uydurulmasıdır</b>: katsayıları sabit tutup yalnızca performansı yeniden ölçerseniz, ölçmek istediğiniz aşırı uyumu atlarsınız.</p>
+  <p class="en">A model's performance on the data it was trained on is always optimistic. The Efron bootstrap measures that inflation and subtracts it. The critical detail is that the model must be <b>refitted in every replicate</b>: holding the coefficients fixed and only re-measuring performance skips exactly the overfitting you are trying to quantify.</p>
+  <div class="eq tr"><pre>1. Orijinal veriden yerine koyarak n boyutlu bir örnek çek
+2. AYNI sabit terim kümesini bu örneğe YENİDEN uydur   ← kritik
+3. Performansı iki yerde ölç:
+     (a) bootstrap örneğinde   (modelin "kendi" verisi)
+     (b) ORİJİNAL veride       (modelin görmediği veri)
+4. iyimserlik = (a) − (b)
+5. 1.000 tekrarın ortalamasını görünür değerden çıkar</pre></div>
+  <div class="eq en"><pre>1. Draw a sample of size n with replacement from the original data
+2. REFIT the SAME fixed term set on that sample        ← critical
+3. Measure performance in two places:
+     (a) on the bootstrap sample  (the model's "own" data)
+     (b) on the ORIGINAL data     (data the model did not see)
+4. optimism = (a) − (b)
+5. Subtract the mean over 1,000 replicates from the apparent value</pre></div>
+  <div class="box key tr"><b class="t">Neden bu çalışmada bootstrap'e "seçim adımı" girmiyor</b>
+    <p>Standart uygulamada değişken seçimi yapılıyorsa, seçim de her bootstrap tekrarında yeniden yapılmalıdır; yoksa iyimserlik ciddi biçimde eksik tahmin edilir. Burada hiçbir model için değişken seçimi yapılmadığı — terimler nedensel diyagramdan önceden sabitlendiği — için bootstrap'e girecek bir seçim adımı da yoktur. Ön kayıt, sonradan bir düzeltme yükünü ortadan kaldırır.</p></div>
+  <div class="box key en"><b class="t">Why no selection step enters the bootstrap here</b>
+    <p>In standard practice, if variable selection is performed then the selection must be repeated inside every bootstrap replicate, or optimism is badly underestimated. Because no model here used variable selection — the terms were fixed in advance from the causal diagram — there is no selection step to repeat. Pre-specification removes a correction burden downstream.</p></div>
 
-  <h3>Neden ilk-olay modeli değil</h3>
-  <p>Bu kohortta 248 bildirimcinin yalnızca 192'sinde herhangi bir epizod var. İlk-olay modeli 497 epizodun 305'ini — beşte üçünü — atardı. Daha da önemlisi, soruyu sessizce değiştirirdi: "insanlar ne sıklıkla hastalanıyor" sorusu "insanlar hastalanıyor mu" sorusuna dönüşürdü. Sürveyans için anlamlı olan ilkidir. Kişi başına epizod sayısının varyansının ortalamasının iki katından fazla olması da tekrarın ihmal edilemeyeceğinin doğrudan kanıtıdır.</p>
+  <h3 class="tr">Aynı kişide tekrarlanan ikili sonuç: koşullu mu, marjinal mi</h3>
+  <h3 class="en">A repeated binary outcome within a person: conditional or marginal</h3>
+  <p class="tr">"Bu hafta hasta olmak, gelecek hafta bildirim yapmayı değiştiriyor mu?" sorusu aynı kişide tekrarlanan bir evet/hayır üretir. Rastgele kesişimli karma etkili lojistik <b>koşullu</b> bir etki verir — aynı kişinin kendi içindeki karşılaştırma. Genelleştirilmiş kestirim denklemleri (GEE) ise <b>marjinal</b> bir etki verir — popülasyon ortalaması. İkisi farklı sorulara cevaptır ve sayısal olarak da farklıdır; hangisinin raporlandığı açıkça yazılmalıdır.</p>
+  <p class="en">"Does being ill this week change whether you file next week?" produces a repeated yes/no within the same person. A mixed-effects logistic with a random intercept gives a <b>conditional</b> effect — the comparison within a person's own history. Generalised estimating equations (GEE) give a <b>marginal</b> effect — a population average. They answer different questions and differ numerically; which one is being reported has to be stated.</p>
+  <div class="wide"><div class="tw"><table>
+    <thead><tr><th class="tr">Soru</th><th class="en">Question</th><th class="tr">Kestirici</th><th class="en">Estimator</th><th class="tr">Sonuç</th><th class="en">Result</th></tr></thead>
+    <tbody>
+      <tr><td class="lead"><span class="tr">Hasta olmak ertesi hafta bildirimi değiştiriyor mu?</span><span class="en">Does illness change next week's reporting?</span></td><td><span class="tr">Karma etkili lojistik, kişi rastgele kesişimi</span><span class="en">Mixed-effects logistic, person random intercept</span></td><td><span class="tr">koşullu OR 1,016 → anlamsız</span><span class="en">conditional OR 1.016 → not significant</span></td></tr>
+      <tr><td class="lead"><span class="tr">Bildirim boşluğu sahte bir "yeni epizod" yaratıyor mu?</span><span class="en">Does a reporting gap manufacture a false "new episode"?</span></td><td><span class="tr">Aynı kestirici ailesi, geri yönde</span><span class="en">Same estimator family, backwards in time</span></td><td><span class="tr">koşullu OR 1,664 → kodlama kuralının özelliği</span><span class="en">conditional OR 1.664 → a property of the coding rule</span></td></tr>
+    </tbody></table></div></div>
+  <div class="box care tr"><b class="t">İkinci satır bir bulgu, bir kusur değil</b>
+    <p>Boşluktan sonra gelen hafta zorunlu olarak yeni epizod kodlanır, çünkü gözlenmemiş bir hafta üzerinden devamlılık tanınamaz. Bu, epizod sayısını bildirimin ne kadar kesintili olduğuyla orantılı biçimde şişirir. Ölçülüp raporlandı; hiçbir kestirim bunun için düzeltilmedi. Ölçülebilen bir yanlılığın büyüklüğünü vermek, ölçülemeyen bir düzeltme uygulamaktan daha savunulabilirdir.</p></div>
+  <div class="box care en"><b class="t">The second row is a finding, not a defect</b>
+    <p>A week following a gap is necessarily coded as a new episode, because continuity cannot be recognised across an unobserved week. That inflates the episode count in proportion to how discontinuous someone's reporting was. It was measured and reported; no estimate was adjusted for it. Giving the size of a bias you can measure is more defensible than applying a correction you cannot.</p></div>
+</div></section>
 
-  <h3>Sayma süreci gösterimi</h3>
-  <div class="eq"><pre>kisi   basla  bitir  yeni_epizod  asi_korumali
-────────────────────────────────────────────
-K017     0      1        0             0
-K017     1      2        1             0        ← epizod
-K017     2      3        0             0        ← risk kümesine geri döner
-K017     3      4        0             1        ← koruma başladı
-K017     4      5        1             1        ← ikinci epizod</pre>
-    <p class="gloss">Veri "uzun" formattadır: bir kişi = birçok satır. Her doldurulmuş hafta, kendi giriş ve çıkış zamanı olan bir risk aralığıdır; kişi her epizoddan sonra risk kümesine geri girer, böylece bütün olaylar olabilirliğe katkı verir.</p>
-  </div>
-
-  <h3>Frailty terimi ne yapar</h3>
-  <p>Frailty, her kişiye ait, hazard'ı yukarı veya aşağı kaydıran gizli bir çarpandır. Ortalaması 1'e sabitlenir; aksi hâlde model tanımlanamaz olurdu (frailty ortalamasını iki katına çıkarıp temel hazard'ı yarıya bölmek aynı olabilirliği verir). İki iş birden yapar: ölçülmemiş kişisel yatkınlığı soğurur ve tekrarlayan olaylar arasındaki bağımlılığı <strong>modelin içinde</strong> temsil eder — yalnızca standart hatayı düzelterek değil.</p>
-
-  <div class="eq"><pre>bu kohortta θ = 0,322
-
-  log-hazard ölçeğinde SS = √0,322 = 0,567
-  çeyrekler arası fark    = 1,349 × 0,567 = 0,765
-  exp(0,765) ≈ 2,2</pre>
-    <p class="gloss">Yani on üç değişkenin tamamı düzeltildikten <em>sonra bile</em>, ölçülmemiş yatkınlığın 75. yüzdeliğindeki bir kişi, 25. yüzdeliktekinin yaklaşık 2,2 katı haftalık hazard taşıyor. Bu teknik bir ayrıntı değil, kendi başına bir bulgudur: risk kohorta eşit yayılmamış, bireylerde yoğunlaşmıştır.</p>
-  </div>
-
-  <h3>Zamanla değişen maruziyet ve ölümsüz zaman tuzağı</h3>
-  <div class="box stop"><b class="t">Ölümsüz zaman yanlılığı (immortal time bias)</b>
-    <p>Bir kişiyi tüm sezon boyunca "aşılı" olarak etiketlemek, aşıdan <em>önceki</em> haftaları da korunmuş saymak demektir. Bu, var olmayan bir koruma icat eder ve etkiyi yapay olarak büyütür. Aynı tuzak, sezon ortasında başlayan her maruziyet için geçerlidir: tedavi, işe dönüş, maske politikası değişikliği.</p>
-  </div>
-  <div class="eq"><pre>korumali(i, t) = 1   eğer  t ≥ maruziyet_haftası_i + 2 hafta
-               = 0   aksi hâlde
-
-  bu kohortta 4.729 haftanın 1.613'ü korumalı (%34,1)
-  1.874 aşılı haftanın 83'ü (%4,4) iki haftalık gecikme aralığına düşer
-  → bu haftalar korumasız sayılır, istisnasız</pre>
-    <p class="gloss">İki haftalık gecikme, bağışık yanıtın gelişmesi için geçen süredir. Benzer tasarımlarda bu gecikmenin süresi ve gerekçesi analiz öncesinde yazılmalıdır, çünkü sonradan seçilirse sonucu ayarlama aracına dönüşür.</p>
-  </div>
-
-  <h3>Varsayımlar nasıl sınandı</h3>
-  <ul>
-    <li><strong>Orantılı hazard</strong> — ölçeklenmiş Schoenfeld artıkları üzerinde. Küresel test rahat (χ² = 11,14; sd 13; p = 0,60); on üç terimden biri saptı ve izlem ortanca olay haftasından bölünerek incelendi. İki yarı da anlamsız çıktı, dolayısıyla ortalamada gizlenen zamanla değişen bir etki yoktu.</li>
-    <li><strong>Eşit olay zamanları</strong> — haftalık veri ayrık zamanlıdır, yani eşitlik yoğundur. Efron yaklaşımı bu durumda tercih edilir; Breslow, eşitlik çoksa katsayıları sıfıra doğru çeker.</li>
-    <li><strong>Varyans kestiricisi</strong> — bu bir spesifikasyon seçimidir, nötr bir hesaplama ayrıntısı değil. Aşağıdaki tablo neden önemli olduğunu gösteriyor.</li>
+<!-- ══════════════════════════════ 06 -->
+<section id="s6"><div class="col">
+  <div class="sh"><span class="n">06</span><h2 class="tr">Tekrarlayan olay: paylaşılan gama-frailty Andersen–Gill</h2><h2 class="en">Recurrent events: shared gamma-frailty Andersen–Gill</h2></div>
+  <p class="standfirst tr">Mevsimsel bir enfeksiyonda aynı kişi bir sezonda birden çok kez hastalanır. Bu, tekrarlayan olay verisidir ve klasik sağkalım modelleri onu doğrudan taşıyamaz.</p>
+  <p class="standfirst en">In a seasonal infection the same person falls ill several times in one season. That is recurrent-event data, and classical survival models cannot carry it directly.</p>
+  <div class="eq"><pre>λ_ij(t) = λ₀(t) · z_i · exp(β′X_ij)</pre></div>
+  <ul class="tr">
+    <li><code>λ_ij(t)</code> — i kişisinin j haftasındaki hazard'ı</li>
+    <li><code>λ₀(t)</code> — ORTAK temel hazard, takvim zamanında; tahmin edilmez</li>
+    <li><code>z_i</code> — kişiye özgü frailty ~ Gama(ortalama 1, varyans θ)</li>
+    <li><code>β′X_ij</code> — değişkenlerin doğrusal birleşimi</li>
+  </ul>
+  <ul class="en">
+    <li><code>λ_ij(t)</code> — the hazard for person i in week j</li>
+    <li><code>λ₀(t)</code> — a SHARED baseline hazard on calendar time; not estimated</li>
+    <li><code>z_i</code> — a person-specific frailty ~ Gamma(mean 1, variance θ)</li>
+    <li><code>β′X_ij</code> — the linear combination of covariates</li>
   </ul>
 
+  <h3 class="tr">Neden ilk-olay modeli değil</h3><h3 class="en">Why not a first-event model</h3>
+  <p class="tr">Bu kohortta 248 bildirimcinin yalnızca 192'sinde herhangi bir epizod var. İlk-olay modeli 497 epizodun 305'ini — beşte üçünü — atardı. Daha da önemlisi, soruyu sessizce değiştirirdi: "insanlar ne sıklıkla hastalanıyor" sorusu "insanlar hastalanıyor mu" sorusuna dönüşürdü. Sürveyans için anlamlı olan ilkidir.</p>
+  <p class="en">In this cohort only 192 of the 248 reporters have any episode at all. A first-event model would discard 305 of the 497 episodes — three fifths of them. More importantly it would quietly change the question: "how often do people fall ill" would become "do people fall ill at all". For surveillance the first is the one that matters.</p>
+  <div class="eq tr"><pre>kisi  basla  bitir  yeni_epizod  asi_korumali
+────────────────────────────────────────────
+K017    0      1         0            0
+K017    1      2         1            0   ← epizod
+K017    2      3         0            0   ← risk kümesine geri döner
+K017    3      4         0            1   ← koruma başladı
+K017    4      5         1            1   ← ikinci epizod</pre></div>
+  <div class="eq en"><pre>person  start  stop  new_episode  vax_protected
+──────────────────────────────────────────────
+P017      0     1         0             0
+P017      1     2         1             0   ← episode
+P017      2     3         0             0   ← re-enters the risk set
+P017      3     4         0             1   ← protection begins
+P017      4     5         1             1   ← second episode</pre></div>
+
+  <h3 class="tr">Frailty terimi ne yapar</h3><h3 class="en">What the frailty term does</h3>
+  <p class="tr">Frailty, her kişiye ait, hazard'ı yukarı veya aşağı kaydıran gizli bir çarpandır. Ortalaması 1'e sabitlenir; aksi hâlde model tanımlanamaz olurdu. İki iş birden yapar: ölçülmemiş kişisel yatkınlığı soğurur ve tekrarlayan olaylar arasındaki bağımlılığı <b>modelin içinde</b> temsil eder — yalnızca standart hatayı düzelterek değil.</p>
+  <p class="en">The frailty is a latent per-person multiplier that shifts the hazard up or down. Its mean is fixed at 1, or the model would not be identified. It does two jobs at once: it absorbs unmeasured individual susceptibility, and it represents the dependence between recurrent events <b>inside the model</b> rather than merely correcting the standard error.</p>
+  <div class="eq tr"><pre>bu kohortta θ = 0,322
+
+log-hazard ölçeğinde SS = √0,322 = 0,567
+çeyrekler arası fark   = 1,349 × 0,567 = 0,765
+exp(0,765) ≈ 2,2</pre></div>
+  <div class="eq en"><pre>in this cohort θ = 0.322
+
+SD on the log-hazard scale = √0.322 = 0.567
+interquartile difference   = 1.349 × 0.567 = 0.765
+exp(0.765) ≈ 2.2</pre></div>
+  <p class="tr">Yani on üç değişkenin tamamı düzeltildikten sonra bile, ölçülmemiş yatkınlığın 75. yüzdeliğindeki bir kişi, 25. yüzdeliktekinin yaklaşık <b>2,2 katı</b> haftalık hazard taşıyor. Bu teknik bir ayrıntı değil, kendi başına bir bulgudur: risk kohorta eşit yayılmamış, bireylerde yoğunlaşmıştır.</p>
+  <p class="en">So even after adjusting for all thirteen covariates, a person at the 75th percentile of unmeasured susceptibility carries roughly <b>2.2 times</b> the weekly hazard of one at the 25th. That is not a technical detail but a finding in its own right: risk is concentrated in individuals rather than spread evenly across the cohort.</p>
+
+  <div class="box stop tr"><b class="t">Ölümsüz zaman yanlılığı (immortal time bias)</b>
+    <p>Bir kişiyi tüm sezon boyunca "aşılı" olarak etiketlemek, aşıdan önceki haftaları da korunmuş saymak demektir. Bu, var olmayan bir koruma icat eder ve etkiyi yapay olarak büyütür. Aynı tuzak, sezon ortasında başlayan her maruziyet için geçerlidir: tedavi, işe dönüş, maske politikası değişikliği.</p></div>
+  <div class="box stop en"><b class="t">Immortal time bias</b>
+    <p>Labelling someone "vaccinated" for the whole season counts the weeks before vaccination as protected too. That invents protection which did not exist and inflates the effect. The same trap applies to any exposure that starts mid-season: a treatment, a return to work, a change in mask policy.</p></div>
+  <div class="eq tr"><pre>korumali(i, t) = 1  eğer t ≥ maruziyet_haftası_i + 2 hafta
+               = 0  aksi hâlde
+
+bu kohortta 4.729 haftanın 1.613'ü korumalı (%34,1)
+1.874 aşılı haftanın 83'ü (%4,4) iki haftalık gecikmeye düşer
+  → bu haftalar korumasız sayılır, istisnasız</pre></div>
+  <div class="eq en"><pre>protected(i, t) = 1  if t ≥ exposure_week_i + 2 weeks
+                = 0  otherwise
+
+in this cohort 1,613 of 4,729 weeks are protected (34.1%)
+83 of 1,874 vaccinated weeks (4.4%) fall in the two-week lag
+  → those weeks count as unprotected, without exception</pre></div>
+  <p class="tr">İki haftalık gecikme, bağışık yanıtın gelişmesi için geçen süredir. Benzer tasarımlarda bu gecikmenin süresi ve gerekçesi <b>analiz öncesinde</b> yazılmalıdır, çünkü sonradan seçilirse sonucu ayarlama aracına dönüşür.</p>
+  <p class="en">The two-week lag is the time an immune response takes to develop. In similar designs the length of that lag and its rationale must be written down <b>before</b> the analysis, because chosen afterwards it becomes a dial for tuning the result.</p>
+
+  <h3 class="tr">Varyans kestiricisi bir spesifikasyon seçimidir</h3>
+  <h3 class="en">The variance estimator is a specification choice</h3>
   <div class="wide"><div class="tw"><table>
-    <thead><tr><th>Kişi içi bağımlılık nasıl ele alınıyor</th><th class="n">HR (%95 GA)</th><th class="n">SH</th></tr></thead>
+    <thead><tr><th class="tr">Kişi içi bağımlılık nasıl ele alınıyor</th><th class="en">How within-person dependence is handled</th><th>HR (95% CI)</th><th class="tr">SH</th><th class="en">SE</th></tr></thead>
     <tbody>
-      <tr><td class="lead">Paylaşılan gama frailty <em>(kayıt spesifikasyonu)</em></td><td class="n">1,325 (1,018–1,724)</td><td class="n">0,134</td></tr>
-      <tr><td class="lead">Bağımsızlık, model temelli standart hata</td><td class="n">1,272 (1,052–1,538)</td><td class="n">0,097</td></tr>
-      <tr><td class="lead">Bağımsızlık, küme-sağlam standart hata</td><td class="n">1,272 (0,981–1,650)</td><td class="n">0,133</td></tr>
-    </tbody>
-  </table></div></div>
-  <div class="box care"><b class="t">Bu tablonun aktarılabilir dersi</b>
-    <p>Üçüncü satırın aralığı biri kesiyor, ama sebep <em>genişlik değil nokta kestirimi</em>. Sağlam standart hata (0,133) ile frailty standart hatası (0,134) binde bire kadar aynı. Bağımsızlık uyumu kişi içi bağımlılığı hiç modellemediği için kestirimi bire doğru çekiyor. Aynı sağlam standart hata, frailty kestirimine uygulandığında 1,021–1,720 veriyor. Yani "sağlam standart hata kullanınca sonuç kayboldu" cümlesi çoğu zaman yanlış teşhistir: değişen genellikle varyans değil, katsayının kendisidir.</p>
-  </div>
+      <tr><td class="lead"><span class="tr">Paylaşılan gama frailty (kayıt spesifikasyonu)</span><span class="en">Shared gamma frailty (specification of record)</span></td><td>1,325 (1,018–1,724)</td><td>0,134</td></tr>
+      <tr><td class="lead"><span class="tr">Bağımsızlık, model temelli standart hata</span><span class="en">Independence, model-based standard error</span></td><td>1,272 (1,052–1,538)</td><td>0,097</td></tr>
+      <tr><td class="lead"><span class="tr">Bağımsızlık, küme-sağlam standart hata</span><span class="en">Independence, cluster-robust standard error</span></td><td>1,272 (0,981–1,650)</td><td>0,133</td></tr>
+    </tbody></table></div></div>
+  <div class="box key tr"><b class="t">Bu tablonun aktarılabilir dersi</b>
+    <p>Üçüncü satırın aralığı biri kesiyor, ama sebep genişlik değil <b>nokta kestirimi</b>. Sağlam standart hata (0,134) ile frailty standart hatası (0,134) neredeyse aynı. Bağımsızlık uyumu kişi içi bağımlılığı hiç modellemediği için kestirimi bire doğru çekiyor. Yani "sağlam standart hata kullanınca sonuç kayboldu" cümlesi çoğu zaman yanlış teşhistir: değişen genellikle varyans değil, katsayının kendisidir.</p></div>
+  <div class="box key en"><b class="t">The transferable lesson in this table</b>
+    <p>The third row's interval crosses one, but the reason is not its width — it is the <b>point estimate</b>. The robust standard error (0.134) and the frailty standard error (0.134) are practically identical. The independence fit never models within-person dependence, so it attenuates the estimate toward one. "The result disappeared when I used robust standard errors" is therefore usually a misdiagnosis: what changed is generally not the variance but the coefficient itself.</p></div>
 
-  <div class="src">
-    <header><span class="l">R</span><span class="d">Paylaşılan gama-frailty Andersen–Gill ve tanıları</span></header>
-    <pre>library(survival)
-
-m &lt;- coxph(<span class="k">Surv</span>(basla, bitir, yeni_epizod) ~ yas10 + cinsiyet + hanede_cocuk +
-             komorbidite + yatkinlik + asi_korumali + <span class="c">/* … */</span>
-             <span class="k">frailty</span>(kisi_id, distribution = "gamma"),
-           data = panel, ties = "efron")
-
-<span class="c"># orantılı hazard: testin tanımlı olduğu SAĞLAM uyum üzerinde</span>
-m_rob &lt;- coxph(Surv(basla, bitir, yeni_epizod) ~ <span class="c">/* aynı terimler */</span> +
-                 <span class="k">cluster</span>(kisi_id), data = panel, ties = "efron")
-<span class="k">cox.zph</span>(m_rob)</pre>
-  </div>
-
-  <div class="faq"><h3>Sık sorulanlar</h3>
-    <details class="f"><summary>Frailty yerine yalnızca sağlam standart hata kullanmak yeterli olmaz mı?</summary>
-      <div class="a">
-        <p><span class="tag">TR</span>Olmaz, çünkü ikisi farklı şeyleri düzeltir. Sağlam standart hata yalnızca belirsizliği düzeltir; nokta kestirimi bağımsızlık varsayımı altında hesaplanmış hâliyle kalır ve bire doğru sönümlenir. Frailty ise bağımlılığı modelin içine koyar ve hem kestirimi hem varyansı etkiler. Ayrıca frailty varyansının kendisi yorumlanabilir bir çıktıdır: kişiler arası ölçülmemiş heterojenliğin büyüklüğünü verir.</p>
-        <p class="en"><span class="tag">EN</span>No, because they correct different things. A robust standard error adjusts only the uncertainty; the point estimate remains as computed under independence and is attenuated toward one. A frailty puts the dependence inside the model and affects both the estimate and the variance. The frailty variance is also an interpretable output in its own right: it quantifies unmeasured between-person heterogeneity.</p>
+  <div class="faq">
+    <h3 class="tr">Sık sorulanlar</h3><h3 class="en">Frequently asked</h3>
+    <details><summary><span class="tr">Frailty yerine yalnızca sağlam standart hata kullanmak yeterli olmaz mı?</span><span class="en">Wouldn't a robust standard error alone do instead of a frailty?</span></summary>
+      <div class="pair">
+        <div class="a tr"><p>Olmaz, çünkü ikisi farklı şeyleri düzeltir. Sağlam standart hata yalnızca belirsizliği düzeltir; nokta kestirimi bağımsızlık varsayımı altında hesaplanmış hâliyle kalır ve bire doğru sönümlenir. Frailty ise bağımlılığı modelin içine koyar ve hem kestirimi hem varyansı etkiler. Ayrıca frailty varyansının kendisi yorumlanabilir bir çıktıdır: kişiler arası ölçülmemiş heterojenliğin büyüklüğünü verir.</p></div>
+        <div class="a en"><p>No, because they correct different things. A robust standard error adjusts only the uncertainty; the point estimate remains as computed under independence and is attenuated toward one. A frailty puts the dependence inside the model and affects both the estimate and the variance. The frailty variance is also an interpretable output in its own right: it quantifies unmeasured between-person heterogeneity.</p></div>
       </div></details>
-    <details class="f"><summary>Frailty dağılımı olarak neden gama seçildi?</summary>
-      <div class="a">
-        <p><span class="tag">TR</span>Gama pozitif değerlidir ve analitik olarak elverişlidir: frailty üzerinden alınan integralin kapalı formu vardır, bu yüzden cezalandırılmış olabilirlikle kararlı biçimde kurulur ve yaygın yazılımların standart uygulamasıdır. Log-normal frailty de meşrudur ama sayısal integrasyon gerektirir. Frailty varyansı bu büyüklükteyken iki dağılım, değişken kestirimlerinde pratikte ayırt edilemez sonuç verir.</p>
-        <p class="en"><span class="tag">EN</span>The gamma is positive-valued and analytically convenient: the integral over the frailty has a closed form, so the model fits stably by penalised likelihood and it is the standard implementation in common software. A log-normal frailty is equally legitimate but requires numerical integration. At a frailty variance of this magnitude the two distributions give practically indistinguishable covariate estimates.</p>
+    <details><summary><span class="tr">Frailty dağılımı olarak neden gama seçildi?</span><span class="en">Why a gamma frailty?</span></summary>
+      <div class="pair">
+        <div class="a tr"><p>Gama pozitif değerlidir ve analitik olarak elverişlidir: frailty üzerinden alınan integralin kapalı formu vardır, bu yüzden cezalandırılmış olabilirlikle kararlı biçimde kurulur ve yaygın yazılımların standart uygulamasıdır. Log-normal frailty de meşrudur ama sayısal integrasyon gerektirir. Frailty varyansı bu büyüklükteyken iki dağılım, değişken kestirimlerinde pratikte ayırt edilemez sonuç verir.</p></div>
+        <div class="a en"><p>The gamma is positive-valued and analytically convenient: the integral over the frailty has a closed form, so the model fits stably by penalised likelihood and it is the standard implementation in common software. A log-normal frailty is equally legitimate but requires numerical integration. At a frailty variance of this magnitude the two distributions give practically indistinguishable covariate estimates.</p></div>
       </div></details>
   </div>
 </div></section>
 
-<!-- ══════════════════════════════════ 06 -->
-<section id="s6"><div class="col">
-  <div class="sh"><span class="n">06</span><h2>Gama dağılımı: iki modelde tek fikir</h2></div>
-  <p class="standfirst">Gama dağılımı bu analizde iki ayrı yerde görünür ve ikisi aynı fikrin farklı veri yapılarına uygulanmış hâlidir.</p>
-
-  <div class="pair">
-    <div class="box"><b class="t">Negatif binomun içinde</b>
-      <p><code>Y | u ~ Poisson(μ·u)</code>, <code>u ~ Gama(1, α)</code><br>
-      Soğurduğu: kişiler arası ölçülmemiş <em>hız</em> farklılığı → aşırı yayılım.<br>
-      Kullanıldığı yer: kişi düzeyinde toplanmış sayımlar, zaman bilgisi olmadan.</p>
-    </div>
-    <div class="box"><b class="t">Frailty olarak</b>
-      <p><code>λ(t) = λ₀(t)·z·exp(β′X)</code>, <code>z ~ Gama(1, θ)</code><br>
-      Soğurduğu: kişiler arası ölçülmemiş <em>hazard</em> farklılığı → kişi içi bağımlılık.<br>
-      Kullanıldığı yer: kişi-hafta paneli, zaman bilgisi korunarak.</p>
-    </div>
-  </div>
-
-  <div class="box good"><b class="t">Bağlantı</b>
-    <p>Her iki durumda da gama, ortalaması bire sabitlenmiş <strong>kişiye özgü bir çarpandır</strong> ve aynı olguyu modele alır: bazı kişiler gerçekten daha yatkındır. Fark yalnızca neyi çarptığıdır — sayım modelinde Poisson ortalamasını, sağkalım modelinde hazard'ı. Nitekim izlem süresi sabit tutulduğunda paylaşılan gama frailty'li tekrarlayan olay modeli ile negatif binom sayım modeli aynı sonuca yakınsar. Bu yüzden mesleki maruziyet alt grubunda her iki uyum eşlikçi olarak birlikte raporlandı: bir sonuç yalnızca tek bir modelin varsayımından geliyorsa bunun görünmesi gerekir.</p>
-  </div>
-</div></section>
-
-<!-- ══════════════════════════════════ 07 -->
+<!-- ══════════════════════════════ 07 -->
 <section id="s7"><div class="col">
-  <div class="sh"><span class="n">07</span><h2>Nedensel çerçeve ve düzeltme kümeleri</h2></div>
-  <p class="standfirst">"Eldeki bütün değişkenleri modele koymak" bir strateji değildir. Bazı değişkenler için düzeltmek yanlılığı giderir, bazıları için yaratır.</p>
+  <div class="sh"><span class="n">07</span><h2 class="tr">Gama dağılımı: iki modelde tek fikir</h2><h2 class="en">The gamma: one idea in two models</h2></div>
+  <p class="standfirst tr">Gama dağılımı bu analizde iki ayrı yerde görünür ve ikisi aynı fikrin farklı veri yapılarına uygulanmış hâlidir.</p>
+  <p class="standfirst en">The gamma appears in two separate places in this analysis, and both are the same idea applied to different data structures.</p>
+  <div class="pair">
+    <div class="box tr"><b class="t">Negatif binomun içinde</b>
+      <p><code>Y | u ~ Poisson(μ·u)</code>, <code>u ~ Gama(1, α)</code><br>
+      <b>Soğurduğu:</b> kişiler arası ölçülmemiş hız farklılığı → aşırı yayılım.<br>
+      <b>Kullanıldığı yer:</b> kişi düzeyinde toplanmış sayımlar, zaman bilgisi olmadan.</p></div>
+    <div class="box en"><b class="t">Inside the negative binomial</b>
+      <p><code>Y | u ~ Poisson(μ·u)</code>, <code>u ~ Gamma(1, α)</code><br>
+      <b>What it absorbs:</b> unmeasured between-person variation in rate → overdispersion.<br>
+      <b>Where it is used:</b> counts aggregated at the person level, with time discarded.</p></div>
+    <div class="box tr"><b class="t">Frailty olarak</b>
+      <p><code>λ(t) = λ₀(t)·z·exp(β′X)</code>, <code>z ~ Gama(1, θ)</code><br>
+      <b>Soğurduğu:</b> kişiler arası ölçülmemiş hazard farklılığı → kişi içi bağımlılık.<br>
+      <b>Kullanıldığı yer:</b> kişi-hafta paneli, zaman bilgisi korunarak.</p></div>
+    <div class="box en"><b class="t">As a frailty</b>
+      <p><code>λ(t) = λ₀(t)·z·exp(β′X)</code>, <code>z ~ Gamma(1, θ)</code><br>
+      <b>What it absorbs:</b> unmeasured between-person variation in hazard → within-person dependence.<br>
+      <b>Where it is used:</b> the person-week panel, with time retained.</p></div>
+  </div>
+  <div class="box key tr"><b class="t">Bağlantı</b>
+    <p>Her iki durumda da gama, ortalaması bire sabitlenmiş kişiye özgü bir çarpandır ve aynı olguyu modele alır: bazı kişiler gerçekten daha yatkındır. Fark yalnızca <em>neyi çarptığıdır</em> — sayım modelinde Poisson ortalamasını, sağkalım modelinde hazard'ı. Nitekim izlem süresi sabit tutulduğunda paylaşılan gama frailty'li tekrarlayan olay modeli ile negatif binom sayım modeli aynı sonuca yakınsar. Bu yüzden mesleki maruziyet alt grubunda her iki uyum eşlikçi olarak birlikte raporlandı.</p></div>
+  <div class="box key en"><b class="t">The link</b>
+    <p>In both cases the gamma is a per-person multiplier with its mean fixed at one, and it encodes the same fact: some people really are more susceptible. The only difference is <em>what it multiplies</em> — the Poisson mean in the count model, the hazard in the survival model. Indeed, with follow-up held constant, a recurrent-event model with a shared gamma frailty and a negative-binomial count model converge on the same answer. That is why both fits were reported side by side in the occupational-exposure subgroup.</p></div>
+</div></section>
 
-  <p>Yönlü çevrimsiz çizge (DAG), her değişkenin bir düğüm, her okun varsayılan bir doğrudan nedensel etki olduğu bir diyagramdır. İşlevi, hangi değişkenler için düzeltileceğini — ve hangileri için <em>düzeltilmeyeceğini</em> — herhangi bir sonlanım modeli kurulmadan önce sabitlemektir.</p>
-
-  <div class="eq"><pre>izlenen yol:
+<!-- ══════════════════════════════ 08 -->
+<section id="s8"><div class="col">
+  <div class="sh"><span class="n">08</span><h2 class="tr">Nedensel çerçeve ve düzeltme kümeleri</h2><h2 class="en">Causal framework and adjustment sets</h2></div>
+  <p class="standfirst tr">"Eldeki bütün değişkenleri modele koymak" bir strateji değildir. Bazı değişkenler için düzeltmek yanlılığı giderir, bazıları için yaratır.</p>
+  <p class="standfirst en">"Put every variable you have into the model" is not a strategy. For some variables adjustment removes bias; for others it creates it.</p>
+  <p class="tr">Yönlü çevrimsiz çizge (DAG), her değişkenin bir düğüm, her okun varsayılan bir doğrudan nedensel etki olduğu bir diyagramdır. İşlevi, hangi değişkenler için düzeltileceğini — ve hangileri için düzeltilmeyeceğini — <b>herhangi bir sonlanım modeli kurulmadan önce</b> sabitlemektir.</p>
+  <p class="en">A directed acyclic graph is a diagram in which each variable is a node and each arrow an assumed direct causal effect. Its job is to fix which variables will be adjusted for — and which will not — <b>before any outcome model is fitted</b>.</p>
+  <div class="eq tr"><pre>izlenen yol:
 
   24 ilişki epidemiyolojik gerekçeyle iddia edildi
-       ↓  her biri BU kohortta ölçüldü, diyagram çizilmeden önce
-       ↓  ikili → lojistik | sıralı → orantılı olasılık
-       ↓  yaşla ilgili her ilişki HEM doğrusal HEM kategorik biçimde
-       ↓  + doğrusallıktan sapma için olabilirlik oranı testi
-       ↓  + parametrik olmayan kontroller
-   7 ilişki saptanabilir → 6 ok çizildi</pre>
-    <p class="gloss">Bu bir değişken seçimi prosedürü değildir: hiçbir terim bu testler yüzünden bir sonlanım modeline girdi ya da çıktı. Amaç, düzeltme kümelerinin hangi arka kapı yollarını kapatması gerektiğini belirlemekti.</p>
-  </div>
+   ↓ her biri BU kohortta ölçüldü, diyagram çizilmeden önce
+   ↓ ikili → lojistik | sıralı → orantılı olasılık
+   ↓ yaşla ilgili her ilişki HEM doğrusal HEM kategorik biçimde
+   ↓ + doğrusallıktan sapma için olabilirlik oranı testi
+   ↓ + parametrik olmayan kontroller
+   7 ilişki saptanabilir → 6 ok çizildi</pre></div>
+  <div class="eq en"><pre>the route taken:
 
-  <h3>Düzeltme kümeleri karşılaştırma başına tanımlanır</h3>
-  <p>Tek bir "tam model" yerine, her karşılaştırma için minimal yeterli küme kullanılır. Bu kohortta yaş, iki sağlam çıkan oka sahip tek düğüm olduğu için her kümede yer aldı. Hanede çocuk karşılaştırması için küme yalnızca {yaş}; aşılanma için {yaş, komorbidite}.</p>
-  <p>On üç terimin tamamını aynı anda kurmak ile bir karşılaştırmanın minimal kümesini kurmak <strong>iki farklı analizdir ve iki farklı soruya cevap verir</strong>. Bu çalışmada ikisi de ayrı ayrı raporlandı: on üç terimli uyum bütün terim kümesinin betimidir, minimal küme uyumu ise ilgili karşılaştırmanın toplam etkisini kestirir (1,325'e karşı 1,475).</p>
+  24 relations asserted on epidemiological grounds
+   ↓ each measured IN THIS cohort, before the diagram was drawn
+   ↓ binary → logistic | ordinal → proportional odds
+   ↓ every age relation in BOTH linear AND categorical form
+   ↓ + a likelihood-ratio test for departure from linearity
+   ↓ + non-parametric checks
+   7 relations detectable → 6 arrows drawn</pre></div>
+  <p class="tr">Bu bir değişken seçimi prosedürü <b>değildir</b>: hiçbir terim bu testler yüzünden bir sonlanım modeline girdi ya da çıktı. Amaç, düzeltme kümelerinin hangi arka kapı yollarını kapatması gerektiğini belirlemekti.</p>
+  <p class="en">This is <b>not</b> a variable-selection procedure: no term entered or left an outcome model because of these tests. The purpose was to establish which back-door paths the adjustment sets had to close.</p>
 
-  <h3>Çarpıştırıcı: modele girmesi zarar veren değişken</h3>
-  <p>Çarpıştırıcı, iki okun içine doğru gittiği bir değişkendir. Ona koşullanmak, ebeveynleri arasında <strong>gerçekte olmayan bir ilişki yaratabilir</strong>. Bu çalışmada iki çarpıştırıcı vardı ve farklı biçimde ele alındılar:</p>
-  <ul>
-    <li><strong>Öz bildirimli yatkınlık</strong> — model terimi olarak tutuldu (kendi başına epidemiyolojik olarak bilgi verici), ama hiçbir düzeltme kümesine konmadı. Çarpıştırıcı yanlılığının mekanizması doğrudan ölçüldü ve saptanamadı; ilgili kestirim hem terimle hem onsuz raporlandı.</li>
-    <li><strong>Bildirim davranışının kendisi</strong> — hiçbir sonlanım modeline konmadı, ne değişken ne ağırlık olarak. Bunun nedeni Bölüm 08'de.</li>
+  <h3 class="tr">Düzeltme kümeleri karşılaştırma başına tanımlanır</h3>
+  <h3 class="en">Adjustment sets are defined per comparison</h3>
+  <p class="tr">Tek bir "tam model" yerine, her karşılaştırma için minimal yeterli küme kullanılır. Bu kohortta yaş, iki sağlam çıkan oka sahip tek düğüm olduğu için her kümede yer aldı. Hanede çocuk karşılaştırması için küme yalnızca {yaş}; aşılanma için {yaş, komorbidite}.</p>
+  <p class="en">Instead of one "full model", each comparison uses its own minimal sufficient set. Age was the only node with two robust outgoing arrows in this cohort, so it appears in every set. For the household-child comparison the set is just {age}; for vaccination it is {age, high-risk condition}.</p>
+  <div class="box care tr"><b class="t">İki farklı analiz, iki farklı soru</b>
+    <p>On üç terimin tamamını aynı anda kurmak ile bir karşılaştırmanın minimal kümesini kurmak iki farklı analizdir. Bu çalışmada ikisi de ayrı ayrı raporlandı: on üç terimli uyum bütün terim kümesinin <em>betimidir</em>, minimal küme uyumu ise ilgili karşılaştırmanın <em>toplam etkisini</em> kestirir (1,325'e karşı 1,475).</p></div>
+  <div class="box care en"><b class="t">Two different analyses, two different questions</b>
+    <p>Fitting all thirteen terms at once and fitting a comparison's minimal sufficient set are two different analyses. Both were reported separately here: the thirteen-term fit is a <em>description</em> of the whole term set, while the minimal-set fit estimates the <em>total effect</em> of that comparison (1.325 against 1.475).</p></div>
+
+  <h3 class="tr">Çarpıştırıcı: modele girmesi zarar veren değişken</h3>
+  <h3 class="en">The collider: a variable that harms the model by entering it</h3>
+  <p class="tr">Çarpıştırıcı, iki okun içine doğru gittiği bir değişkendir. Ona koşullanmak, <b>ebeveynleri arasında gerçekte olmayan bir ilişki yaratabilir</b>. Bu çalışmada iki çarpıştırıcı vardı ve farklı biçimde ele alındılar:</p>
+  <p class="en">A collider is a variable into which two arrows point. Conditioning on it can <b>manufacture an association between its parents that does not exist</b>. There were two colliders here and they were handled differently:</p>
+  <ul class="tr">
+    <li><b>Öz bildirimli yatkınlık</b> — model terimi olarak tutuldu (kendi başına epidemiyolojik olarak bilgi verici), ama hiçbir düzeltme kümesine konmadı. Çarpıştırıcı yanlılığının mekanizması doğrudan ölçüldü ve saptanamadı; ilgili kestirim hem terimle hem onsuz raporlandı.</li>
+    <li><b>Bildirim davranışının kendisi</b> — hiçbir sonlanım modeline konmadı, ne değişken ne ağırlık olarak. Bunun nedeni Bölüm 10'da.</li>
   </ul>
-
-  <div class="box care"><b class="t">Genelleştirilebilir bir uyarı</b>
-    <p>Bu kohortta bir ilişki doğrusal terimde <span class="num">p = 0,044</span>'e ulaşıyordu, ama bant ortalamaları monoton değildi (1,424 · 1,425 · 1,257 · 1,195) ve iki parametrik olmayan test de anlamsızdı. Anlamlılık, monoton olmayan bir örüntüye doğrusal bir biçim dayatmanın yarattığı bir yapaylıktı. <strong>Yalnızca doğrusal biçim kurulsaydı bu ok yanlışlıkla çizilecekti.</strong> Sürekli değişkenlerin fonksiyonel biçimi, ilişki iddia edilmeden önce en az iki biçimde incelenmelidir.</p>
-  </div>
+  <ul class="en">
+    <li><b>Self-reported susceptibility</b> — kept as a model term (epidemiologically informative in its own right) but placed in no adjustment set. The mechanism of collider bias was measured directly and was not detectable; the relevant estimate was reported both with and without the term.</li>
+    <li><b>Reporting behaviour itself</b> — entered no outcome model, neither as a covariate nor as a weight. The reason is in Section 10.</li>
+  </ul>
+  <div class="box stop tr"><b class="t">Genelleştirilebilir bir uyarı</b>
+    <p>Bu kohortta bir ilişki doğrusal terimde p = 0,044'e ulaşıyordu, ama bant ortalamaları monoton değildi (1,424 · 1,425 · 1,257 · 1,195) ve iki parametrik olmayan test de anlamsızdı. Anlamlılık, monoton olmayan bir örüntüye doğrusal bir biçim dayatmanın yarattığı bir yapaylıktı. Yalnızca doğrusal biçim kurulsaydı bu ok yanlışlıkla çizilecekti. Sürekli değişkenlerin fonksiyonel biçimi, ilişki iddia edilmeden önce <b>en az iki biçimde</b> incelenmelidir.</p></div>
+  <div class="box stop en"><b class="t">A generalisable warning</b>
+    <p>One relation in this cohort reached p = 0.044 in its linear term, but the band means were not monotone (1.424 · 1.425 · 1.257 · 1.195) and two non-parametric tests were null. The significance was an artefact of imposing a linear form on a non-monotone pattern. Had only the linear form been fitted, that arrow would have been drawn in error. The functional form of a continuous variable must be examined in <b>at least two forms</b> before a relation is claimed.</p></div>
 </div></section>
 
-<!-- ══════════════════════════════════ 08 -->
-<section id="s8"><div class="col">
-  <div class="sh"><span class="n">08</span><h2>Katılımın kendisi bir değişken</h2></div>
-  <p class="standfirst">Katılımcı sürveyansta gözlenen kişiler aynı zamanda gözlemcilerdir. Bu, diğer kohort tasarımlarında olmayan bir geçerlilik tehdidi yaratır ve doğrudan ölçülmesi gerekir.</p>
-
-  <p>Üç ayrı soru, üç ayrı karşılaştırmayla ele alındı. Hepsinin ortak özelliği, <strong>düzeltmek yerine ölçmek</strong> olması.</p>
-
-  <div class="wide"><div class="tw"><table>
-    <thead><tr><th>Soru</th><th>Nasıl ölçüldü</th><th class="n">Sonuç</th></tr></thead>
-    <tbody>
-      <tr>
-        <td class="lead">Bildirim yapanlar, kaydolup hiç bildirmeyenlerden farklı mı?</td>
-        <td>Standartlaştırılmış ortalama farkla temel özellik karşılaştırması; ardından önceden tanımlı sekiz terimli eğilim modeli</td>
-        <td class="n">16 özellikten 12'si |SMD| &gt; 0,10 · kestirimleri taşıyan terimler dengeye yakın</td>
-      </tr>
-      <tr>
-        <td class="lead">Hasta olmak, ertesi hafta bildirim yapmayı değiştiriyor mu?</td>
-        <td>Kişi düzeyinde rastgele kesişimli karma etkili lojistik; karşılaştırma kişinin kendi bildirim geçmişi içinde</td>
-        <td class="n">koşullu OR 1,016 → anlamsız</td>
-      </tr>
-      <tr>
-        <td class="lead">Bildirim boşluğu sahte bir "yeni epizod" yaratıyor mu?</td>
-        <td>Aynı kestirici ailesi, geri yönde</td>
-        <td class="n">koşullu OR 1,664 → kodlama kuralının özelliği</td>
-      </tr>
-    </tbody>
-  </table></div></div>
-
-  <div class="box stop"><b class="t">Neden ağırlıklandırma yapılmadı</b>
-    <p><strong>Yapısal sebep:</strong> bildirim bir çarpıştırıcıdır — hem sonlanımdan hem maruziyet etkenlerinden ona ok gider. Ağırlıklandırma bir tür koşullanmadır, dolayısıyla yanlılığı gidermek yerine yaratabilir.</p>
-    <p><strong>Ampirik sebep:</strong> ağırlıklar yine de hesaplandı ve dağıtacak neredeyse hiçbir şey olmadığı görüldü. Dengelenmiş ağırlıklar 0,829–1,960 arasında, ortalama 1,001; Kish etkin örneklemi 242'nin 235,4'ü; tasarım etkisi 1,028. Zayıf ayrım gücüne sahip bir eğilim skorunu tersine çevirmek, hiçbir kazanç sağlamadan kestirim gürültüsü yayardı. Kayıt kestirimleri ağırlıksız bırakıldı, ağırlıklı uyum ilan edilmiş duyarlılık analizi olarak raporlandı.</p>
-  </div>
-
-  <div class="box good"><b class="t">Aktarılabilir yaklaşım</b>
-    <p>İki mekanizma zıt yönlerde çalışıyordu: biri insidansı yukarı, diğeri aşağı iter. Net etkinin işareti verilemediği için sonuç <strong>işaretsiz</strong> raporlandı — düzeltilmiş gibi sunulmadı. Ölçülebilen bir yanlılığı ölçüp büyüklüğünü vermek, ölçülemeyen bir düzeltme uygulamaktan daha savunulabilirdir.</p>
-  </div>
-</div></section>
-
-<!-- ══════════════════════════════════ 09 -->
+<!-- ══════════════════════════════ 09 -->
 <section id="s9"><div class="col">
-  <div class="sh"><span class="n">09</span><h2>İki sürveyans sinyalini karşılaştırmak</h2></div>
-  <p class="standfirst">Yeni bir sürveyans akışının değeri, çoğu zaman yerleşik bir akışla ne kadar uyuştuğuyla değerlendirilir. Bu karşılaştırmanın adil olması için birkaç kararın önceden verilmesi gerekir.</p>
+  <div class="sh"><span class="n">09</span><h2 class="tr">Örneklem çerçevesi ve temsiliyet</h2><h2 class="en">Sampling frame and representativeness</h2></div>
+  <p class="standfirst tr">Bu bölüm tek bir soruya hazırlıktır: "Bu 248 hekim kimi temsil ediyor?" Doğru cevap savunmacı değil, tanımlayıcıdır — çerçeveyi adlandırın, sapmayı ölçün, sonucunu taşıyın.</p>
+  <p class="standfirst en">This section prepares one question: "who do these 248 physicians represent?" The right answer is not defensive but descriptive — name the frame, measure the bias, carry the consequence.</p>
 
-  <h3>Karşılaştırılan büyüklük: oran, düzey değil</h3>
-  <p>Dünya Sağlık Örgütü rehberi, internet ve topluluk temelli katılımcı sistemlerin göreli eğilimi iyi izlediğini ama <strong>mutlak düzeyi</strong> ölçmekte zorlandığını belirtir; çünkü payda oynaktır. Çözüm, iki akışta da bir oran karşılaştırmaktır:</p>
-  <div class="eq"><pre>katılımcı akış :  viral-sistemik epizod / tüm yeni epizod
-yerleşik akış  :  laboratuvar pozitif  / test edilen örnek
+  <h3 class="tr">Bu bir olasılıklı örneklem değil</h3><h3 class="en">This is not a probability sample</h3>
+  <div class="eq tr"><pre>Olasılıklı örneklem              SALGINTR
+──────────────────────────       ───────────────────────────────
+tanımlı örnekleme çerçevesi      yok — hekim kütüğünden çekilmedi
+bilinen seçilme olasılığı        yok — katılım gönüllü
+rastgele seçim                   yok — mevcut mesleki ağ üzerinden davet
+ağırlıklandırma imkânı           var, ama tasarım ağırlığı DEĞİL:
+                                 model temelli katılım eğilimi ağırlığı</pre></div>
+  <div class="eq en"><pre>Probability sample               SALGINTR
+──────────────────────────       ───────────────────────────────
+defined sampling frame           none — not drawn from a physician register
+known selection probability      none — participation is voluntary
+random selection                 none — invited through professional networks
+weighting possible               yes, but NOT design weights:
+                                 model-based participation-propensity weights</pre></div>
 
-  → iki taraf da "sendromik hastalığın viral fraksiyonunu" ölçer
-  → payda oynaklığından etkilenmez, çünkü pay ve payda aynı akıştan gelir
-  → bu kohortta sezon farkı yalnızca 1,25 yüzde puanı (%18,31 – %19,56)</pre></div>
-
-  <h3>Düzleştirme: nedensel mi, simetrik mi</h3>
-  <div class="eq"><pre>nedensel MA-3(t) = ( x(t−2) + x(t−1) + x(t) ) / 3      ✓
-simetrik MA-3(t) = ( x(t−1) + x(t)   + x(t+1) ) / 3      ✗</pre>
-    <p class="gloss">Simetrik ortalama <strong>sonraki haftayı</strong> kullanır. Gerçek zamanlı bir erken uyarı sisteminde o hafta henüz mevcut değildir, dolayısıyla simetrik düzleştirmeyle elde edilen performans sahada tekrarlanamaz. Bu, sürveyans literatüründe sık gözden kaçan bir ayrımdır.</p>
-  </div>
-  <div class="box care"><b class="t">Demir kural</b>
-    <p>İki seri her zaman <strong>özdeş</strong> işlenmelidir: ya ikisi de ham, ya ikisi de aynı biçimde düzleştirilmiş. Düzleştirilmiş bir seriyi ham bir seriyle karşılaştırmak, uyumu yapay olarak yükseltir.</p>
-  </div>
-
-  <h3>Fazlar önceden sabitlenir</h3>
-  <p>Katılımcı bir sinyal, epidemi dalgasının içinde ve dışında çok farklı davranır: dalgadan önce haftalık sayılar küçüktür ve gürültü baskındır; dalga sırasında sinyal güçlüdür; dalgadan sonra kapalı kohortun duyarlı havuzu tükendiği için sinyal çöker. Tüm sezonu tek bir uyum sayısına indirgemek bu üç rejimi ortalayarak gizler.</p>
+  <h3 class="tr">Hekim kohortu neyi çözer: <em>payda</em></h3>
+  <h3 class="en">What a physician cohort buys you: <em>a denominator</em></h3>
   <div class="wide"><div class="tw"><table>
-    <thead><tr><th>Faz</th><th class="n">n (hafta)</th><th class="n">Uyum (düzleştirilmiş)</th><th class="n">Uyum (ham)</th></tr></thead>
+    <thead><tr><th class="tr">Sorun</th><th class="en">Problem</th><th class="tr">Halka açık katılımcı sistemler</th><th class="en">Public participatory systems</th><th class="tr">SALGINTR hekim paneli</th><th class="en">SALGINTR physician panel</th></tr></thead>
     <tbody>
-      <tr><td class="lead">Epidemi öncesi</td><td class="n">10</td><td class="n">0,886</td><td class="n">0,524</td></tr>
-      <tr><td class="lead">Epidemi</td><td class="n">9</td><td class="n">0,754</td><td class="n">0,437</td></tr>
-      <tr><td class="lead">Erken uyarı penceresi <em>(önceden tanımlı birincil)</em></td><td class="n">19</td><td class="n">0,642</td><td class="n">0,489</td></tr>
-      <tr><td class="lead">Epidemi sonrası</td><td class="n">14</td><td class="n">0,047</td><td class="n">−0,226</td></tr>
-      <tr><td class="lead">Tüm sezon</td><td class="n">33</td><td class="n">0,538</td><td class="n">0,243</td></tr>
-    </tbody>
-  </table></div></div>
-  <p>Faz sınırları, on sezonluk yerleşik veriye uygulanan Hareketli Epidemi Yöntemi eşiğinden geldi — çalışmanın kendi verisinden değil. Bu ayrım önemlidir: sınırları kendi verinizden türetirseniz karşılaştırma döngüsel hâle gelir.</p>
+      <tr><td class="lead"><span class="tr">Payda</span><span class="en">Denominator</span></td><td><span class="tr">Yok. Katılımcı sayısı haftadan haftaya kayar; oranın altına koyacak sabit bir taban yoktur.</span><span class="en">None. The number of participants drifts week to week; there is no stable base to put under a rate.</span></td><td><span class="tr">Var, tanım gereği. Kayıtlı hekim listesi bellidir; her hafta kimin risk altında olduğu bilinir.</span><span class="en">Present by construction. The enrolled list is known, so who is at risk each week is known.</span></td></tr>
+      <tr><td class="lead"><span class="tr">Temsiliyet</span><span class="en">Representativeness</span></td><td><span class="tr">Zayıf, <b>ölçülmemiş</b></span><span class="en">Weak, <b>unmeasured</b></span></td><td><span class="tr">Zayıf ama <b>ölçülmüş</b></span><span class="en">Weak but <b>measured</b></span></td></tr>
+      <tr><td class="lead"><span class="tr">Klinik ayrım</span><span class="en">Clinical discrimination</span></td><td><span class="tr">Yok — laik semptom bildirimi</span><span class="en">None — lay symptom reporting</span></td><td><span class="tr">Var — hekimin klinik tanısı</span><span class="en">Present — the physician's clinical diagnosis</span></td></tr>
+    </tbody></table></div></div>
+  <div class="box key tr"><b class="t">Tek cümlelik cevap</b>
+    <p>Hekim kohortu temsiliyet sorununu çözmez; <b>payda sorununu</b> çözer ve temsiliyet sapmasını <b>ölçülebilir</b> hâle getirir. Bu ikisi farklı şeylerdir.</p></div>
+  <div class="box key en"><b class="t">The one-sentence answer</b>
+    <p>A physician cohort does not solve representativeness; it solves the <b>denominator</b> problem and makes the representativeness bias <b>measurable</b>. Those are two different things.</p></div>
 
-  <h3>Belirsizlik: neden sıradan bootstrap değil</h3>
-  <div class="eq"><pre>hareketli blok bootstrap · blok uzunluğu 4 hafta · 2.000 tekrar
-
-sıradan bootstrap:  haftaları tek tek çeker
-                    → haftalar arası otokorelasyonu yok eder
-                    → güven aralığını olduğundan DAR gösterir
-
-blok bootstrap:     ardışık hafta bloklarını çeker
-                    → epidemi eğrisinin yerel yapısını korur</pre></div>
-
-  <h3>Zamanlılık iddiası için önceden yazılmış kural</h3>
-  <p>"Bizim sinyalimiz daha erken uyarıyor" iddiası, katılımcı sürveyansın en cazip ve en kırılgan iddiasıdır. Bu çalışmada karar kuralı analiz öncesinde yazıldı: çapraz korelasyonun tepe gecikmesi bootstrap ile yeniden örneklenir ve <strong>aralık iki gecikmeden genişse sonuç "öncelik" değil "tanımlanamaz" olarak raporlanır</strong>.</p>
-  <div class="box good"><b class="t">Kuralın uygulanması</b>
-    <p>Nokta kestirimi bir tepe gösteriyordu, ama profil merkez gecikmelerde neredeyse düzdü ve %95 tepe-gecikme aralığı sıfırı içeriyordu. Kural gereği hiçbir öncelik iddia edilmedi; desteklenen bulgu <em>eşzamanlı doğrulama</em> olarak raporlandı. Tek sezonluk veriyle bu sorunun çözülemeyeceği de ayrıca belirtildi.</p>
+  <h3 class="tr">Kim girdi: 304 → 248, 46 il</h3><h3 class="en">Who entered: 304 → 248, 46 provinces</h3>
+  <div class="figs">
+    <div class="fig tr"><b>%81,6</b><span>304 kayıtlının 248'i en az bir hafta bildirdi</span></div><div class="fig en"><b>81.6%</b><span>248 of 304 registrants filed at least one week</span></div>
+    <div class="fig tr"><b>%52,8</b><span>üç merkez: Ankara, İzmir, İstanbul</span></div><div class="fig en"><b>52.8%</b><span>three centres: Ankara, İzmir, İstanbul</span></div>
+    <div class="fig tr"><b>46 / 81</b><span>temsil edilen il</span></div><div class="fig en"><b>46 / 81</b><span>provinces represented</span></div>
   </div>
+  <div class="box care tr"><b class="t">Nasıl sunmalı</b>
+    <p>Kohort ulusal değil, merkez ağırlıklıdır. Bunu bir kusur olarak değil, <b>kestirimlerin geçerlilik alanını tanımlayan bir olgu</b> olarak sunun: sezon düzeyindeki hız bu panel için geçerlidir; ulusal genelleme için gereken büyüklük ayrıca verilir (Bölüm 16, ≈824 aktif hekim).</p></div>
+  <div class="box care en"><b class="t">How to present it</b>
+    <p>The cohort is centre-weighted rather than national. Present that not as a flaw but as <b>a fact that defines where the estimates are valid</b>: the season-level rate holds for this panel, and the size needed for national generalisation is stated separately (Section 16, ≈824 active physicians).</p></div>
 
-  <h3>Yön uyumu, düzey uyumu değildir</h3>
-  <p>Korelasyon tek başına ölçek uyuşmazlığını gizler. Bland–Altman analizi ve regresyon eğimi bu çalışmada birlikte raporlandı: ortalama haftalık fark küçüktü (+2,8 yüzde puanı) ama uyum sınırları çok genişti (−32,1 ile +37,7). Pratik sonuç açıkça yazıldı — <strong>katılımcı seri yön ve faz göstergesi olarak kullanılabilir, yerleşik akışın düzeyinin kalibre edilmiş bir kestirimi olarak kullanılamaz.</strong></p>
+  <h3 class="tr">Kapalı kohort ile sentinel: iki farklı örnekleme mantığı</h3>
+  <h3 class="en">Fixed panel versus sentinel: two sampling logics</h3>
+  <div class="eq tr"><pre>SENTINEL                        SALGINTR
+her hafta FARKLI hastaları      her hafta AYNI hekimleri
+örnekler (kesitsel)             izler (sabit üyelik)
+
+→ duyarlı havuz yenilenir       → duyarlı havuz boşalır
+→ dalga sonrası pozitiflik      → dalga sonrası pozitiflik
+  gerçek dolaşımı izler           mekanik olarak düşer</pre></div>
+  <div class="eq en"><pre>SENTINEL                        SALGINTR
+samples DIFFERENT patients      follows the SAME physicians
+each week (cross-sectional)     each week (fixed membership)
+
+→ susceptible pool is renewed   → susceptible pool is depleted
+→ post-wave positivity tracks   → post-wave positivity falls
+  real circulation                mechanically</pre></div>
+  <p class="tr">Sistem sezon boyunca yeni üyeye açıktır ama <b>üyelik anlamında sabittir</b>: takip edilen kişi kümesi büyük ölçüde değişmez. Dalga sonrası uyumun sıfıra çökmesinin bir bölümü budur; diğer bölümü küçük haftalık paydadır.</p>
+  <p class="en">The system stayed open to new members through the season but is <b>fixed in membership</b>: the set of people followed barely changes. That is part of why post-wave agreement collapses to zero; the rest is the small weekly denominator.</p>
+
+  <div class="faq">
+    <h3 class="tr">Sık sorulanlar</h3><h3 class="en">Frequently asked</h3>
+    <details><summary><span class="tr">248 kişilik, yarısı üç şehirden gelen bir panelle Türkiye hakkında nasıl konuşuyorsunuz?</span><span class="en">How can you speak about Türkiye from a panel of 248, half of it in three cities?</span></summary>
+      <div class="pair">
+        <div class="a tr"><p>Konuşmuyoruz. Bu panel üzerinden raporlanan her kestirim bu panelin kestirimidir; ulusal genelleme ayrı bir hedef olarak, gereken büyüklükle birlikte verilir — temsili bir panel için yaklaşık 824 aktif hekim. Yapılan şey sapmayı gizlemek yerine ölçmektir: bildirim eğilimi modeli bildirimcilerle bildirmeyenleri karşılaştırır ve ölçülen özelliklerde ciddi bir dengesizlik bulmaz. Bu, panel içi geçerliliği destekler, ulusal temsiliyeti değil.</p></div>
+        <div class="a en"><p>We don't. Every estimate reported on this panel is an estimate for this panel; national generalisation is stated separately as a target together with the size it requires — about 824 active physicians. What is done is to measure the bias rather than hide it: the reporting-propensity model compares reporters with non-reporters and finds no serious imbalance on measured characteristics. That supports internal validity within the panel, not national representativeness.</p></div>
+      </div></details>
+    <details><summary><span class="tr">Neden hekim seçtiniz? Halkı örneklemek daha temsili olmaz mıydı?</span><span class="en">Why physicians? Wouldn't sampling the public be more representative?</span></summary>
+      <div class="pair">
+        <div class="a tr"><p>Temsiliyet açısından evet, ama iki şey kaybedilirdi. Birincisi payda: halka açık gönüllü sistemlerde risk altındaki nüfus haftadan haftaya kayar, kayıtlı hekim listesi ise bu tabanı tanım gereği verir. İkincisi klinik ayrım: laboratuvar doğrulaması olmayan bir sistemde semptomu bir etken kümesine atayan şey hekimin klinik tanısıdır; laik bir katılımcı bunu yapamaz. Kısacası hekim paneli temsiliyeti değil, duyarlılığı, özgüllüğü ve paydayı satın alır.</p></div>
+        <div class="a en"><p>More representative, yes, but two things would be lost. First the denominator: in public volunteer systems the population at risk drifts week to week, whereas an enrolled physician list supplies that base by construction. Second, clinical discrimination: in a system without laboratory confirmation, what assigns a symptom to an agent cluster is the physician's clinical diagnosis, and a lay participant cannot do that. In short, a physician panel buys sensitivity, specificity and a denominator — not representativeness.</p></div>
+      </div></details>
+    <details><summary><span class="tr">Bildirim yapmayan 56 kişi neden analiz dışı? Bu seçilim yaratmıyor mu?</span><span class="en">Why are the 56 non-reporters excluded? Doesn't that create selection?</span></summary>
+      <div class="pair">
+        <div class="a tr"><p>Analiz dışı değiller — bildirim eğilimi modelinin karşılaştırma grubu tam olarak onlardır. Kişi-hafta düzeyindeki analizlerden çıkmak zorundalar çünkü hiç kişi-hafta katkısı yok; bir kişi-hafta modeline sıfır hafta ile giremezsiniz. Ama bireysel düzeyde tam olarak oradalar ve o modelden çıkan ağırlıklar birincil modelin duyarlılık analizine girer. "Dışarıda bırakılan" grup, seçilimin büyüklüğünü ölçmenin aracıdır.</p></div>
+        <div class="a en"><p>They are not excluded — they are precisely the comparison group in the reporting-propensity model. They must drop out of the person-week analyses because they contribute no person-weeks; you cannot enter a person-week model with zero weeks. But at the individual level they are exactly there, and the weights from that model enter the sensitivity refit of the primary model. The "excluded" group is the instrument for measuring how large the selection is.</p></div>
+      </div></details>
+  </div>
 </div></section>
 
-<!-- ══════════════════════════════════ 10 -->
+<!-- ══════════════════════════════ 10 -->
 <section id="s10"><div class="col">
-  <div class="sh"><span class="n">10</span><h2>Ölçüm hatasının koyduğu tavan</h2></div>
-  <p class="standfirst">Bu, küçük paydalı sürveyans sinyalleriyle çalışan herkesin bilmesi gereken kavram. Gözlenen bir korelasyonu 1,0'a karşı okumak, çoğu zaman sistemin haksız yere kötü görünmesine yol açar.</p>
+  <div class="sh"><span class="n">10</span><h2 class="tr">Katılımın kendisi bir değişken</h2><h2 class="en">Participation is itself a variable</h2></div>
+  <p class="standfirst tr">Katılımcı sürveyansta gözlenen kişiler aynı zamanda gözlemcilerdir. Bu, diğer kohort tasarımlarında olmayan bir geçerlilik tehdidi yaratır ve doğrudan ölçülmesi gerekir.</p>
+  <p class="standfirst en">In participatory surveillance the people observed are also the observers. That creates a validity threat other cohort designs do not have, and it has to be measured directly.</p>
+  <p class="tr">Üç ayrı soru, üç ayrı karşılaştırmayla ele alındı. Hepsinin ortak özelliği, <b>düzeltmek yerine ölçmek</b> olması.</p>
+  <p class="en">Three separate questions were addressed with three separate comparisons. What they have in common is that they <b>measure rather than correct</b>.</p>
+  <div class="wide"><div class="tw"><table>
+    <thead><tr><th class="tr">Soru</th><th class="en">Question</th><th class="tr">Nasıl ölçüldü</th><th class="en">How it was measured</th><th class="tr">Sonuç</th><th class="en">Result</th></tr></thead>
+    <tbody>
+      <tr><td class="lead"><span class="tr">Bildirim yapanlar, kaydolup hiç bildirmeyenlerden farklı mı?</span><span class="en">Do reporters differ from registrants who never reported?</span></td><td><span class="tr">Standartlaştırılmış ortalama farkla temel özellik karşılaştırması; ardından önceden tanımlı sekiz terimli eğilim modeli</span><span class="en">Baseline comparison by standardised mean difference, then a pre-specified eight-term propensity model</span></td><td><span class="tr">16 özellikten 12'si |SMD| &gt; 0,10 · kestirimleri taşıyan terimler dengeye yakın</span><span class="en">12 of 16 characteristics at |SMD| &gt; 0.10 · the terms carrying the estimates are close to balance</span></td></tr>
+      <tr><td class="lead"><span class="tr">Hasta olmak, ertesi hafta bildirim yapmayı değiştiriyor mu?</span><span class="en">Does illness change whether you file next week?</span></td><td><span class="tr">Kişi düzeyinde rastgele kesişimli karma etkili lojistik</span><span class="en">Mixed-effects logistic with a person-level random intercept</span></td><td><span class="tr">koşullu OR 1,016 → anlamsız</span><span class="en">conditional OR 1.016 → not significant</span></td></tr>
+      <tr><td class="lead"><span class="tr">Bildirim boşluğu sahte bir "yeni epizod" yaratıyor mu?</span><span class="en">Does a reporting gap manufacture a false "new episode"?</span></td><td><span class="tr">Aynı kestirici ailesi, geri yönde</span><span class="en">The same estimator family, backwards in time</span></td><td><span class="tr">koşullu OR 1,664 → kodlama kuralının özelliği</span><span class="en">conditional OR 1.664 → a property of the coding rule</span></td></tr>
+    </tbody></table></div></div>
 
-  <p>Güvenilirlik, bir göstergedeki haftadan haftaya değişimin ne kadarının <strong>gerçek epidemiyolojik sinyal</strong>, ne kadarının örnekleme gürültüsü olduğunu ifade eder. Küçük haftalık paydalarda bu oran hızla düşer.</p>
+  <h3 class="tr">Ağırlıklar: düzeltme değil, teşhis aracı</h3>
+  <h3 class="en">Weights: a diagnostic, not a correction</h3>
+  <div class="eq tr"><pre>DENGELENMİŞ ağırlık: w_i = P(bildirdi) / π_i     — ham 1/π DEĞİL
+  → ağırlıkların ortalaması 1'de kalır
+  → ağırlıklı örneklem, gözlenen örneklemin büyüklüğünde kalır
 
-  <div class="eq"><pre>1) örnekleme (binom) gürültüsünün payı
+bu kohortta: w 0,829 – 1,960 · ortalama 1,001
+Kish etkin örneklem = 235,4 / 242  → %97,3
+tasarım etkisi      = 242 / 235,4  = 1,028</pre></div>
+  <div class="eq en"><pre>STABILISED weight: w_i = P(reported) / π_i        — NOT raw 1/π
+  → keeps the mean of the weights at 1
+  → the weighted sample stays the size of the observed sample
+
+in this cohort: w 0.829 – 1.960 · mean 1.001
+Kish effective sample = 235.4 / 242  → 97.3%
+design effect         = 242 / 235.4  = 1.028</pre></div>
+  <div class="box key tr"><b class="t">Bu sayının kendisi bulgudur</b>
+    <p>Tasarım etkisi 1,028 demek, ağırlıkların yeniden dağıtacağı neredeyse hiçbir şey yok demektir: ölçülen özelliklere göre bildirimcilerle bildirmeyenler arasında ciddi bir dengesizlik yoktur. Ağırlık dağılımının ne kadar dar olduğu, ölçülen boyutlardaki dengesizliğin doğrudan ölçüsüdür. Bu yüzden ağırlıklı uyum birincil analiz değil, önceden ilan edilmiş tek bir duyarlılık analizidir.</p></div>
+  <div class="box key en"><b class="t">That number is itself a finding</b>
+    <p>A design effect of 1.028 means the weights have almost nothing to redistribute: on measured characteristics there is no serious imbalance between reporters and non-reporters. How narrow the weight distribution is, is a direct measure of how much imbalance there is on the measured dimensions. That is why the weighted fit is not the primary analysis but a single pre-declared sensitivity analysis.</p></div>
+  <div class="box stop tr"><b class="t">Neden ağırlıklandırma bir çözüm değil</b>
+    <p><b>Yapısal sebep:</b> bildirim bir çarpıştırıcıdır — hem sonlanımdan hem maruziyet etkenlerinden ona ok gider. Ağırlıklandırma bir tür koşullanmadır, dolayısıyla yanlılığı gidermek yerine yaratabilir. <b>Ampirik sebep:</b> ağırlıklar yine de hesaplandı ve dağıtacak neredeyse hiçbir şey olmadığı görüldü. Ayrıca ağırlıklar yalnızca <em>ölçülen</em> özelliklerdeki dengesizliği ele alabilir; ölçülmemiş bir seçilim nedenini ele alamaz.</p></div>
+  <div class="box stop en"><b class="t">Why weighting is not the solution</b>
+    <p><b>Structural reason:</b> reporting is a collider — arrows run into it from both the outcome and the exposure factors. Weighting is a form of conditioning, so it can create bias rather than remove it. <b>Empirical reason:</b> the weights were computed anyway and had almost nothing to redistribute. Weights can also only address imbalance on <em>measured</em> characteristics; they cannot address an unmeasured reason for selection.</p></div>
+  <div class="box care tr"><b class="t">Aktarılabilir yaklaşım</b>
+    <p>İki mekanizma zıt yönlerde çalışıyordu: biri insidansı yukarı, diğeri aşağı iter. Net etkinin işareti verilemediği için sonuç <b>işaretsiz</b> raporlandı — düzeltilmiş gibi sunulmadı. Ölçülebilen bir yanlılığı ölçüp büyüklüğünü vermek, ölçülemeyen bir düzeltme uygulamaktan daha savunulabilirdir.</p></div>
+  <div class="box care en"><b class="t">Transferable approach</b>
+    <p>Two mechanisms ran in opposite directions: one pushes incidence up, the other down. Because the sign of the net effect could not be established, the result was reported <b>without a sign</b> rather than presented as corrected. Measuring a bias you can measure, and stating its size, is more defensible than applying a correction you cannot.</p></div>
+</div></section>
+
+<!-- ══════════════════════════════ 11 -->
+<section id="s11"><div class="col">
+  <div class="sh"><span class="n">11</span><h2 class="tr">İki sürveyans sinyalini karşılaştırmak</h2><h2 class="en">Comparing two surveillance signals</h2></div>
+  <p class="standfirst tr">Yeni bir sürveyans akışının değeri, çoğu zaman yerleşik bir akışla ne kadar uyuştuğuyla değerlendirilir. Bu karşılaştırmanın adil olması için birkaç kararın önceden verilmesi gerekir.</p>
+  <p class="standfirst en">A new surveillance stream is usually judged by how well it agrees with an established one. For that comparison to be fair, several decisions have to be made in advance.</p>
+
+  <h3 class="tr">Karşılaştırılan büyüklük: oran, düzey değil</h3>
+  <h3 class="en">Compare a proportion, not a level</h3>
+  <div class="eq tr"><pre>katılımcı akış : viral-sistemik epizod / tüm yeni epizod
+yerleşik akış  : laboratuvar pozitif  / test edilen örnek
+
+→ iki taraf da "sendromik hastalığın viral fraksiyonunu" ölçer
+→ payda oynaklığından etkilenmez: pay ve payda aynı akıştan gelir
+→ bu kohortta sezon farkı yalnızca 1,25 yüzde puanı</pre></div>
+  <div class="eq en"><pre>participatory stream : viral-systemic episodes / all incident episodes
+established stream   : laboratory positives   / specimens tested
+
+→ both measure "the viral fraction of syndromic illness"
+→ immune to denominator drift: numerator and denominator share a stream
+→ in this cohort the season-level difference is just 1.25 percentage points</pre></div>
+
+  <h3 class="tr">Düzleştirme: nedensel mi, simetrik mi</h3>
+  <h3 class="en">Smoothing: causal or symmetric</h3>
+  <div class="eq tr"><pre>nedensel MA-3(t) = ( x(t−2) + x(t−1) + x(t) ) / 3   ✓
+simetrik MA-3(t) = ( x(t−1) + x(t) + x(t+1) ) / 3   ✗</pre></div>
+  <div class="eq en"><pre>causal MA-3(t)    = ( x(t−2) + x(t−1) + x(t) ) / 3   ✓
+symmetric MA-3(t) = ( x(t−1) + x(t) + x(t+1) ) / 3   ✗</pre></div>
+  <p class="tr">Simetrik ortalama sonraki haftayı kullanır. Gerçek zamanlı bir erken uyarı sisteminde o hafta henüz mevcut değildir, dolayısıyla simetrik düzleştirmeyle elde edilen performans sahada tekrarlanamaz.</p>
+  <p class="en">A symmetric average uses next week's value. In a real-time early-warning system that week does not exist yet, so performance obtained with symmetric smoothing cannot be reproduced in the field.</p>
+  <div class="box stop tr"><b class="t">Demir kural</b>
+    <p>İki seri her zaman özdeş işlenmelidir: ya ikisi de ham, ya ikisi de aynı biçimde düzleştirilmiş. Düzleştirilmiş bir seriyi ham bir seriyle karşılaştırmak, uyumu yapay olarak yükseltir.</p></div>
+  <div class="box stop en"><b class="t">Iron rule</b>
+    <p>The two series must always be treated identically: either both raw, or both smoothed the same way. Comparing a smoothed series with a raw one inflates the agreement artificially.</p></div>
+
+  <h3 class="tr">Fazlar önceden sabitlenir</h3><h3 class="en">Phases are fixed in advance</h3>
+  <div class="wide"><div class="tw"><table>
+    <thead><tr><th class="tr">Faz</th><th class="en">Phase</th><th class="tr">n (hafta)</th><th class="en">n (weeks)</th><th class="tr">Uyum (düzleştirilmiş)</th><th class="en">Agreement (smoothed)</th><th class="tr">Uyum (ham)</th><th class="en">Agreement (raw)</th></tr></thead>
+    <tbody>
+      <tr><td class="lead"><span class="tr">Epidemi öncesi</span><span class="en">Pre-epidemic</span></td><td>10</td><td>0,886</td><td>0,524</td></tr>
+      <tr><td class="lead"><span class="tr">Epidemi</span><span class="en">Epidemic</span></td><td>9</td><td>0,754</td><td>0,437</td></tr>
+      <tr><td class="lead"><b><span class="tr">Erken uyarı penceresi (önceden tanımlı birincil)</span><span class="en">Early-warning window (pre-specified primary)</span></b></td><td>19</td><td><b>0,642</b></td><td>0,489</td></tr>
+      <tr><td class="lead"><span class="tr">Epidemi sonrası</span><span class="en">Post-epidemic</span></td><td>14</td><td>0,047</td><td>−0,226</td></tr>
+      <tr><td class="lead"><span class="tr">Tüm sezon</span><span class="en">Whole season</span></td><td>33</td><td>0,538</td><td>0,243</td></tr>
+    </tbody></table></div></div>
+  <p class="tr">Faz sınırları, on sezonluk yerleşik veriye uygulanan Hareketli Epidemi Yöntemi eşiğinden geldi — çalışmanın kendi verisinden değil. Bu ayrım önemlidir: sınırları kendi verinizden türetirseniz karşılaştırma <b>döngüsel</b> hâle gelir.</p>
+  <p class="en">The phase boundaries came from a Moving Epidemic Method threshold applied to ten seasons of established data — not from the study's own data. That distinction matters: derive the boundaries from your own series and the comparison becomes <b>circular</b>.</p>
+
+  <h3 class="tr">Zamanlılık iddiası için önceden yazılmış kural</h3>
+  <h3 class="en">A decision rule written in advance for the timeliness claim</h3>
+  <p class="tr">"Bizim sinyalimiz daha erken uyarıyor" iddiası, katılımcı sürveyansın en cazip ve en kırılgan iddiasıdır. Bu çalışmada karar kuralı analiz öncesinde yazıldı: çapraz korelasyonun tepe gecikmesi bootstrap ile yeniden örneklenir ve <b>aralık iki gecikmeden genişse sonuç "öncelik" değil "tanımlanamaz" olarak raporlanır</b>.</p>
+  <p class="en">"Our signal warns earlier" is the most attractive and most fragile claim in participatory surveillance. Here the decision rule was written before the analysis: the peak lag of the cross-correlation is resampled by bootstrap, and <b>if the interval spans more than two lags the result is reported as "not identifiable" rather than as a lead</b>.</p>
+  <div class="box care tr"><b class="t">Kuralın uygulanması</b>
+    <p>Nokta kestirimi bir tepe gösteriyordu, ama profil merkez gecikmelerde neredeyse düzdü ve %95 tepe-gecikme aralığı sıfırı içeriyordu. Kural gereği hiçbir öncelik iddia edilmedi; desteklenen bulgu <em>eşzamanlı doğrulama</em> olarak raporlandı. Tek sezonluk veriyle bu sorunun çözülemeyeceği de ayrıca belirtildi.</p></div>
+  <div class="box care en"><b class="t">The rule in action</b>
+    <p>The point estimate did show a peak, but the profile was nearly flat across the central lags and the 95% peak-lag interval contained zero. Under the rule no lead was claimed; what the data support was reported as <em>concurrent corroboration</em>. It was also stated that one season cannot settle the question.</p></div>
+
+  <h3 class="tr">Yön uyumu, düzey uyumu değildir</h3><h3 class="en">Agreement in direction is not agreement in level</h3>
+  <p class="tr">Korelasyon tek başına ölçek uyuşmazlığını gizler. Bland–Altman analizi ve regresyon eğimi birlikte raporlandı: ortalama haftalık fark küçüktü (+2,8 yüzde puanı) ama uyum sınırları çok genişti (−32,1 ile +37,7). Pratik sonuç açıkça yazıldı — katılımcı seri <b>yön ve faz göstergesi</b> olarak kullanılabilir, yerleşik akışın düzeyinin kalibre edilmiş bir kestirimi olarak kullanılamaz.</p>
+  <p class="en">Correlation alone hides a scale mismatch. Bland–Altman analysis and the regression slope were reported together: the mean weekly difference was small (+2.8 percentage points) but the limits of agreement were wide (−32.1 to +37.7). The practical consequence was stated plainly — the participatory series can be used as an <b>indicator of direction and phase</b>, not as a calibrated estimate of the established stream's level.</p>
+</div></section>
+
+<!-- ══════════════════════════════ 12 -->
+<section id="s12"><div class="col">
+  <div class="sh"><span class="n">12</span><h2 class="tr">Ölçüm hatasının koyduğu tavan</h2><h2 class="en">The ceiling measurement error imposes</h2></div>
+  <p class="standfirst tr">Bu, küçük paydalı sürveyans sinyalleriyle çalışan herkesin bilmesi gereken kavram. Gözlenen bir korelasyonu 1,0'a karşı okumak, çoğu zaman sistemin haksız yere kötü görünmesine yol açar.</p>
+  <p class="standfirst en">This is the concept anyone working with small-denominator surveillance signals needs. Reading an observed correlation against 1.0 usually makes the system look worse than it is.</p>
+  <p class="tr">Güvenilirlik, bir göstergedeki haftadan haftaya değişimin ne kadarının <b>gerçek epidemiyolojik sinyal</b>, ne kadarının <b>örnekleme gürültüsü</b> olduğunu ifade eder. Küçük haftalık paydalarda bu oran hızla düşer.</p>
+  <p class="en">Reliability expresses how much of an indicator's week-to-week movement is <b>real epidemiological signal</b> and how much is <b>sampling noise</b>. With small weekly denominators that ratio falls fast.</p>
+  <div class="eq tr"><pre>1) örnekleme (binom) gürültüsünün payı
    Var_örnekleme = ortalama_t [ p_t (1 − p_t) / n_t ]
 
 2) güvenilirlik
    R = ( Var_gözlenen − Var_örnekleme ) / Var_gözlenen
 
    bu çalışmada:
-     R_katılımcı = 0,293      (haftada ortanca 15 epizod)
-     R_yerleşik  = 0,962      (haftada ~115 test)
+     R_katılımcı = 0,293   (haftada ortanca 15 epizod)
+     R_yerleşik  = 0,962   (haftada ~115 test)
 
 3) klasik sönümleme tavanı
    r_maks = √( R_katılımcı × R_yerleşik )
-          = √( 0,293 × 0,962 ) = 0,531</pre>
-    <p class="gloss">Anlamı: sistem ne kadar iyi olursa olsun, bu iki ham haftalık seri arasında 0,531'den yüksek bir korelasyon <em>gözlenemez</em>. Çünkü katılımcı serideki haftalık hareketin yaklaşık %71'i örnekleme hatasıdır.</p>
-  </div>
+          = √( 0,293 × 0,962 ) = 0,531</pre></div>
+  <div class="eq en"><pre>1) the share that is sampling (binomial) noise
+   Var_sampling = mean_t [ p_t (1 − p_t) / n_t ]
 
-  <div class="box good"><b class="t">Sonucu doğru okumak</b>
-    <p>Bu kohortta ham ölçekteki epidemi öncesi katsayı 0,524 — yani neredeyse tam tavanın üzerinde. Doğru ifade "uyum vasat" değil, <strong>"uyum, ölçümün izin verdiği kadar iyi"</strong>dir. Bu, sınırlanmış ve daha güçlü bir ifadedir.</p>
-  </div>
+2) reliability
+   R = ( Var_observed − Var_sampling ) / Var_observed
 
-  <div class="eq"><pre>tavanı yükseltmek için ne gerekir:
+   in this study:
+     R_participatory = 0.293   (median 15 episodes per week)
+     R_established   = 0.962   (~115 tests per week)
+
+3) the classical attenuation ceiling
+   r_max = √( R_participatory × R_established )
+         = √( 0.293 × 0.962 ) = 0.531</pre></div>
+  <p class="tr">Anlamı: sistem ne kadar iyi olursa olsun, bu iki ham haftalık seri arasında <b>0,531'den yüksek bir korelasyon gözlenemez</b>. Çünkü katılımcı serideki haftalık hareketin yaklaşık %71'i örnekleme hatasıdır.</p>
+  <p class="en">What that means: however good the system is, <b>no correlation above 0.531 can be observed</b> between these two raw weekly series, because about 71% of the participatory series' weekly movement is sampling error.</p>
+  <div class="box key tr"><b class="t">Sonucu doğru okumak</b>
+    <p>Bu kohortta ham ölçekteki epidemi öncesi katsayı 0,524 — yani neredeyse tam tavanın üzerinde. Doğru ifade "uyum vasat" değil, <b>"uyum, ölçümün izin verdiği kadar iyi"</b>dir. Bu, sınırlanmış ve daha güçlü bir ifadedir.</p></div>
+  <div class="box key en"><b class="t">Reading the result correctly</b>
+    <p>In this cohort the raw pre-epidemic coefficient is 0.524 — essentially sitting on the ceiling. The correct statement is not "agreement is mediocre" but <b>"agreement is as good as the measurement allows"</b>. That is a bounded claim, and a stronger one.</p></div>
+  <div class="eq tr"><pre>tavanı yükseltmek için ne gerekir:
 
   hedef tavan 0,70  →  R_katılımcı ≈ 0,51
   hedef tavan 0,80  →  R_katılımcı ≈ 0,67
 
   ikisi de yalnızca HAFTALIK OLAY SAYISINI artırarak elde edilir
   — olgu tanımını, düzleştirmeyi veya algoritmayı değiştirerek DEĞİL</pre></div>
+  <div class="eq en"><pre>what it takes to raise the ceiling:
 
-  <div class="box care"><b class="t">İki farklı yeterlilik sorusunu karıştırmayın</b>
-    <p>Korelasyon <em>testi</em> için hafta sayısı yeterliydi: Fisher z dönüşümüyle bu büyüklükte bir katsayıyı %80 güçle göstermek yaklaşık 17 hafta gerektiriyor, elde 19 hafta vardı. Yetersiz olan hafta sayısı değil, <strong>her haftanın paydasıydı</strong>. Bu iki soru sık sık birbirine karıştırılır ve yanlış çözüme yönlendirir.</p>
-  </div>
+  target ceiling 0.70  →  R_participatory ≈ 0.51
+  target ceiling 0.80  →  R_participatory ≈ 0.67
+
+  both are reached only by increasing the WEEKLY EVENT COUNT
+  — NOT by changing the case definition, the smoothing or the algorithm</pre></div>
+  <div class="box care tr"><b class="t">İki farklı yeterlilik sorusunu karıştırmayın</b>
+    <p>Korelasyon testi için hafta sayısı yeterliydi: Fisher z dönüşümüyle bu büyüklükte bir katsayıyı %80 güçle göstermek yaklaşık 17 hafta gerektiriyor, elde 19 hafta vardı. Yetersiz olan hafta sayısı değil, <b>her haftanın paydasıydı</b>. Bu iki soru sık sık birbirine karıştırılır ve yanlış çözüme yönlendirir.</p></div>
+  <div class="box care en"><b class="t">Do not conflate two different adequacy questions</b>
+    <p>The number of weeks was sufficient for the correlation test: via Fisher's z, showing a coefficient of this size at 80% power needs about 17 weeks, and 19 were available. What was insufficient was not the number of weeks but <b>the denominator within each week</b>. These two questions are often confused, and the confusion points at the wrong fix.</p></div>
 </div></section>
 
-<!-- ══════════════════════════════════ 11 -->
-<section id="s11"><div class="col">
-  <div class="sh"><span class="n">11</span><h2>Alarm algoritmaları ve spesifikasyon eğrisi</h2></div>
-  <p class="standfirst">Tek bir aberasyon dedektörü seçmek, sonucu en iyi gösteren yöntemi seçme riskini taşır. Bu çalışmada altı standart dedektör birlikte ve önceden kilitlenmiş bir uzlaşma kuralıyla kullanıldı.</p>
-
+<!-- ══════════════════════════════ 13 -->
+<section id="s13"><div class="col">
+  <div class="sh"><span class="n">13</span><h2 class="tr">Alarm algoritmaları ve spesifikasyon eğrisi</h2><h2 class="en">Alarm algorithms and the specification curve</h2></div>
+  <p class="standfirst tr">Tek bir aberasyon dedektörü seçmek, sonucu en iyi gösteren yöntemi seçme riskini taşır. Bu çalışmada altı standart dedektör birlikte ve önceden kilitlenmiş bir uzlaşma kuralıyla kullanıldı.</p>
+  <p class="standfirst en">Choosing a single aberration detector risks choosing whichever one flatters the result. Here six standard detectors were used together under a consensus rule locked in advance.</p>
   <div class="wide"><div class="tw"><table>
-    <thead><tr><th>Dedektör</th><th>Tespit ilkesi</th><th>Temel / ısınma</th><th>Alarm eşiği</th></tr></thead>
+    <thead><tr><th class="tr">Dedektör</th><th class="en">Detector</th><th class="tr">Tespit ilkesi</th><th class="en">Detection principle</th><th class="tr">Temel / ısınma</th><th class="en">Baseline / warm-up</th></tr></thead>
     <tbody>
-      <tr><td class="lead">EARS C1</td><td>Kısa temelli kontrol grafiği</td><td class="n">7 hafta yuvarlanan</td><td class="n">≈3 standart sapma</td></tr>
-      <tr><td class="lead">EARS C2</td><td>C1 + iki haftalık koruma bandı</td><td class="n">koruma sonrası 7 hafta</td><td class="n">≈3 standart sapma</td></tr>
-      <tr><td class="lead">EARS C3</td><td>C2 aşımlarının üç haftalık birikimi</td><td class="n">koruma bandını devralır</td><td class="n">birikimli &gt; 2</td></tr>
-      <tr><td class="lead">NB-CUSUM</td><td>Ardışık sayım toplamı, negatif binom olabilirlik oranı</td><td class="n">7 hafta yuvarlanan ortalama</td><td class="n">akış başına Monte-Carlo kalibrasyonu</td></tr>
-      <tr><td class="lead">EWMA</td><td>Üstel ağırlıklı hareketli ortalama (λ = 0,4)</td><td class="n">7 hafta ortalama/SS</td><td class="n">alarmdan sonra yeniden kurulur</td></tr>
-      <tr><td class="lead">Yüzdelik-95</td><td>Parametrik olmayan dağılım eşiği</td><td class="n">10 hafta kayan pencere</td><td class="n">önceki pencerenin 95. yüzdeliği</td></tr>
-    </tbody>
-  </table></div></div>
+      <tr><td class="lead">EARS C1</td><td><span class="tr">Kısa temelli kontrol grafiği</span><span class="en">Short-baseline control chart</span></td><td><span class="tr">7 hafta yuvarlanan</span><span class="en">7-week rolling</span></td></tr>
+      <tr><td class="lead">EARS C2</td><td><span class="tr">C1 + iki haftalık koruma bandı</span><span class="en">C1 plus a two-week guard band</span></td><td><span class="tr">koruma sonrası 7 hafta</span><span class="en">7 weeks after the guard</span></td></tr>
+      <tr><td class="lead">EARS C3</td><td><span class="tr">C2 aşımlarının üç haftalık birikimi</span><span class="en">Three-week accumulation of C2 exceedances</span></td><td><span class="tr">koruma bandını devralır</span><span class="en">inherits the guard band</span></td></tr>
+      <tr><td class="lead">NB-CUSUM</td><td><span class="tr">Ardışık sayım toplamı, negatif binom olabilirlik oranı</span><span class="en">Cumulative sum on counts, negative-binomial likelihood ratio</span></td><td><span class="tr">7 hafta yuvarlanan ortalama</span><span class="en">7-week rolling mean</span></td></tr>
+      <tr><td class="lead">EWMA</td><td><span class="tr">Üstel ağırlıklı hareketli ortalama (λ = 0,4)</span><span class="en">Exponentially weighted moving average (λ = 0.4)</span></td><td><span class="tr">7 hafta ortalama/SS</span><span class="en">7-week mean/SD</span></td></tr>
+      <tr><td class="lead"><span class="tr">Yüzdelik-95</span><span class="en">95th percentile</span></td><td><span class="tr">Parametrik olmayan dağılım eşiği</span><span class="en">Non-parametric distributional threshold</span></td><td><span class="tr">10 hafta kayan pencere</span><span class="en">10-week sliding window</span></td></tr>
+    </tbody></table></div></div>
 
-  <h3>Uygulama ayrıntıları alarm kümesini değiştirir</h3>
-  <p>Bu tür dedektörleri kullanan çalışmalarda üç karar genellikle yazılmaz, ama sonucu doğrudan etkiler ve <strong>yazılmalıdır</strong>:</p>
-  <ol>
-    <li><strong>Birikimli istatistiğin alarmdan sonra sıfırlanıp sıfırlanmadığı.</strong> Sıfırlanmazsa mandallanır ve yalnızca bir kez ateşler. Bu çalışmada sıfırlamalı ve sıfırlamasız karşılaştırıldığında, incelenen kombinasyonların çoğunda alarm kümesi değişti.</li>
-    <li><strong>Eşiğin akış başına mı ortak mı kalibre edildiği.</strong> Haftada 15 olaylık bir seri ile haftada 115 testlik bir seri aynı eşikte aynı yanlış alarm hızını vermez; ortak eşik, küçük ölçekli seriyi ya aşırı duyarlı ya sağır yapar.</li>
-    <li><strong>Ağırlıklı ortalamanın nasıl tohumlandığı ve alarmdan sonra nasıl yeniden kurulduğu.</strong> Bu ayrıntı tek başına bir haftanın alarm durumunu belirleyebilir.</li>
-  </ol>
+  <h3 class="tr">Uygulama ayrıntıları alarm kümesini değiştirir</h3>
+  <h3 class="en">Implementation details change the alarm set</h3>
+  <p class="tr">Bu tür dedektörleri kullanan çalışmalarda üç karar genellikle yazılmaz, ama sonucu doğrudan etkiler ve <b>yazılmalıdır</b>:</p>
+  <p class="en">Three decisions usually go unwritten in studies using these detectors, yet they change the result directly and <b>should be stated</b>:</p>
+  <ul class="tr">
+    <li><b>Birikimli istatistiğin alarmdan sonra sıfırlanıp sıfırlanmadığı.</b> Sıfırlanmazsa mandallanır ve yalnızca bir kez ateşler. Sıfırlamalı ve sıfırlamasız karşılaştırıldığında, incelenen kombinasyonların çoğunda alarm kümesi değişti.</li>
+    <li><b>Eşiğin akış başına mı ortak mı kalibre edildiği.</b> Haftada 15 olaylık bir seri ile haftada 115 testlik bir seri aynı eşikte aynı yanlış alarm hızını vermez; ortak eşik, küçük ölçekli seriyi ya aşırı duyarlı ya sağır yapar.</li>
+    <li><b>Ağırlıklı ortalamanın nasıl tohumlandığı ve alarmdan sonra nasıl yeniden kurulduğu.</b> Bu ayrıntı tek başına bir haftanın alarm durumunu belirleyebilir.</li>
+  </ul>
+  <ul class="en">
+    <li><b>Whether the cumulative statistic resets after an alarm.</b> Without a reset it latches and fires only once. Comparing reset against no-reset changed the alarm set in most of the combinations examined.</li>
+    <li><b>Whether thresholds are calibrated per stream or shared.</b> A series with 15 events a week and one with 115 tests a week do not give the same false-alarm rate at the same threshold; a shared threshold makes the small-scale series either hypersensitive or deaf.</li>
+    <li><b>How the weighted average is seeded and re-established after an alarm.</b> This detail alone can decide a week's alarm status.</li>
+  </ul>
+  <div class="box stop tr"><b class="t">Isınma dönemi bir sonuç değil, bir kısıttır</b>
+    <p>Yedi haftalık temel penceresi dolmadan hiçbir dedektör alarm veremez. Bu, sezonun ilk yedi haftasında "hiç yanlış alarm vermedik" demenin anlamsız olduğu anlamına gelir — o haftalarda alarm vermek zaten mümkün değildi. Aynı sebeple, birkaç geçmiş sezondan beklenen sayı kestiren yöntemler (Farrington ailesi) tek sezonluk veriye <b>uygulanabilir değildir</b>; denenip elenmedikleri, tasarım gereği dışlandıkları belirtilmelidir.</p></div>
+  <div class="box stop en"><b class="t">The warm-up is a constraint, not a result</b>
+    <p>No detector can raise an alarm before the seven-week baseline window has filled. So "we produced no false alarms in the first seven weeks" is a meaningless claim — an alarm was not possible in those weeks. For the same reason, methods that estimate an expected count from several past seasons (the Farrington family) are <b>not applicable</b> to single-season data; it should be stated that they were excluded by design rather than tried and rejected.</p></div>
 
-  <div class="box care"><b class="t">Isınma dönemi bir sonuç değil, bir kısıttır</b>
-    <p>Yedi haftalık temel penceresi dolmadan hiçbir dedektör alarm veremez. Bu, sezonun ilk yedi haftasında "hiç yanlış alarm vermedik" demenin anlamsız olduğu anlamına gelir — o haftalarda alarm vermek zaten mümkün değildi. Bu çalışmada epidemi öncesi özgüllüğün yalnızca üç değerlendirilebilir haftaya dayandığı açıkça belirtildi.</p>
-  </div>
-  <p>Aynı sebeple, birkaç geçmiş sezondan beklenen sayı kestiren yöntemler (Farrington ailesi) tek sezonluk veriye <strong>uygulanabilir değildir</strong>; denenip elenmedikleri, tasarım gereği dışlandıkları belirtilmelidir.</p>
-
-  <h3>Spesifikasyon eğrisi</h3>
-  <p>Tek bir uyum katsayısı, "çok tarif denendi, en iyisi raporlandı" eleştirisine açıktır. Bunu ortadan kaldırmanın pratik yolu, tarifi önce kilitlemek, sonra <strong>bütün savunulabilir alternatifleri çalıştırıp sonucun o dağılımın neresinde durduğunu göstermektir.</strong></p>
+  <h3 class="tr">Spesifikasyon eğrisi</h3><h3 class="en">The specification curve</h3>
+  <p class="tr">Tek bir uyum katsayısı, "çok tarif denendi, en iyisi raporlandı" eleştirisine açıktır. Bunu ortadan kaldırmanın pratik yolu, <b>tarifi önce kilitlemek</b>, sonra bütün savunulabilir alternatifleri çalıştırıp sonucun o dağılımın neresinde durduğunu göstermektir.</p>
+  <p class="en">A single agreement coefficient is open to the charge that many recipes were tried and the best one reported. The practical remedy is to <b>lock the recipe first</b>, then run every defensible alternative and show where the locked result sits in that distribution.</p>
   <div class="figs">
-    <div class="fig"><b>72</b><span>savunulabilir spesifikasyon</span></div>
-    <div class="fig"><b>0,53</b><span>ortanca uyum</span></div>
-    <div class="fig"><b>0,42–0,72</b><span>çeyrekler arası aralık</span></div>
-    <div class="fig"><b>2 / 72</b><span>kilitli spesifikasyonun sırası</span></div>
+    <div class="fig tr"><b>72</b><span>savunulabilir spesifikasyon</span></div><div class="fig en"><b>72</b><span>defensible specifications</span></div>
+    <div class="fig tr"><b>0,53</b><span>ortanca uyum</span></div><div class="fig en"><b>0.53</b><span>median agreement</span></div>
+    <div class="fig tr"><b>0,42–0,72</b><span>çeyrekler arası aralık</span></div><div class="fig en"><b>0.42–0.72</b><span>interquartile range</span></div>
+    <div class="fig tr"><b>2 / 72</b><span>kilitli spesifikasyonun sırası</span></div><div class="fig en"><b>2 / 72</b><span>rank of the locked specification</span></div>
   </div>
-  <p>Değiştirilen boyutlar: izlenen büyüklük, düzleştirme, temel pencere uzunluğu, alarm eşiği ve uzlaşma kuralı. Kilitli spesifikasyondan daha yüksek puan alan tek alternatif, epidemi haftalarını ayırt edemeyen bir büyüklüğü izliyordu — yani o tek katsayı dışında hiçbir gerekçeyle tercih edilebilir değildi.</p>
+  <p class="tr">Değiştirilen boyutlar: izlenen büyüklük, düzleştirme, temel pencere uzunluğu, alarm eşiği ve uzlaşma kuralı. Kilitli spesifikasyondan daha yüksek puan alan tek alternatif, epidemi haftalarını ayırt edemeyen bir büyüklüğü izliyordu — yani o tek katsayı dışında hiçbir gerekçeyle tercih edilebilir değildi.</p>
+  <p class="en">The dimensions varied were: the quantity tracked, the smoothing, the baseline window length, the alarm threshold and the consensus rule. The only alternative scoring higher than the locked specification tracked a quantity that could not discriminate epidemic weeks — so it was preferable on no ground other than that one coefficient.</p>
 </div></section>
 
-<!-- ══════════════════════════════════ 12 -->
-<section id="s12"><div class="col">
-  <div class="sh"><span class="n">12</span><h2>Güç, kesinlik, tasarım etkisi</h2></div>
-  <p class="standfirst">Tekrarlı ölçüm panellerinde toplanan gözlem sayısı, taşınan bilgi miktarıyla aynı şey değildir.</p>
+<!-- ══════════════════════════════ 14 -->
+<section id="s14"><div class="col">
+  <div class="sh"><span class="n">14</span><h2 class="tr">Model performansı: dört ayrı soru</h2><h2 class="en">Model performance: four separate questions</h2></div>
+  <p class="standfirst tr">Bir modelin doğru kurulmuş olması iyi çalıştığı anlamına gelmez. "Modeliniz ne kadar iyi?" sorusunun tek bir cevabı yoktur — dört ayrı sorunun dört ayrı ölçüsü vardır ve birbirinin yerine geçmezler.</p>
+  <p class="standfirst en">A correctly specified model is not the same as a well-performing one. "How good is your model?" has no single answer — there are four distinct questions with four distinct measures, and they do not substitute for one another.</p>
+  <div class="wide"><div class="tw"><table>
+    <thead><tr><th class="tr">Soru</th><th class="en">Question</th><th class="tr">Ne sorar</th><th class="en">What it asks</th><th class="tr">Ölçüsü</th><th class="en">Measure</th></tr></thead>
+    <tbody>
+      <tr><td class="lead"><span class="tr">Ayrım</span><span class="en">Discrimination</span></td><td><span class="tr">Model, olan ile olmayanı sıralayabiliyor mu?</span><span class="en">Can the model rank those with the event above those without?</span></td><td><span class="tr">AUC / c indeksi</span><span class="en">AUC / c-index</span></td></tr>
+      <tr><td class="lead"><span class="tr">Kalibrasyon</span><span class="en">Calibration</span></td><td><span class="tr">Tahmin ettiği olasılık gerçek sıklığa uyuyor mu?</span><span class="en">Do the predicted probabilities match observed frequencies?</span></td><td><span class="tr">Kalibrasyon eğimi, Brier</span><span class="en">Calibration slope, Brier score</span></td></tr>
+      <tr><td class="lead"><span class="tr">Varsayım</span><span class="en">Assumption</span></td><td><span class="tr">Modelin dayandığı varsayım veride tutuyor mu?</span><span class="en">Does the model's assumption hold in the data?</span></td><td><span class="tr">Schoenfeld PH testi, aşırı yayılım kontrolü</span><span class="en">Schoenfeld PH test, overdispersion check</span></td></tr>
+      <tr><td class="lead"><span class="tr">Spesifikasyon duyarlılığı</span><span class="en">Specification sensitivity</span></td><td><span class="tr">Sonuç, savunulabilir başka seçimlerle değişir mi?</span><span class="en">Does the result change under other defensible choices?</span></td><td><span class="tr">Spesifikasyon eğrisi, ilan edilmiş duyarlılık uyumları</span><span class="en">Specification curve, declared sensitivity fits</span></td></tr>
+    </tbody></table></div></div>
+  <div class="box key tr"><b class="t">Tek cümlelik ayrım</b>
+    <p>Ayrım <em>sıralayabiliyor mu</em>, kalibrasyon <em>doğru büyüklüğü söylüyor mu</em> demektir. Bir model mükemmel ayrım yapıp berbat kalibre olabilir; tersi de mümkündür. İkisi ayrı ayrı raporlanmalıdır.</p></div>
+  <div class="box key en"><b class="t">The distinction in one sentence</b>
+    <p>Discrimination asks <em>can it rank</em>; calibration asks <em>does it get the magnitude right</em>. A model can discriminate perfectly and be badly calibrated, or the reverse. Both must be reported separately.</p></div>
 
-  <div class="eq"><pre>tasarım etkisi
+  <h3 class="tr">Üç ölçü — kısa tanımlar</h3><h3 class="en">Three measures — short definitions</h3>
+  <div class="eq tr"><pre>AUC (c indeksi)
+  Rastgele bir "olan" ile bir "olmayan" alın. Model olana daha
+  yüksek risk verme olasılığı = AUC.
+  0,5 = yazı tura    0,7 kabul edilebilir    0,8 iyi
+
+Brier skoru
+  ortalama( (tahmin edilen olasılık − gerçekleşen 0/1)² )
+  KÜÇÜK iyidir. Ayrımı ve kalibrasyonu tek sayıda birleştirir.
+
+Kalibrasyon eğimi
+  Gerçekleşen sonuçları modelin kendi doğrusal öngörücüsüne
+  geri regresyon edin.
+  1,0 = tahminler doğru ölçekte
+  <1,0 = tahminler AŞIRI uç (aşırı uyum) → küçültme gerekir</pre></div>
+  <div class="eq en"><pre>AUC (c-index)
+  Take a random case and a random non-case. The probability the
+  model assigns the case a higher risk = AUC.
+  0.5 = coin flip    0.7 acceptable    0.8 good
+
+Brier score
+  mean( (predicted probability − observed 0/1)² )
+  SMALLER is better. It combines discrimination and calibration.
+
+Calibration slope
+  Regress the observed outcomes back on the model's own
+  linear predictor.
+  1.0 = predictions on the right scale
+  <1.0 = predictions too EXTREME (overfitting) → shrinkage needed</pre></div>
+  <div class="box care tr"><b class="t">Uydurulan veride eğim neden hep 1,000</b>
+    <p>Çünkü model tam olarak o veriye uydurulmuştur — eğim matematiksel bir zorunluluktur, bilgi taşımaz. Bilgi taşıyan, <b>bootstrap eğimidir</b>. Aynı mantık AUC için de geçerlidir: görünür AUC her zaman iyimserdir, raporlanması gereken iyimserlik düzeltilmiş değerdir (Bölüm 05).</p></div>
+  <div class="box care en"><b class="t">Why the slope is always 1.000 on the fitted data</b>
+    <p>Because the model was fitted to exactly that data — the slope is a mathematical necessity and carries no information. What carries information is the <b>bootstrap slope</b>. The same logic applies to AUC: the apparent value is always optimistic, and what should be reported is the optimism-corrected one (Section 05).</p></div>
+
+  <h3 class="tr">Zayıf ayrım her zaman kötü haber değildir</h3>
+  <h3 class="en">Weak discrimination is not always bad news</h3>
+  <p class="tr">Bildirim eğilimi modelinde düzeltilmiş AUC 0,665 çıktı — zayıf. Ama bu <b>beklenen</b> sonuçtur: kayıt olduktan sonra bildirim neredeyse evrensel olduğu için (%81,6), bildirimciyi bildirmeyenden ayıracak ölçülen bir özellik zaten çok azdır. Kish etkin örneklemin 242'nin 235,4'ü çıkması (Bölüm 10) aynı olgunun ikinci ifadesidir. Bir modelin zayıf ayrımı, bazen ölçülen boyutlarda ayrılacak bir şey olmadığının kanıtıdır.</p>
+  <p class="en">The reporting-propensity model gave a corrected AUC of 0.665 — weak. But that is the <b>expected</b> result: because reporting is nearly universal once someone has registered (81.6%), there is very little measured characteristic left to separate reporters from non-reporters. The Kish effective sample of 235.4 of 242 (Section 10) is the same fact stated a second way. Weak discrimination is sometimes evidence that there is nothing to separate on the measured dimensions.</p>
+</div></section>
+
+<!-- ══════════════════════════════ 15 -->
+<section id="s15"><div class="col">
+  <div class="sh"><span class="n">15</span><h2 class="tr">Bootstrap: beş kullanım, beş gerekçe</h2><h2 class="en">Bootstrap: five uses, five rationales</h2></div>
+  <p class="standfirst tr">"Bootstrap" bu analizde beş ayrı yerde geçiyor ve hepsi aynı şey değil. "Neden bootstrap?" sorusunun cevabı "güven aralığı için" değildir — <b>hangi bootstrap, hangi yapıyı korumak için</b> sorusunun cevabıdır.</p>
+  <p class="standfirst en">"Bootstrap" appears in five separate places in this analysis and they are not the same thing. The answer to "why bootstrap?" is not "for a confidence interval" — it is the answer to <b>which bootstrap, and which structure it has to preserve</b>.</p>
+  <div class="eq tr"><pre>Elinizde tek bir örneklem var. Kestiriminizin örneklemden örnekleme
+ne kadar oynayacağını bilmek istiyorsunuz ama ikinci bir örneklem
+toplayamıyorsunuz.
+
+Bootstrap: KENDİ verinizden yerine koyarak yeniden örnekleyin,
+her seferinde aynı hesabı tekrarlayın, çıkan dağılıma bakın.
+
+→ dağılımın %2,5 ve %97,5 yüzdelikleri = %95 güven aralığı</pre></div>
+  <div class="eq en"><pre>You have one sample. You want to know how much your estimate would
+move from sample to sample, but you cannot collect a second sample.
+
+Bootstrap: resample from YOUR OWN data with replacement,
+repeat the same computation each time, look at the distribution.
+
+→ the 2.5th and 97.5th percentiles = a 95% confidence interval</pre></div>
+  <p class="tr">Neden burada çok işe yarıyor: kullanılan niceliklerin çoğunun kapalı formda bir standart hata formülü ya yok (uyum indeksi, AUC, kappa, tepe gecikmesi) ya da varsayımları bu veride tutmuyor (33 haftalık otokorelasyonlu seri).</p>
+  <p class="en">Why it earns its place here: most of the quantities used either have no closed-form standard error (c-index, AUC, kappa, peak lag) or have one whose assumptions fail in this data (an autocorrelated 33-week series).</p>
+  <div class="wide"><div class="tw"><table>
+    <thead><tr><th class="tr">Nerede</th><th class="en">Where</th><th class="tr">Hangi tür</th><th class="en">Which kind</th><th class="tr">Neyi korumak zorunda</th><th class="en">What it must preserve</th></tr></thead>
+    <tbody>
+      <tr><td class="lead"><span class="tr">İyimserlik düzeltmesi</span><span class="en">Optimism correction</span></td><td><span class="tr">Efron bootstrap</span><span class="en">Efron bootstrap</span></td><td><span class="tr">modelin aynı sabit terim kümesiyle yeniden uydurulması</span><span class="en">refitting the model with the same fixed term set</span></td></tr>
+      <tr><td class="lead"><span class="tr">Faz korelasyonları</span><span class="en">Phase correlations</span></td><td><span class="tr">Hareketli blok bootstrap</span><span class="en">Moving-block bootstrap</span></td><td><span class="tr">haftalık otokorelasyon</span><span class="en">weekly autocorrelation</span></td></tr>
+      <tr><td class="lead"><span class="tr">Tepe gecikmesi</span><span class="en">Peak lag</span></td><td><span class="tr">Eşleştirilmiş, gecikme-koruyan blok bootstrap</span><span class="en">Paired, lag-preserving block bootstrap</span></td><td><span class="tr">çapraz-gecikme yapısı</span><span class="en">the cross-lag structure</span></td></tr>
+      <tr><td class="lead"><span class="tr">AUC güven aralığı</span><span class="en">AUC confidence interval</span></td><td><span class="tr">Sıradan bootstrap</span><span class="en">Ordinary bootstrap</span></td><td><span class="tr">— (haftalar sınıflandırma birimi)</span><span class="en">— (weeks are the classification unit)</span></td></tr>
+      <tr><td class="lead"><span class="tr">İç geçerlilik ekleri</span><span class="en">Internal-validity appendices</span></td><td><span class="tr">Küme (cluster) bootstrap</span><span class="en">Cluster bootstrap</span></td><td><span class="tr">hekim içi bağımlılık</span><span class="en">within-physician dependence</span></td></tr>
+    </tbody></table></div></div>
+  <div class="box stop tr"><b class="t">Kural</b>
+    <p>Bootstrap <b>veri yapısını taklit etmek zorundadır</b>. Yapıyı bozan bir yeniden örnekleme şeması güven aralığını dar gösterir — yani sizi yanıltır. Bu, bootstrap'in "her duruma uyan tek çözüm" sanılmasının en sık yol açtığı hatadır.</p></div>
+  <div class="box stop en"><b class="t">The rule</b>
+    <p>A bootstrap <b>must imitate the data structure</b>. A resampling scheme that destroys the structure produces intervals that are too narrow — that is, it misleads you. This is the most common error caused by treating the bootstrap as a one-size-fits-all solution.</p></div>
+  <div class="eq tr"><pre>SIRADAN BOOTSTRAP (zaman serisinde yanlış)
+  hafta:  W40 W41 W42 W43 W44 W45 ...
+  örnek:  W44 W41 W41 W52 W40 W47 ...   ← komşuluk yok oldu
+  sonuç:  güven aralığı OLMASI GEREKENDEN DAR
+
+HAREKETLİ BLOK BOOTSTRAP (doğru)
+  4 haftalık ardışık bloklar hâlinde çek:
+  örnek:  [W44 W45 W46 W47] [W40 W41 W42 W43] [W49 W50 W51 W52] ...
+  → blok İÇİNDEKİ otokorelasyon korunur</pre></div>
+  <div class="eq en"><pre>ORDINARY BOOTSTRAP (wrong for a time series)
+  week:    W40 W41 W42 W43 W44 W45 ...
+  sample:  W44 W41 W41 W52 W40 W47 ...   ← adjacency destroyed
+  result:  the interval is TOO NARROW
+
+MOVING-BLOCK BOOTSTRAP (right)
+  draw consecutive four-week blocks:
+  sample:  [W44 W45 W46 W47] [W40 W41 W42 W43] [W49 W50 W51 W52] ...
+  → autocorrelation WITHIN a block is preserved</pre></div>
+  <div class="box care tr"><b class="t">Tohum kütüğü</b>
+    <p>Rastgelelik içeren her işlem sabit bir tohumla çalışır ve tohumlar ayrı bir dosyada listelenir: bootstrap'ler ve Monte-Carlo kalibrasyonu için bir tohum, iyimserlik düzeltmesi için bir başkası, ek analizler için üçüncüsü. Böylece raporlanan sayılar <em>yaklaşık</em> değil <em>birebir</em> yeniden üretilir.</p></div>
+  <div class="box care en"><b class="t">The seed register</b>
+    <p>Every operation involving randomness runs from a fixed seed, and the seeds are listed in a separate file: one for the bootstraps and the Monte-Carlo calibration, another for the optimism correction, a third for the supplementary analyses. That is what makes the reported numbers reproducible <em>exactly</em> rather than <em>approximately</em>.</p></div>
+</div></section>
+
+<!-- ══════════════════════════════ 16 -->
+<section id="s16"><div class="col">
+  <div class="sh"><span class="n">16</span><h2 class="tr">Güç, kesinlik, tasarım etkisi</h2><h2 class="en">Power, precision, design effect</h2></div>
+  <p class="standfirst tr">Tekrarlı ölçüm panellerinde toplanan gözlem sayısı, taşınan bilgi miktarıyla aynı şey değildir.</p>
+  <p class="standfirst en">In a repeated-measures panel, the number of observations collected is not the same as the amount of information carried.</p>
+  <div class="eq tr"><pre>tasarım etkisi
   DEFF = 1 + (m − 1) × ICC
        = 1 + (19,1 − 1) × 0,127
        = 3,295
@@ -779,126 +1180,206 @@ blok bootstrap:     ardışık hafta bloklarını çeker
 etkin örneklem = 4.729 / 3,295 ≈ 1.435 kişi-hafta
 
   m   = kişi başına ortalama bildirim sayısı
-  ICC = sınıf içi korelasyon</pre>
-    <p class="gloss">Aynı kişiden gelen iki bildirim, farklı kişilerden gelen iki bildirimden daha benzerdir. Toplanan her üç gözlemden kabaca biri yeni bilgi taşır. Bir katılımcı panelde her güç ifadesi nominal değil, <strong>etkin</strong> örneklem üzerinden yapılmalıdır.</p>
-  </div>
+  ICC = sınıf içi korelasyon</pre></div>
+  <div class="eq en"><pre>design effect
+  DEFF = 1 + (m − 1) × ICC
+       = 1 + (19.1 − 1) × 0.127
+       = 3.295
 
-  <div class="box care"><b class="t">Sık karıştırılan iki nicelik</b>
-    <p>Haftalık serinin sınıf içi korelasyonu (burada 0,127) ile insidans modelinin frailty varyansı (0,322) <strong>aynı şey değildir</strong>. İki farklı model, iki farklı ölçek. Raporlarken hangisinin kastedildiği açıkça yazılmalıdır.</p>
-  </div>
+effective sample = 4,729 / 3.295 ≈ 1,435 person-weeks
 
-  <h3>Panel büyüklüğü hedefi nasıl hesaplanır</h3>
-  <div class="eq"><pre>Cochran (bir oranı ±5 puanla, %95 güvenle):
-   n = z² p(1−p) / e² = 1,96² × 0,25 / 0,05² = 384 bağımsız gözlem
+  m   = mean number of reports per person
+  ICC = intraclass correlation</pre></div>
+  <p class="tr">Aynı kişiden gelen iki bildirim, farklı kişilerden gelen iki bildirimden daha benzerdir. Toplanan her üç gözlemden kabaca biri yeni bilgi taşır. Bir katılımcı panelde her güç ifadesi nominal değil, <b>etkin örneklem</b> üzerinden yapılmalıdır.</p>
+  <p class="en">Two reports from the same person are more alike than two reports from different people. Roughly one in every three observations collected carries new information. In a participatory panel every power statement must be made on the <b>effective</b> sample, not the nominal one.</p>
+  <div class="box stop tr"><b class="t">Üç ayrı "tasarım etkisi" var — karıştırmayın</b>
+    <p><b>1,028</b> — ağırlıklandırmanın kesinlik maliyeti (Bölüm 10).<br>
+       <b>3,295</b> — aynı hekimden tekrarlı gözlemler (bu bölüm).<br>
+       <b>0,322</b> — frailty varyansı, ölçülmemiş bireysel yatkınlık (Bölüm 06).<br>
+       Üçü farklı modellerin farklı ölçeklerdeki büyüklükleridir; birbirinin yerine kullanılamaz. Raporlarken hangisinin kastedildiği açıkça yazılmalıdır.</p></div>
+  <div class="box stop en"><b class="t">There are three different "design effects" — do not conflate them</b>
+    <p><b>1.028</b> — the precision cost of weighting (Section 10).<br>
+       <b>3.295</b> — repeated observations from the same physician (this section).<br>
+       <b>0.322</b> — the frailty variance, unmeasured individual susceptibility (Section 06).<br>
+       These are quantities from three different models on three different scales; they are not interchangeable. Which one is meant has to be stated.</p></div>
+
+  <h3 class="tr">Panel büyüklüğü hedefi nasıl hesaplanır</h3>
+  <h3 class="en">How to compute a panel-size target</h3>
+  <div class="eq tr"><pre>Cochran (bir oranı ±5 puanla, %95 güvenle):
+  n = z² p(1−p) / e² = 1,96² × 0,25 / 0,05² = 384 bağımsız gözlem
 
 tasarım etkisiyle şişir:
-   384 × 3,295 ≈ 1.267 eşdeğer haftalık bildirim
+  384 × 3,295 ≈ 1.267 eşdeğer haftalık bildirim
 
 kişiye çevir (kişi başına ~19 bildirim):
-   ≈ 70 sürekli bildirim yapan kişi
+  ≈ 70 sürekli bildirim yapan kişi
 
 + alt bölge kestirimi ve gerçekçi katılım kaybı
-   ≈ 824 kayıtlı kişi  ← ölçeklendirme hedefi</pre></div>
+  ≈ 824 kayıtlı kişi   ← ölçeklendirme hedefi</pre></div>
+  <div class="eq en"><pre>Cochran (a proportion to ±5 points, 95% confidence):
+  n = z² p(1−p) / e² = 1.96² × 0.25 / 0.05² = 384 independent observations
 
-  <h3>Olay/değişken bütçesi: manşet oran yanıltır</h3>
-  <p>Bir modelin kaç terim taşıyabileceği, olay sayısının terim sayısına oranıyla değerlendirilir; geleneksel taban 10'dur. Ancak <strong>bağlayıcı kısıt en seyrek maruz hücredir</strong>, manşet oran değil.</p>
+inflate by the design effect:
+  384 × 3.295 ≈ 1,267 equivalent weekly reports
+
+convert to people (~19 reports each):
+  ≈ 70 continuously reporting people
+
++ sub-regional estimation and realistic attrition
+  ≈ 824 registrants   ← the scale-up target</pre></div>
+
+  <h3 class="tr">Olay/değişken bütçesi: manşet oran yanıltır</h3>
+  <h3 class="en">The events-per-variable budget: the headline ratio misleads</h3>
   <div class="wide"><div class="tw"><table>
-    <thead><tr><th>Model</th><th class="n">Manşet oran</th><th>Bağlayıcı hücre</th><th class="n">Gerçek oran</th></tr></thead>
+    <thead><tr><th class="tr">Model</th><th class="en">Model</th><th class="tr">Manşet oran</th><th class="en">Headline ratio</th><th class="tr">Bağlayıcı hücre</th><th class="en">Binding cell</th><th class="tr">Gerçek oran</th><th class="en">Real ratio</th></tr></thead>
     <tbody>
-      <tr><td class="lead">Birincil insidans modeli</td><td class="n">38,0</td><td>Güncel tütün kullanımı: 49 kişi, 89 epizod</td><td class="n">6,85</td></tr>
-      <tr><td class="lead">Aşılanma modeli (9 terim)</td><td class="n">10,0</td><td>Önceki sezon sağlık başvurusu: 18 olay</td><td class="n">2,00</td></tr>
-    </tbody>
-  </table></div></div>
-  <p>İkinci satır, bir modelin neden "tek bir etkinin kestirimi" değil "terim kümesinin betimi" olarak sunulması gerektiğini gösterir. Bu ayrımı yazmak, sonradan aşırı yorumlanmayı engeller.</p>
-
-  <div class="box stop"><b class="t">Sonradan güç hesabı hakkında</b>
-    <p>Gözlenen p değerinden gözlenen güç hesaplayıp bulguyu yeniden test etmek metodolojik olarak hatalıdır. Bu çalışmada raporlanan şey farklıdır: <strong>tasarımın çözebileceği etki büyüklüğü</strong> — minimum saptanabilir etki ve ulaşılan kesinlik. Bu ileriye dönük bir ifadedir ve bir sonraki çalışmanın ne kadar büyük olması gerektiğini söyler.</p>
-  </div>
+      <tr><td class="lead"><span class="tr">Birincil insidans modeli</span><span class="en">Primary incidence model</span></td><td>38,0</td><td><span class="tr">Güncel tütün kullanımı: 49 kişi, 89 epizod</span><span class="en">Current tobacco use: 49 people, 89 episodes</span></td><td><b>6,85</b></td></tr>
+      <tr><td class="lead"><span class="tr">Aşılanma modeli (9 terim)</span><span class="en">Vaccination model (9 terms)</span></td><td>10,0</td><td><span class="tr">Önceki sezon sağlık başvurusu: 18 olay</span><span class="en">Prior-season care-seeking: 18 events</span></td><td><b>2,00</b></td></tr>
+    </tbody></table></div></div>
+  <p class="tr">İkinci satır, bir modelin neden "tek bir etkinin kestirimi" değil <b>"terim kümesinin betimi"</b> olarak sunulması gerektiğini gösterir. Bu ayrımı yazmak, sonradan aşırı yorumlanmayı engeller.</p>
+  <p class="en">The second row shows why such a model has to be presented as a <b>description of a term set</b> rather than as the estimate of any single effect. Writing that distinction down is what prevents over-reading later.</p>
+  <div class="box care tr"><b class="t">Sonradan güç hesabı hakkında</b>
+    <p>Gözlenen p değerinden gözlenen güç hesaplayıp bulguyu yeniden test etmek metodolojik olarak hatalıdır. Raporlanması gereken şey farklıdır: <b>tasarımın çözebileceği etki büyüklüğü</b> — minimum saptanabilir etki ve ulaşılan kesinlik. Bu ileriye dönük bir ifadedir ve bir sonraki çalışmanın ne kadar büyük olması gerektiğini söyler.</p></div>
+  <div class="box care en"><b class="t">On post-hoc power</b>
+    <p>Computing observed power from an observed p-value and re-testing the finding is methodologically wrong. What should be reported instead is <b>the effect size the design can resolve</b> — the minimum detectable effect and the precision achieved. That is a forward-looking statement, and it tells you how large the next study has to be.</p></div>
 </div></section>
 
-<!-- ══════════════════════════════════ 13 -->
-<section id="s13"><div class="col">
-  <div class="sh"><span class="n">13</span><h2>Tekrarlanabilirlik altyapısı</h2></div>
-  <p class="standfirst">Bireysel veri paylaşılamadığında bile analiz tam olarak denetlenebilir hâle getirilebilir. Gereken şey, kodun tükettiği her değişkenin tanımlı olmasıdır.</p>
-
-  <div class="pair">
-    <div class="box"><b class="t">Dil bölüşümü konuya göre değil, rutine göre</b>
-      <p>Paylaşılan gama-frailty modelleri, uyarlamalı Gauss–Hermite kuadratürüyle kurulan rastgele etkili modeller, genelleştirilmiş kestirim denklemleri ve negatif binom sayım modelleri R'da; betimsel analizler, lojistik ve ordinal modeller, sistem düzeyi uyum çalışması ve dedektör kümesi Python'da.</p>
-    </div>
-    <div class="box"><b class="t">Tohum kütüğü</b>
-      <p>Rastgelelik içeren her işlem sabit bir tohumla çalışır ve tohumlar ayrı bir dosyada listelenir: bootstrap'ler ve Monte-Carlo kalibrasyonu için bir tohum, iyimserlik düzeltmesi için bir başkası, ek analizler için üçüncüsü. Böylece raporlanan sayılar yaklaşık değil <strong>birebir</strong> yeniden üretilir.</p>
-    </div>
-  </div>
-
-  <h4>Depoda ne bulunur</h4>
-  <ul>
-    <li><strong>Çıktıları gömülü defterler</strong> — her raporlanan sayı, onu üreten hücreye kadar izlenebilir.</li>
-    <li><strong>Dilden bağımsız sözde kod</strong> — analizin üçüncü bir ortamda, defterleri okumadan yeniden kurulabilmesi için.</li>
-    <li><strong>Kod kitabı</strong> — ham ve türetilmiş her değişkenin tanımı, hem makine okunur hem belge biçiminde.</li>
-    <li><strong>Spesifikasyon dosyaları</strong> — dedektör tanımları, tohum kütüğü, spesifikasyon eğrisi çıktıları.</li>
-    <li><strong>Ortam tanımları</strong> — paket sürümleriyle birlikte, iki dil için de.</li>
-    <li><strong>Eşleme belgesi</strong> — her analizi, sonucunun raporlandığı yere bağlar.</li>
+<!-- ══════════════════════════════ 17 -->
+<section id="s17"><div class="col">
+  <div class="sh"><span class="n">17</span><h2 class="tr">Tekrarlanabilirlik altyapısı</h2><h2 class="en">Reproducibility infrastructure</h2></div>
+  <p class="standfirst tr">Bireysel veri paylaşılamadığında bile analiz tam olarak denetlenebilir hâle getirilebilir. Gereken şey, kodun tükettiği her değişkenin tanımlı olmasıdır.</p>
+  <p class="standfirst en">Even when individual-level data cannot be shared, an analysis can be made fully auditable. What that takes is a definition for every variable the code consumes.</p>
+  <div class="box key tr"><b class="t">Dil bölüşümü konuya göre değil, rutine göre</b>
+    <p>Paylaşılan gama-frailty modelleri ve uyarlamalı Gauss–Hermite kuadratürüyle kurulan rastgele etkili modeller R'da, çünkü kullanılan Python yığınında eşdeğerleri yok; genelleştirilmiş kestirim denklemleri de R tarafında. Betimsel analizler, lojistik ve ordinal modeller, sistem düzeyi uyum çalışması ve dedektör kümesi Python'da. Negatif binom sayım modelleri, Poisson uyumlarının yayılım kontrolü olarak <em>her iki tarafta da</em> kuruldu.</p></div>
+  <div class="box key en"><b class="t">The split is by fitting routine, not by topic</b>
+    <p>The shared gamma-frailty models and the random-effects models fitted by adaptive Gauss–Hermite quadrature are in R, because the Python stack used here has no equivalent; the generalised estimating equations are on the R side too. Descriptive analyses, the logistic and ordinal models, the system-level concordance work and the detector ensemble are in Python. Negative-binomial count models were fitted on <em>both</em> sides, as a dispersion check on the Poisson fits.</p></div>
+  <h3 class="tr">Depoda ne bulunur</h3><h3 class="en">What the repository contains</h3>
+  <ul class="tr">
+    <li><b>Çıktıları gömülü defterler</b> — her raporlanan sayı, onu üreten hücreye kadar izlenebilir; her defterin çalıştırma kütüğü de yanında.</li>
+    <li><b>Analiz envanteri</b> — her analiz için model, hipotez, sonlanım, popülasyon ve örneklem büyüklüğü, satır satır.</li>
+    <li><b>Kanonik spesifikasyonlar</b> — birden fazla yerde raporlanan her niceliğin tek doğru değeri, böylece iki kez anılan bir sayı iki kez aynı anılır.</li>
+    <li><b>Kod kitabı</b> — beş veri sayfasında 192 değişken üzerinde 263 girdi; her biri için etiket, tip, izinli değerler, türetme kuralı ve onu tüketen analizler.</li>
+    <li><b>Toplama döngüsü sözde kodu</b> — haftalık ritmin dilden bağımsız tarifi, böylece araç başka bir zamanlayıcı ve posta katmanında yeniden kurulabilir.</li>
+    <li><b>Nedensel diyagramlar</b> — her hipotezin tanımlama stratejisinin arkasındaki yönlü çevrimsiz çizgeler.</li>
+    <li><b>Ortam tanımları ve denetim kayıtları</b> — paket sürümleri, ve kod kitabının veri kümesine karşı denetimi.</li>
   </ul>
-
-  <div class="box good"><b class="t">Veri paylaşılamıyorsa ne yapılır</b>
-    <p>Küçük bir profesyonel kohortta uzmanlık, kurum tipi, bölge, hane bileşimi ve haftalık bildirim örüntüsünün <em>bileşimi</em>, doğrudan tanımlayıcılar kaldırılsa bile yeniden tanımlayıcı olabilir. Bu durumda bireysel veri yatırılmaz. Ancak kod kitabı kodun tükettiği her değişkeni tanımladığı sürece, <strong>kod veri elde olmadan da tam olarak okunabilir ve denetlenebilir.</strong> Erişim kısıtı, tekrarlanabilirliğin tamamen terk edilmesini gerektirmez.</p>
-  </div>
+  <ul class="en">
+    <li><b>Notebooks with outputs embedded</b> — every reported number traceable to the cell that produced it, each with its run log alongside.</li>
+    <li><b>An analysis inventory</b> — one row per analysis giving the model, hypothesis, outcome, population and sample size.</li>
+    <li><b>Canonical specifications</b> — the single correct value of every quantity reported in more than one place, so a figure quoted twice is quoted identically.</li>
+    <li><b>A codebook</b> — 263 entries over 192 variables across five dataset sheets; label, type, permitted values, derivation rule and the analyses that consume each.</li>
+    <li><b>Collection-pipeline pseudocode</b> — a language-neutral description of the weekly rhythm, so the instrument can be rebuilt on another scheduler and mail layer.</li>
+    <li><b>Causal diagrams</b> — the directed acyclic graphs behind the identification strategy for each hypothesis.</li>
+    <li><b>Environment files and audit records</b> — package versions, and the codebook checked against the dataset.</li>
+  </ul>
+  <div class="box care tr"><b class="t">Veri paylaşılamıyorsa ne yapılır</b>
+    <p>Küçük bir profesyonel kohortta uzmanlık, kurum tipi, bölge, hane bileşimi ve haftalık bildirim örüntüsünün <em>bileşimi</em>, doğrudan tanımlayıcılar kaldırılsa bile yeniden tanımlayıcı olabilir. Bu durumda bireysel veri yatırılmaz. Ancak kod kitabı kodun tükettiği her değişkeni tanımladığı sürece, kod veri elde olmadan da tam olarak <b>okunabilir ve denetlenebilir</b>. Erişim kısıtı, tekrarlanabilirliğin tamamen terk edilmesini gerektirmez.</p></div>
+  <div class="box care en"><b class="t">What to do when the data cannot be shared</b>
+    <p>In a small professional cohort the <em>combination</em> of specialty, institution type, region, household composition and weekly reporting pattern can be re-identifying even after direct identifiers are removed. In that case individual-level data are not deposited. But as long as the codebook defines every variable the code consumes, the code can still be <b>read and audited in full</b> without the data in hand. An access restriction does not require abandoning reproducibility altogether.</p></div>
 </div></section>
 
-<!-- ══════════════════════════════════ 14 -->
-<section id="s14"><div class="col">
-  <div class="sh"><span class="n">14</span><h2>Bu tasarımı yeniden kullanmak</h2></div>
-  <p class="standfirst">Benzer bir sistem kurmayı düşünenler için: neyin doğrudan kopyalanabileceği, neyin bağlama göre değişmesi gerektiği ve bu uygulamada neyin farklı yapılmasının isteneceği.</p>
+<!-- ══════════════════════════════ 18 -->
+<section id="s18"><div class="col">
+  <div class="sh"><span class="n">18</span><h2 class="tr">Bu tasarımı yeniden kullanmak</h2><h2 class="en">Reusing this design</h2></div>
+  <p class="standfirst tr">Benzer bir sistem kurmayı düşünenler için: neyin doğrudan kopyalanabileceği, neyin bağlama göre değişmesi gerektiği ve bu uygulamada neyin farklı yapılmasının isteneceği.</p>
+  <p class="standfirst en">For anyone considering a similar system: what can be copied directly, what has to change with context, and what we would do differently.</p>
 
-  <h3>Doğrudan aktarılabilir olanlar</h3>
-  <ul>
-    <li><strong>Dört bileşenli mimari ve iki depolu ayrım.</strong> Kimlik bir yerde, sağlık verisi başka yerde, ikisini yalnızca kişisel hiçbir şeyden türetilmemiş rastgele bir jeton bağlar. Belirli bir sağlayıcıya bağlı değildir.</li>
-    <li><strong>Sabit haftalık ritim.</strong> Öngörülebilir bir hatırlatma, açık bir yanıt penceresi ve kısa bir form. Bildirim yükü, paydayı ayakta tutan tek değişkendir.</li>
-    <li><strong>Analiz planının önceden yazılması.</strong> Popülasyon, kestirici, düzeltme kümesi ve spesifikasyon, veri görülmeden sabitlenir. Maliyeti sıfırdır.</li>
-    <li><strong>Katılımı bir sonuç olarak ölçmek.</strong> Kimin bildirim yaptığı, ne sıklıkla yaptığı ve bunun ölçülen insidansla ilişkisi ayrı analizler olarak planlanmalıdır.</li>
-    <li><strong>Spesifikasyon eğrisi mantığı.</strong> Kilitle, sonra bütün savunulabilir alternatifleri çalıştır ve sonucun dağılımdaki yerini göster.</li>
+  <h3 class="tr">Doğrudan aktarılabilir olanlar</h3><h3 class="en">Directly transferable</h3>
+  <ul class="tr">
+    <li><b>Dört bileşenli mimari ve iki depolu ayrım.</b> Kimlik bir yerde, sağlık verisi başka yerde, ikisini yalnızca kişisel hiçbir şeyden türetilmemiş rastgele bir jeton bağlar.</li>
+    <li><b>Sabit haftalık ritim.</b> Öngörülebilir bir hatırlatma, açık bir yanıt penceresi ve kısa bir form. Bildirim yükü, paydayı ayakta tutan tek değişkendir.</li>
+    <li><b>Analiz planının önceden yazılması.</b> Popülasyon, kestirici, düzeltme kümesi ve spesifikasyon, veri görülmeden sabitlenir. Maliyeti sıfırdır.</li>
+    <li><b>Katılımı bir sonuç olarak ölçmek.</b> Kimin bildirim yaptığı, ne sıklıkla yaptığı ve bunun ölçülen insidansla ilişkisi ayrı analizler olarak planlanmalıdır.</li>
+    <li><b>Spesifikasyon eğrisi mantığı.</b> Kilitle, sonra bütün savunulabilir alternatifleri çalıştır ve sonucun dağılımdaki yerini göster.</li>
+    <li><b>Bootstrap'i veri yapısına göre seçmek.</b> Zaman serisinde blok, tekrarlı ölçümde küme, model performansında iyimserlik düzeltmesi.</li>
+  </ul>
+  <ul class="en">
+    <li><b>The four-component architecture and the two-store split.</b> Identity in one place, health data in another, joined only by a random token derived from nothing personal.</li>
+    <li><b>A fixed weekly rhythm.</b> A predictable reminder, an explicit response window and a short form. Reporting burden is the one variable that keeps the denominator alive.</li>
+    <li><b>Writing the analysis plan first.</b> Population, estimator, adjustment set and specification fixed before the data are seen. It costs nothing.</li>
+    <li><b>Measuring participation as an outcome.</b> Who reports, how often, and how that relates to measured incidence should be planned as separate analyses.</li>
+    <li><b>The specification-curve logic.</b> Lock the recipe, then run every defensible alternative and show where the locked result sits.</li>
+    <li><b>Choosing the bootstrap to match the data structure.</b> Block for a time series, cluster for repeated measures, optimism correction for model performance.</li>
   </ul>
 
-  <h3>Bağlama göre değişmesi gerekenler</h3>
-  <ul>
-    <li><strong>Olgu tanımı</strong>, karşılaştırılacak yerleşik sistemin kullandığıyla aynı olmalıdır. Aksi hâlde iki akış farklı şeyleri ölçer ve karşılaştırma meşru değildir.</li>
-    <li><strong>Faz sınırları ve epidemi eşikleri</strong> dış bir kaynaktan, tercihen çok sezonlu tarihsel veriden gelmelidir; kendi verinizden türetirseniz değerlendirme döngüsel olur.</li>
-    <li><strong>Dedektör eşikleri</strong> her akış için ayrı kalibre edilmelidir; sayım ölçekleri farklıysa ortak eşik kullanılamaz.</li>
-    <li><strong>Koruma gecikmesi</strong> gibi zamanla değişen maruziyet parametreleri, ilgili biyolojik gerekçeyle ve analiz öncesinde belirlenmelidir.</li>
+  <h3 class="tr">Bağlama göre değişmesi gerekenler</h3><h3 class="en">What has to change with context</h3>
+  <ul class="tr">
+    <li><b>Olgu tanımı</b>, karşılaştırılacak yerleşik sistemin kullandığıyla aynı olmalıdır. Aksi hâlde iki akış farklı şeyleri ölçer ve karşılaştırma meşru değildir.</li>
+    <li><b>Faz sınırları ve epidemi eşikleri</b> dış bir kaynaktan, tercihen çok sezonlu tarihsel veriden gelmelidir; kendi verinizden türetirseniz değerlendirme döngüsel olur.</li>
+    <li><b>Dedektör eşikleri</b> her akış için ayrı kalibre edilmelidir; sayım ölçekleri farklıysa ortak eşik kullanılamaz.</li>
+    <li><b>Koruma gecikmesi</b> gibi zamanla değişen maruziyet parametreleri, biyolojik gerekçeyle ve analiz öncesinde belirlenmelidir.</li>
+  </ul>
+  <ul class="en">
+    <li><b>The case definition</b> must match the one used by the established system you compare against. Otherwise the two streams measure different things and the comparison is not legitimate.</li>
+    <li><b>Phase boundaries and epidemic thresholds</b> should come from an external source, preferably multi-season historical data; derive them from your own series and the evaluation becomes circular.</li>
+    <li><b>Detector thresholds</b> must be calibrated per stream; a shared threshold cannot be used when the count scales differ.</li>
+    <li><b>Time-varying exposure parameters</b> such as a protection lag must be set on biological grounds and before the analysis.</li>
   </ul>
 
-  <h3>Bu uygulamada farklı yapılması istenecekler</h3>
-  <div class="box care"><b class="t">Dört somut nokta</b>
-    <p><strong>1 · Etken sınıflaması doğrulanmalı.</strong> Bu çalışmada hastalık nedeni, kişinin kendi körlenmemiş klinik kanaatiydi ve epizod başına tek bir atama yapıldı; ikinci okuyucu olmadığı için uyum katsayısı hesaplanamıyor. Küçük bir öz-sürüntü alt çalışması bu sınırı kapatırdı ve <em>baştan planlanmalıydı</em>.</p>
-    <p><strong>2 · Panel, haftalık payda hedefine göre boyutlandırılmalı.</strong> Uyum tavanını belirleyen şey kişi sayısı değil, haftalık olay sayısıdır. Hedef tavan baştan seçilip gereken panel büyüklüğü ondan geriye doğru hesaplanabilir.</p>
-    <p><strong>3 · Birden fazla bildirim yolu olmalı.</strong> Tek yolun e-posta bağlantısı olması, katılımı belirli bir dijital erişim profiline sınırlar. Genel topluma açılacak bir tasarımda bu doğrudan bir temsil sorunudur.</p>
-    <p><strong>4 · Birlikte çalışabilirlik baştan tasarlanmalı.</strong> Bu uygulamada sendromik kümeler dışsal bir terminolojiye (ICD-10, SNOMED CT, LOINC gibi) eşlenmedi ve makine okunur bir değişim arayüzü kurulmadı. Ulusal bir sisteme bağlanma hedefi varsa, bu bir sonradan ekleme değil bir gereksinim olarak yazılmalıdır.</p>
-  </div>
-
-  <div class="box good"><b class="t">Genel ilke</b>
-    <p>Bu tasarımın en aktarılabilir yanı istatistiksel değil, yazımsaldır: <strong>her sınırın yanına onu sınırlayan sayıyı yazmak.</strong> "Az sayıda olay vardı" yerine "91 olayın 21'i maruziyet altındaydı ve tasarımın %80 güçle saptayabileceği en küçük etki gözlenen etkiye neredeyse eşitti" demek, aynı sınırı savunulabilir bir ifadeye dönüştürür.</p>
-  </div>
+  <h3 class="tr">Bu uygulamada farklı yapılması istenecekler</h3>
+  <h3 class="en">What we would do differently</h3>
+  <div class="box stop tr"><b class="t">Dört somut nokta</b>
+    <p><b>1 · Etken sınıflaması doğrulanmalı.</b> Hastalık nedeni, kişinin kendi körlenmemiş klinik kanaatiydi ve epizod başına tek bir atama yapıldı; ikinci okuyucu olmadığı için uyum katsayısı hesaplanamıyor. Küçük bir öz-sürüntü alt çalışması bu sınırı kapatırdı ve baştan planlanmalıydı.<br><br>
+       <b>2 · Panel, haftalık payda hedefine göre boyutlandırılmalı.</b> Uyum tavanını belirleyen şey kişi sayısı değil, haftalık olay sayısıdır. Hedef tavan baştan seçilip gereken panel büyüklüğü ondan geriye doğru hesaplanabilir.<br><br>
+       <b>3 · Birden fazla bildirim yolu olmalı.</b> Tek yolun e-posta bağlantısı olması, katılımı belirli bir dijital erişim profiline sınırlar.<br><br>
+       <b>4 · Birlikte çalışabilirlik baştan tasarlanmalı.</b> Sendromik kümeler dışsal bir terminolojiye (ICD-10, SNOMED CT, LOINC) eşlenmedi ve makine okunur bir değişim arayüzü kurulmadı. Ulusal bir sisteme bağlanma hedefi varsa, bu bir sonradan ekleme değil bir gereksinim olarak yazılmalıdır.</p></div>
+  <div class="box stop en"><b class="t">Four concrete points</b>
+    <p><b>1 · The agent classification should be validated.</b> The cause of illness was the person's own unblinded clinical judgement, with a single assignment per episode; with no second reader, no agreement coefficient can be computed. A small self-swab sub-study would have closed that gap and should have been planned from the start.<br><br>
+       <b>2 · Size the panel to a weekly-denominator target.</b> What sets the agreement ceiling is not the number of people but the number of events per week. Choose the target ceiling first and compute the panel size backwards from it.<br><br>
+       <b>3 · Provide more than one reporting route.</b> Making an e-mail link the only route confines participation to a particular digital-access profile.<br><br>
+       <b>4 · Design interoperability in from the start.</b> The syndromic clusters were not mapped to an external terminology (ICD-10, SNOMED CT, LOINC) and no machine-readable exchange interface was built. If connecting to a national system is a goal, that belongs in the requirements rather than as a later addition.</p></div>
+  <div class="box key tr"><b class="t">Genel ilke</b>
+    <p>Bu tasarımın en aktarılabilir yanı istatistiksel değil, <b>yazımsaldır</b>: her sınırın yanına onu sınırlayan sayıyı yazmak. "Az sayıda olay vardı" yerine "91 olayın 21'i maruziyet altındaydı ve tasarımın %80 güçle saptayabileceği en küçük etki gözlenen etkiye neredeyse eşitti" demek, aynı sınırı savunulabilir bir ifadeye dönüştürür.</p></div>
+  <div class="box key en"><b class="t">The general principle</b>
+    <p>The most transferable thing about this design is not statistical but <b>editorial</b>: put the number that bounds a limitation next to the limitation. Replacing "there were few events" with "21 of the 91 events arose under exposure, and the smallest effect the design could detect at 80% power was almost exactly the effect observed" turns the same limit into a defensible statement.</p></div>
 </div></section>
 
-<!-- ══════════════════════════════════ footer -->
-<footer class="col">
-  <h3>Kaynak, atıf ve yeniden kullanım</h3>
-  <p>Bu sayfa, SALGINTR doktora tezinin yöntem bölümünden kamuya açık bir özet olarak hazırlanmıştır. Sayılar tezin ilgili bölümlerinden alınmıştır; yöntemin tam ayrıntısı, kod, sözde kod ve kod kitabı proje deposundadır.</p>
-  <div class="cite">SALGINTR — Development and Evaluation of a Digital Participatory
+<!-- ══════════════════════════════ kaynak -->
+<section><div class="col">
+  <div class="src">
+    <h2 class="tr">Kaynak, atıf ve yeniden kullanım</h2>
+    <h2 class="en">Source, citation and reuse</h2>
+    <p class="tr">Bu sayfa, SALGINTR doktora tezinin yöntem bölümünden kamuya açık bir özet olarak hazırlanmıştır. Sayılar tezin ilgili bölümlerinden alınmıştır; yöntemin tam ayrıntısı, kod ve kod kitabı proje deposundadır.</p>
+    <p class="en">This page is a public summary of the methods chapter of the SALGINTR doctoral thesis. The numbers are taken from the corresponding sections of the thesis; the full detail of the method, the code and the codebook are in the project repository.</p>
+    <div class="cite"><pre>SALGINTR — Development and Evaluation of a Digital Participatory
 Surveillance System to Monitor Influenza-like Illness in Türkiye,
 Based on Self-reported Data from a Physician Cohort.
-Orta Doğu Teknik Üniversitesi, Enformatik Enstitüsü.
+Middle East Technical University, Graduate School of Informatics.
 
-Kod ve dokümantasyon: github.com/salgintr/SALGINTR-2025-2026-analysis
-Sistem ve pano: salgin.com.tr</div>
-  <p class="small">Bu sayfadaki kod parçaları, tarif edilen spesifikasyonların okunabilir karşılıklarıdır; analiz deposundaki kodun birebir kopyası değildir. Çalışma, Orta Doğu Teknik Üniversitesi İnsan Araştırmaları Etik Kurulu onayıyla yürütülmüş, sağlık verisi açık rızaya dayanarak işlenmiş ve bireysel düzeyde veri hiçbir kuruma açıklanmamıştır.</p>
-</footer>
+Code and documentation: github.com/salgintr/SALGINTR-2025-2026-analysis
+System and dashboard:   salgin.com.tr</pre></div>
+    <p class="small tr">Bu sayfadaki kod parçaları ve şemalar, tarif edilen spesifikasyonların okunabilir karşılıklarıdır; analiz deposundaki kodun birebir kopyası değildir. Çalışma, Orta Doğu Teknik Üniversitesi İnsan Araştırmaları Etik Kurulu onayıyla yürütülmüş, sağlık verisi açık rızaya dayanarak işlenmiş ve bireysel düzeyde veri hiçbir kuruma açıklanmamıştır.</p>
+    <p class="small en">The code fragments and schematics on this page are readable equivalents of the specifications described; they are not verbatim copies of the code in the analysis repository. The study was conducted with the approval of the Middle East Technical University Human Research Ethics Committee, health data were processed on the basis of explicit consent, and no individual-level data were disclosed to any institution.</p>
+  </div>
+</div></section>
 
-</div>
+</div><!-- /page -->
+</div><!-- /doc -->
 
 <script>
 (function(){
-  "use strict";
-  document.documentElement.lang = "tr";
+  var doc = document.getElementById('doc'),
+      bTR = document.getElementById('btn-tr'),
+      bEN = document.getElementById('btn-en');
+
+  function apply(lang){
+    doc.setAttribute('data-lang', lang);
+    bTR.setAttribute('aria-pressed', lang === 'tr');
+    bEN.setAttribute('aria-pressed', lang === 'en');
+    document.title = (lang === 'en')
+      ? 'SALGINTR Methods Notes'
+      : 'SALGINTR Yöntem Notları';
+    try { localStorage.setItem('salgintr-lang', lang); } catch(e){}
+  }
+
+  var saved = null;
+  try { saved = localStorage.getItem('salgintr-lang'); } catch(e){}
+  if (saved !== 'tr' && saved !== 'en'){
+    saved = (navigator.language || '').toLowerCase().indexOf('tr') === 0 ? 'tr' : 'en';
+  }
+  apply(saved);
+
+  bTR.addEventListener('click', function(){ apply('tr'); });
+  bEN.addEventListener('click', function(){ apply('en'); });
 })();
 </script>
