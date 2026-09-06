@@ -8,6 +8,10 @@ abstract: >-
 type: software
 license: MIT
 repository-code: https://github.com/salgintr/SALGINTR-2025-2026-analysis
+authors:
+  - family-names: Öntaş
+    given-names: Eray
+    orcid: https://orcid.org/0000-0002-0150-0694
 keywords:
   - participatory surveillance
   - influenza-like illness
@@ -15,6 +19,14 @@ keywords:
   - syndromic surveillance
 preferred-citation:
   type: article
+  authors:
+    - family-names: Öntaş
+      given-names: Eray
+      orcid: https://orcid.org/0000-0002-0150-0694
+    - family-names: Güçlü
+      given-names: Hasan
+    - family-names: Aydın Son
+      given-names: Yeşim
   title: >-
     SALGINTR: development and early evaluation of a low-cost cloud-based digital participatory
     surveillance system for influenza-like illness among physicians in Türkiye — a proof of
