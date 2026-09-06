@@ -19,7 +19,7 @@ use. **It does not contain the data** — see [Data availability](#data-availabi
 |---|---|
 | `notebooks/` | The two analysis notebooks, one per language, with outputs embedded as executed, and the verbatim run log of each |
 | `codebook/` | All 263 variables the analyses consume, across the five dataset sheets: label, type, permitted values, derivation rule, and which analyses use each one |
-| `specs/` | The analysis inventory, one row per analysis, and the canonical value of every quantity the manuscript reports more than once |
+| `specs/` | The analysis inventory, one row per analysis; the canonical value of every quantity the manuscript reports more than once; and the aberration-detector specification |
 | `pseudocode/` | The collection-pipeline pseudocode |
 | `figures/` | The directed acyclic graphs behind the identification strategy for each hypothesis |
 | `environment/` | Version-pinned environment files for Python and R, and the note recording how the notebooks were run |
@@ -55,33 +55,10 @@ other participant attribute, which is why the generation rule can be stated open
 identifier computed from an identifier — a digest of an address, say — would be invertible by
 enumeration over a small and guessable address space, and describing the rule would then amount to
 describing a re-identification method.
+
 The pseudocode of record for each analysis is in the thesis supplement;
 `specs/analysis_inventory.csv` names the supplement section carrying it for every analysis, in its
 `current_supplement_pseudocode` column.
-
-## Aberration detection
-
-The detection ensemble is implemented directly from the published detector definitions rather than
-through a historical-baseline surveillance package, because the available series is a single season
-and those packages require multi-year baselines. Six detectors run on the causal three-week moving
-average of each series with a seven-week rolling baseline and a seven-week warm-up:
-
-| Detector | Statistic | Alarm threshold |
-|---|---|---|
-| EARS C1 | standardised deviate against the prior seven weeks | statistic > 3 |
-| EARS C2 | as C1, baseline ending two weeks before the current week | statistic > 3 |
-| EARS C3 | cumulative positive C2 excess over three weeks, inheriting C2's guard band | statistic > 2 |
-| Negative-binomial CUSUM | log-likelihood ratio on weekly counts, dispersion by method of moments, accumulator reset after an alarm | series-specific decision interval, Monte-Carlo calibrated |
-| EWMA | exponentially weighted average, smoothing constant 0.4, control limit re-arming to the baseline mean after an alarm | Z > baseline mean + 3 standard deviations of Z |
-| Empirical 95th percentile | current value against the prior ten weeks | value above the 95th percentile |
-
-A week is flagged when at least one detector alarms; a two-detector consensus variant is reported
-separately. The Farrington Flexible algorithm was excluded for the reason above.
-
-Three details are load-bearing and easy to get wrong, so they are stated explicitly here as well as
-in the code: EARS C3 inherits C2's two-week guard band; the CUSUM decision interval is calibrated
-separately for each series rather than shared; and the EWMA control limit re-arms after an alarm,
-without which the statistic latches and reports consecutive weeks as separate alarms.
 
 ## Reproducibility
 
